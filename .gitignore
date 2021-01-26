@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# E2D-specific
+[Vv]anilla Files/
+
 # User-specific files
 *.rsuser
 *.suo
