@@ -18,6 +18,7 @@ namespace ModStuff.Utility
 					string line = string.Empty;
 					while((line = reader.ReadLine()) != null)
 					{
+						if (line.Contains(nameof(LogDebugMessage))) continue;
 						output += "-> " + line + "\n";
 					}
 				}
