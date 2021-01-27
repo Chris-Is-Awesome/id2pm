@@ -59,6 +59,26 @@ namespace ModStuff.Utility
 
 		#endregion
 
+		#region Entity
+
+		public static void SaveToEnt(string path, int value, bool doSave = true)
+		{
+			Entity toEnt = Core.GetEntComp<Entity>("PlayerEnt");
+			if (toEnt != null) { toEnt.SetStateVariable(path, value); }
+			if (doSave) { GetSaverOwner().SaveAll(); }
+		}
+
+		public static int LoadFromEnt(string path)
+		{
+			Entity fromEnt = Core.GetEntComp<Entity>("PlayerEnt");
+			if (fromEnt != null) { return fromEnt.GetStateVariable(path); }
+
+			DebugManager.LogDebugMessage("'PlayerEnt' was not found. Returning 0.", LogType.Warning);
+			return 0;
+		}
+
+		#endregion
+
 		#region NewGame
 
 		public static void SaveNewGameData(string path, string value, IDataSaver saver)
@@ -71,6 +91,22 @@ namespace ModStuff.Utility
 			newValue[0].path = path;
 			newValue[0].value = value;
 			DataSaverData.AddDebugData(saver, newValue);
+		}
+
+		#endregion
+
+		#region Core
+
+		// Returns the primary SaverOwner
+		public static SaverOwner GetSaverOwner()
+		{
+			foreach (SaverOwner owner in Resources.FindObjectsOfTypeAll<SaverOwner>())
+			{
+				if (owner.name == "MainSaver") { return owner; }
+			}
+
+			DebugManager.LogDebugMessage("SaverOwner named 'MainSaver' was not found. Returning null.", LogType.Warning);
+			return null;
 		}
 
 		#endregion
