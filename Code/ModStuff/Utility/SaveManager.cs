@@ -58,5 +58,21 @@ namespace ModStuff.Utility
 		}
 
 		#endregion
+
+		#region NewGame
+
+		public static void SaveNewGameData(string path, string value, IDataSaver saver)
+		{
+			DataSaverData.DebugAddData[] newValue = new DataSaverData.DebugAddData[]
+			{
+				new DataSaverData.DebugAddData()
+			};
+
+			newValue[0].path = path;
+			newValue[0].value = value;
+			DataSaverData.AddDebugData(saver, newValue);
+		}
+
+		#endregion
 	}
 }
