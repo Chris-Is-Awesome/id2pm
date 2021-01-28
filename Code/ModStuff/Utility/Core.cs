@@ -4,9 +4,9 @@ namespace ModStuff.Utility
 {
 	public static class Core
 	{
-		public static T GetEntComp<T>(string entName) where T : Component
+		public static T GetObjComp<T>(string objName) where T : Component
 		{
-			GameObject go = GameObject.Find(entName);
+			GameObject go = GameObject.Find(objName);
 
 			if (go != null)
 			{
@@ -24,12 +24,12 @@ namespace ModStuff.Utility
 			else
 			{
 				// If GameObject not found
-				DebugManager.LogDebugMessage("Entity with name '" + entName + "' was not found. Returning null.", LogType.Error);
+				DebugManager.LogDebugMessage("GameObject with name '" + objName + "' was not found. Returning null.", LogType.Error);
 				return null;
 			}
 
 			// If component not found
-			DebugManager.LogDebugMessage("Component of type '" + typeof(T).ToString() + "' was not found on Entity named '" + entName + "'. Returning null.", LogType.Warning);
+			DebugManager.LogDebugMessage("Component of type '" + typeof(T).ToString() + "' was not found on GameObject named '" + objName + "'. Returning null.", LogType.Warning);
 			return null;
 		}
 	}
