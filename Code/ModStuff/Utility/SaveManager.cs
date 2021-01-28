@@ -63,14 +63,14 @@ namespace ModStuff.Utility
 
 		public static void SaveToEnt(string path, int value, bool doSave = true)
 		{
-			Entity toEnt = Core.GetEntComp<Entity>("PlayerEnt");
+			Entity toEnt = Core.GetObjComp<Entity>("PlayerEnt");
 			if (toEnt != null) { toEnt.SetStateVariable(path, value); }
 			if (doSave) { GetSaverOwner().SaveAll(); }
 		}
 
 		public static int LoadFromEnt(string path)
 		{
-			Entity fromEnt = Core.GetEntComp<Entity>("PlayerEnt");
+			Entity fromEnt = Core.GetObjComp<Entity>("PlayerEnt");
 			if (fromEnt != null) { return fromEnt.GetStateVariable(path); }
 
 			DebugManager.LogDebugMessage("'PlayerEnt' was not found. Returning 0.", LogType.Warning);
