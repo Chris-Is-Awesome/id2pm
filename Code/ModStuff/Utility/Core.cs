@@ -1,51 +1,66 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace ModStuff.Utility
 {
 	public static class Core
 	{
+		private static List<Transform> children = new List<Transform>();
 		public static Transform FindNestedChild(string indirectParentName, string childName, string directParentName = "")
 		{
-			Transform indirectParentObj = GameObject.Find(indirectParentName).transform;
+			GameObject indirectParentObj = GameObject.Find(indirectParentName);
 			string output = string.Empty;
 
 			// If indirect parent found
 			if (indirectParentObj != null)
 			{
-				// If indirect parent has children
-				if (indirectParentObj.childCount > 0)
-				{
-					Transform[] children = indirectParentObj.GetComponentsInChildren<Transform>();
+				// Get all children
+				FindNestedChildRecursive(indirectParentObj.transform);
 
-					// Loop through each child
-					foreach (Transform child in children)
+				// If children were found
+				if (children.Count > 0)
+				{
+					// Check each child
+					for (int i = 0; i < children.Count; i++)
 					{
-						// If child name matches what is wanted
-						if (child.name == childName || child.name.ToLower() == childName.ToLower())
+						Transform child = children[i];
+
+						// Check child name
+						if (child.name == childName)
 						{
-							// If searching for direct parent
+							// Check for direct parent
 							if (!string.IsNullOrEmpty(directParentName))
 							{
-								// If direct parent of child matches what is wanted
+								// If direct parent is what is wanted
 								if ((child.parent.name == directParentName || child.parent.name.ToLower() == directParentName.ToLower())) { return child; }
-								// If direct parent of child does not match what is wanted
+								// If direct parent is NOT what is wanted
 								else { output = "No direct parent with name '" + directParentName + "' was found for child '" + childName + "' with indirect parent of '" + indirectParentName + "'. Returning null."; }
 							}
-							// If not searching for direct parent
 							else { return child; }
 						}
 						// If no child matching the wanted name is found
 						else { output = "No child with name '" + childName + "' was found under indirect parent '" + indirectParentName + "'. Returning null."; }
 					}
 				}
-				// If indirect parent has no children
+				// If no children were found
 				else { output = "'" + indirectParentName + "' has no children. Returning null."; }
 			}
-			// If indirect parent not found
-			else { output = "'" + indirectParentName + "' was not found. Returning null."; }
+			// If indirect parent NOT found
+			else { output = "Indirect parent '" + indirectParentName + "' was not found. Returning null."; }
 
 			DebugManager.LogDebugMessage(output, LogType.Warning);
 			return null;
+		}
+
+		private static void FindNestedChildRecursive(Transform parent)
+		{
+			// Add existing children to list
+			foreach (Transform child in parent)
+			{
+				if (child == null) continue;
+				children.Add(child);
+				FindNestedChildRecursive(child);
+			}
 		}
 
 		public static T GetObjComp<T>(string objName) where T : Component
