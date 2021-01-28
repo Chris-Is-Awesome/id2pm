@@ -52,6 +52,9 @@ public class DebugMenu : MonoBehaviour
 		GuiContentData guiContentData = new GuiContentData();
 		guiContentData.SetValue("version", this._version.GetVersion());
 		this.menuRoot.ApplyContent(guiContentData, true);
+
+		// Modify the HUD to make it better
+		ModifyUI();
 	}
 
 	void Start()
@@ -251,6 +254,67 @@ public class DebugMenu : MonoBehaviour
 	void OnDestroy()
 	{
 		this.ClearListeners();
+	}
+
+	void ModifyUI()
+	{
+		// Change title
+		Transform titleTrans = Core.FindNestedChild("PauseOverlay", "Text", "Title");
+		TextMesh titleTextMesh = null;
+
+		if (titleTrans != null) titleTextMesh = titleTrans.GetComponent<TextMesh>();
+		if (titleTextMesh != null)
+		{
+			titleTextMesh.text = "E2D Debug Menu";
+			titleTextMesh.color = Color.black;
+			titleTextMesh.alignment = TextAlignment.Center;
+			titleTextMesh.fontSize = 35;
+			titleTextMesh.fontStyle = FontStyle.Normal;
+		}
+
+		// Remove version text
+		Transform versionTrans = Core.FindNestedChild("PauseOverlay", "Version");
+		TextMesh versionTextMesh = null;
+
+		if (versionTrans != null) versionTextMesh = versionTrans.GetComponent<TextMesh>();
+		if (versionTextMesh != null) versionTextMesh.text = string.Empty;
+
+		// Move back button
+		Transform backBtn = Core.FindNestedChild("PauseOverlay", "Back", "Debug");
+		if (backBtn != null) backBtn.localPosition = new Vector3(-2.5f, -5.10f, 0f);
+
+		// Move cofnrim button
+		Transform confirmBtn = Core.FindNestedChild("PauseOverlay", "Confirm", "Debug");
+		if (confirmBtn != null) confirmBtn.localPosition = new Vector3(2.5f, -5.10f, 0f);
+
+		// Modify output text
+		Transform outputText = Core.FindNestedChild("PauseOverlay", "InfoValue", "Debug");
+		if (outputText != null)
+		{
+			outputText.localPosition = new Vector3(0.3f, 5.3f, 0f);
+			outputText.GetChild(0).GetComponent<TextMesh>().fontSize = 20;
+		}
+
+		// Modify input field
+		Transform inputField = Core.FindNestedChild("PauseOverlay", "StringValue", "Debug");
+		if (inputField != null)
+		{
+			inputField.GetComponentInChildren<NineSlice>().Size = new Vector2(5.5f, 0.65f);
+			inputField.localPosition = new Vector3(-0.5f, -3.75f, 0f);
+			inputField.Find("Text").localPosition = new Vector3(-4.33f, 0f, -0.18f);
+		}
+
+		// Create background for output field
+		Transform outputBackgroundTrans = Core.FindNestedChild("PauseOverlay", "Background", "Layout");
+		Transform menu = Core.FindNestedChild("PauseOverlay", "Debug", "Pause");
+		if (outputBackgroundTrans != null && menu != null)
+		{
+			Transform outputBackgroundObj = Instantiate(outputBackgroundTrans.gameObject, menu).transform;
+			outputBackgroundObj.name = "DebugOutputBackground";
+			outputBackgroundObj.GetComponentInChildren<NineSlice>().Size = new Vector2(7.10f, 3.75f);
+			outputBackgroundObj.localPosition = new Vector3(-0.5f, 0.9f, 0f);
+			outputBackgroundObj.localScale = Vector3.one * 2;
+		}
 	}
 
 	public delegate void OnDoneFunc();
