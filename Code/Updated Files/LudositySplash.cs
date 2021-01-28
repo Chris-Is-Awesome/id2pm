@@ -26,6 +26,9 @@ public class LudositySplash : MonoBehaviour
 		DebugManager.LogDebugMessage("GAME STARTED", LogType.Log, true, true, true);
 		#endregion
 
+		// TEMP
+		Utility.LoadLevel("MainMenu");
+
 		GuiBindInData guiBindInData = new GuiBindInData(null, null);
 		guiBindInData.Content.SetValue("gameLoading", false);
 		MainMenu.ApplyUIData(PlatformInfo.Current.GetDataForUI("splash"), guiBindInData.Content);
