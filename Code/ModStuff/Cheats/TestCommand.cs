@@ -6,7 +6,7 @@ namespace ModStuff.Cheats
 	{
 		public string RunCommand(string[] args)
 		{
-			return "This will return PlayerPrefs soon! Remind me to write ModSaver!";
+			return SaveManager.LoadFromPrefs<string>("test").ToString();
 		}
 	}
 }
