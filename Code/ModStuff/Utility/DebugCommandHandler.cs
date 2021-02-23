@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using ModStuff.Cheats;
 
 namespace ModStuff.Utility
 {
@@ -10,6 +11,9 @@ namespace ModStuff.Utility
 
 		public KeyCode keyToOpenDebugMenu = KeyCode.F1;
 		public DebugMenu debugMenu;
+
+		// Command comps
+		TestCommand testCommand = TestCommand.Instance;
 
 		private void Awake()
 		{
@@ -26,7 +30,7 @@ namespace ModStuff.Utility
 
 		private void Test(string[] args)
 		{
-			OutputText("Hello, world!");
+			OutputText(testCommand.RunCommand(args));
 		}
 
 		private void OutputText(string output)
