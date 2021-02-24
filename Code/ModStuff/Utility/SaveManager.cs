@@ -1,10 +1,21 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace ModStuff.Utility
 {
 	public static class SaveManager
 	{
+		private static List<string> globalDataTypes = new List<string>()
+		{
+			"sound/musicVol",
+			"sound/soundVol",
+			"extras/soundtest",
+			"extras/gallery",
+			"extras/secretGallery"
+		};
+
 		#region PlayerPrefs
 
 		public static void SaveToPrefs(string prefName, object value)
@@ -95,6 +106,69 @@ namespace ModStuff.Utility
 
 		#endregion
 
+		#region SaveFile
+
+		public static void SaveToSaveFile(string path, string value, bool doSave = true)
+		{
+			IDataSaver saver = GetSaver(path);
+
+			if (saver != null)
+			{
+				string key = GetSaveKey(path);
+				saver.SaveData(key, value);
+				if (doSave) GetSaverOwner().SaveAll();
+			}
+			else DebugManager.LogDebugMessage("[Save Data] Path " + path + " could not be loaded. Unable to save the requested data.", LogType.Warning);
+		}
+
+		public static string LoadFromSaveFile(string path)
+		{
+			IDataSaver saver = GetSaver(path);
+
+			if (saver != null)
+			{
+				string key = GetSaveKey(path);
+				return saver.LoadData(key);
+			}
+
+			DebugManager.LogDebugMessage("[Save Data] Path " + path + " could not be loaded. Returning empty string.", LogType.Warning);
+			return string.Empty;
+		}
+
+		public static bool HasSaveData(string path)
+		{
+			IDataSaver saver = GetSaver(path);
+
+			if (saver != null)
+			{
+				string key = GetSaveKey(path);
+				return saver.HasData(key);
+			}
+
+			return false;
+		}
+
+		public static List<string> GetSaveKeys(string header)
+		{
+			return MainMenu.GetSortedSaveKeys(GetSaverOwner(), header);
+		}
+
+		public static void DeleteSaveData(string path, bool doSave = true)
+		{
+			IDataSaver saver = GetSaver(path);
+
+			if (saver != null)
+			{
+				saver.ClearValue(GetSaveKey(path));
+				if (doSave) GetSaverOwner().SaveAll();
+				return;
+			}
+
+			DebugManager.LogDebugMessage("[Save Data] Path " + path + " could not be loaded. Cannot delete save data that was not found.", LogType.Warning);
+		}
+
+		#endregion
+
 		#region Core
 
 		// Returns the primary SaverOwner
@@ -107,6 +181,20 @@ namespace ModStuff.Utility
 
 			DebugManager.LogDebugMessage("SaverOwner named 'MainSaver' was not found. Returning null.", LogType.Warning);
 			return null;
+		}
+
+		public static IDataSaver GetSaver(string path)
+		{
+			string header = path.Remove(path.LastIndexOf('/'));
+			if (header.StartsWith("/local/") || header.StartsWith("/global/")) return GetSaverOwner().GetSaver(header);
+
+			if (globalDataTypes.Contains(path)) return GetSaverOwner().GlobalStorage.GetLocalSaver(header);
+			return GetSaverOwner().GetSaver("/local/" + header);
+		}
+
+		private static string GetSaveKey(string path)
+		{
+			return path.Remove(0, path.LastIndexOf('/') + 1);
 		}
 
 		#endregion
