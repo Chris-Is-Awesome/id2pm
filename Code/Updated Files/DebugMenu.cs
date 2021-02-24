@@ -268,7 +268,7 @@ public class DebugMenu : MonoBehaviour
 	void ModifyUI()
 	{
 		// Change title
-		Transform titleTrans = Core.FindNestedChild("PauseOverlay", "Text", "Title");
+		Transform titleTrans = transform.Find("Title").Find("Text");
 		TextMesh titleTextMesh = null;
 
 		if (titleTrans != null) titleTextMesh = titleTrans.GetComponent<TextMesh>();
@@ -282,22 +282,22 @@ public class DebugMenu : MonoBehaviour
 		}
 
 		// Remove version text
-		Transform versionTrans = Core.FindNestedChild("PauseOverlay", "Version");
+		Transform versionTrans = transform.Find("Version");
 		TextMesh versionTextMesh = null;
 
 		if (versionTrans != null) versionTextMesh = versionTrans.GetComponent<TextMesh>();
 		if (versionTextMesh != null) versionTextMesh.text = string.Empty;
 
 		// Move back button
-		Transform backBtn = Core.FindNestedChild("PauseOverlay", "Back", "Debug");
+		Transform backBtn = transform.Find("Back");
 		if (backBtn != null) backBtn.localPosition = new Vector3(-2.5f, -5.10f, 0f);
 
 		// Move cofnrim button
-		Transform confirmBtn = Core.FindNestedChild("PauseOverlay", "Confirm", "Debug");
+		Transform confirmBtn = transform.Find("Confirm");
 		if (confirmBtn != null) confirmBtn.localPosition = new Vector3(2.5f, -5.10f, 0f);
 
 		// Modify output text
-		Transform outputText = Core.FindNestedChild("PauseOverlay", "InfoValue", "Debug");
+		Transform outputText = transform.Find("InfoValue");
 		if (outputText != null)
 		{
 			outputText.localPosition = new Vector3(0.3f, 5.3f, 0f);
@@ -305,7 +305,7 @@ public class DebugMenu : MonoBehaviour
 		}
 
 		// Modify input field
-		Transform inputField = Core.FindNestedChild("PauseOverlay", "StringValue", "Debug");
+		Transform inputField = transform.Find("StringValue");
 		if (inputField != null)
 		{
 			inputField.GetComponentInChildren<NineSlice>().Size = new Vector2(5.5f, 0.65f);
@@ -314,8 +314,8 @@ public class DebugMenu : MonoBehaviour
 		}
 
 		// Create background for output field
-		Transform outputBackgroundTrans = Core.FindNestedChild("PauseOverlay", "Background", "Layout");
-		Transform menu = Core.FindNestedChild("PauseOverlay", "Debug", "Pause");
+		Transform outputBackgroundTrans = GameObject.Find("PauseOverlay").transform.Find("Pause").Find("Main").Find("Layout").Find("Background");
+		Transform menu = transform;
 		if (outputBackgroundTrans != null && menu != null)
 		{
 			Transform outputBackgroundObj = Instantiate(outputBackgroundTrans.gameObject, menu).transform;
