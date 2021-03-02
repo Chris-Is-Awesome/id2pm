@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 namespace ModStuff.Utility
@@ -32,6 +32,12 @@ namespace ModStuff.Utility
 			// If component not found
 			DebugManager.LogDebugMessage("Component of type '" + typeof(T).ToString() + "' was not found on GameObject named '" + objName + "'. Returning null.", LogType.Warning);
 			return null;
+		}
+
+		public static bool DoStringsMatch(string string1, string string2, bool ignoreCase = true)
+		{
+			if (!ignoreCase) return string1 == string2;
+			return string.Equals(string1, string2, StringComparison.OrdinalIgnoreCase);
 		}
 	}
 }
