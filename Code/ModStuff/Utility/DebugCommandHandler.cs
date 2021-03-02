@@ -12,9 +12,6 @@ namespace ModStuff.Utility
 		public KeyCode keyToOpenDebugMenu = KeyCode.F1;
 		public DebugMenu debugMenu;
 
-		// Command comps
-		TestCommand testCommand = TestCommand.Instance;
-
 		private void Awake()
 		{
 			InitializeCommands();
@@ -30,7 +27,7 @@ namespace ModStuff.Utility
 
 		private void Test(string[] args)
 		{
-			OutputText(testCommand.RunCommand(args));
+			OutputText(TestCommand.Instance.RunCommand(args));
 		}
 
 		private void OutputText(string output)
