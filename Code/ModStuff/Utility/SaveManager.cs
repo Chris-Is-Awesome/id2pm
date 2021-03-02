@@ -169,6 +169,35 @@ namespace ModStuff.Utility
 
 		#endregion
 
+		#region CustomFile
+
+		public static void SaveToCustomFile(object data, string fileName, string fileDirectory = "")
+		{
+			string dataToWrite = JsonUtility.ToJson(data);
+			string fullPath = GetModFilePath(fileDirectory, fileName);
+			File.WriteAllText(fullPath, dataToWrite);
+		}
+
+		public static T LoadFromCustomFile<T>(string fileName, string fileDirectory = "")
+		{
+			string fullPath = GetModFilePath(fileDirectory, fileName);
+			if (File.Exists(fullPath)) return JsonUtility.FromJson<T>(File.ReadAllText(fullPath));
+
+			DebugManager.LogDebugMessage("File at path " + fullPath + " does not exist. Returning default.", LogType.Warning);
+			return default;
+		}
+
+		private static string GetModFilePath(string fileDirectory, string fileName)
+		{
+			string rootDirectory = Application.dataPath + "/extra2dew/";
+			string fullDirectory = string.IsNullOrEmpty(fileDirectory) ? rootDirectory : rootDirectory + fileDirectory;
+			if (fullDirectory[fullDirectory.Length - 1] != '/') fullDirectory += "/";
+			if (!Directory.Exists(fullDirectory)) Directory.CreateDirectory(fullDirectory);
+			return fullDirectory + fileName;
+		}
+
+		#endregion
+
 		#region Core
 
 		// Returns the primary SaverOwner
