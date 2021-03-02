@@ -7,7 +7,14 @@ namespace ModStuff.Cheats
 	{
 		public string RunCommand(string[] args)
 		{
-			return SaveManager.LoadFromPrefs<string>("test").ToString();
+			return WriteDataToFile(GameObject.Find("PlayerEnt").transform.position);
+			//return SaveManager.LoadFromPrefs<string>("test").ToString();
+		}
+
+		private string WriteDataToFile(object data)
+		{
+			SaveManager.SaveToCustomFile(data, "test.txt", "", false);
+			return "Successfully wrote test data to file!";
 		}
 	}
 }
