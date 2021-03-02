@@ -178,8 +178,8 @@ namespace ModStuff.Utility
 			if (doOverwrite) File.WriteAllText(fullPath, dataToWrite);
 			else
 			{
-				// If file exists, add new line before appending
-				if (File.Exists(fullPath)) File.AppendAllText(fullPath, Environment.NewLine + dataToWrite);
+				// If file exists & has text, add new line before appending
+				if (File.Exists(fullPath) && !string.IsNullOrEmpty(File.ReadAllText(fullPath))) File.AppendAllText(fullPath, Environment.NewLine + dataToWrite);
 				else File.AppendAllText(fullPath, dataToWrite);
 			}
 		}
