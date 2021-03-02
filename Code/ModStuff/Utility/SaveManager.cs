@@ -171,13 +171,20 @@ namespace ModStuff.Utility
 
 		#region CustomFile
 
-		public static void SaveToCustomFile(object data, string fileName, string fileDirectory = "")
+		public static void SaveToCustomFile(object data, string fileName, string fileDirectory = "", bool toJson = true, bool doOverwrite = false)
 		{
-			string dataToWrite = JsonUtility.ToJson(data);
+			string dataToWrite = toJson ? JsonUtility.ToJson(data) : data.ToString();
 			string fullPath = GetModFilePath(fileDirectory, fileName);
-			File.WriteAllText(fullPath, dataToWrite);
+			if (doOverwrite) File.WriteAllText(fullPath, dataToWrite);
+			else
+			{
+				// If file exists, add new line before appending
+				if (File.Exists(fullPath)) File.AppendAllText(fullPath, Environment.NewLine + dataToWrite);
+				else File.AppendAllText(fullPath, dataToWrite);
+			}
 		}
 
+		/*
 		public static T LoadFromCustomFile<T>(string fileName, string fileDirectory = "")
 		{
 			string fullPath = GetModFilePath(fileDirectory, fileName);
@@ -186,6 +193,7 @@ namespace ModStuff.Utility
 			DebugManager.LogDebugMessage("File at path " + fullPath + " does not exist. Returning default.", LogType.Warning);
 			return default;
 		}
+		*/
 
 		private static string GetModFilePath(string fileDirectory, string fileName)
 		{
