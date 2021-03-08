@@ -97,5 +97,24 @@ namespace ModStuff.Utility
 
 			return fadeData;
 		}
+
+		public static LevelRoom GetLoadedRoom()
+		{
+			Transform levelRoot = GameObject.Find("LevelRoot").transform;
+
+			for (int i = 0; i < levelRoot.childCount; i++)
+			{
+				LevelRoom room = levelRoot.GetChild(i).GetComponent<LevelRoom>();
+
+				if (room != null && room.IsActive) return room;
+			}
+
+			return null;
+		}
+
+		public static LevelRoom GetRoomPlayerIsIn()
+		{
+			return LevelRoom.GetRoomForPosition(GameObject.Find("PlayerEnt").transform.position);
+		}
 	}
 }
