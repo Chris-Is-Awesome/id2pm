@@ -98,8 +98,15 @@ namespace ModStuff.Utility
 			return fadeData;
 		}
 
+		public static Scene GetLoadedScene()
+		{
+			return SceneManager.GetActiveScene();
+		}
+
 		public static LevelRoom GetLoadedRoom()
 		{
+			// TODO: In the case of multiple rooms being loaded, check if setting is enabled, then add each active room to a list and if multiple are indeed active, call GetRoomPlayerIsIn() to get current room
+
 			Transform levelRoot = GameObject.Find("LevelRoot").transform;
 
 			for (int i = 0; i < levelRoot.childCount; i++)
