@@ -1,10 +1,19 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ModStuff.Utility
 {
 	public static class Core
 	{
+		public enum FadeType
+		{
+			Circle,
+			Flash,
+			Fullscreen
+		}
+
 		public static T GetObjComp<T>(string objName) where T : Component
 		{
 			GameObject go = GameObject.Find(objName);
@@ -38,6 +47,56 @@ namespace ModStuff.Utility
 		{
 			if (!ignoreCase) return string1 == string2;
 			return string.Equals(string1, string2, StringComparison.OrdinalIgnoreCase);
+		}
+
+		public static void LoadScene(string scene, string spawn, bool doSave = true, bool doFade = true, FadeType fadeType = FadeType.Circle, Color? fadeColor = null, float fadeOutTime = 0.5f, float fadeInTime = 1f)
+		{
+			// If saving, trigger save
+			if (doSave)
+			{
+				SaveManager.SaveToSaveFile("start/level", scene);
+				SaveManager.SaveToSaveFile("start/door", spawn);
+			}
+
+			// If no fade, load scene instantly
+			if (doFade)
+			{
+				SceneManager.LoadScene(scene);
+				return;
+			}
+
+			// If fading, make fade & trigger load
+			FadeEffectData fadeData = MakeFadeEffect(fadeType, fadeColor, fadeOutTime, fadeInTime);
+			SceneDoor.StartLoad(scene, spawn, fadeData, SaveManager.GetSaverOwner());
+		}
+
+		static private FadeEffectData MakeFadeEffect(FadeType type, Color? color, float outTime, float inTime)
+		{
+			string fadeType;
+
+			switch (type)
+			{
+				case FadeType.Flash:
+					fadeType = "AdditiveFade";
+					break;
+				case FadeType.Fullscreen:
+					fadeType = "ScreenFade";
+					break;
+				default:
+					fadeType = "ScreenCircleWipe";
+					break;
+			}
+
+			FadeEffectData fadeData = new FadeEffectData
+			{
+				_faderName = fadeType,
+				_targetColor = color ?? Color.black,
+				_fadeOutTime = outTime,
+				_fadeInTime = inTime,
+				_useScreenPos = true
+			};
+
+			return fadeData;
 		}
 	}
 }
