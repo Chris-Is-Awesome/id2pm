@@ -25,12 +25,12 @@ namespace ModStuff.Utility
 			else
 			{
 				// If GameObject not found
-				DebugManager.LogDebugMessage("GameObject with name '" + objName + "' was not found. Returning null.", LogType.Error);
+				DebugManager.LogToFile("GameObject with name '" + objName + "' was not found. Returning null.", LogType.Error);
 				return null;
 			}
 
 			// If component not found
-			DebugManager.LogDebugMessage("Component of type '" + typeof(T).ToString() + "' was not found on GameObject named '" + objName + "'. Returning null.", LogType.Warning);
+			DebugManager.LogToFile("Component of type '" + typeof(T).ToString() + "' was not found on GameObject named '" + objName + "'. Returning null.", LogType.Warning);
 			return null;
 		}
 

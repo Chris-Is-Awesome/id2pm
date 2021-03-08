@@ -23,7 +23,7 @@ public class LudositySplash : MonoBehaviour
 		Debug.logger.logEnabled = true;
 		Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
 		Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
-		DebugManager.LogDebugMessage("GAME STARTED", LogType.Log, true, true, true);
+		DebugManager.LogToFile("GAME STARTED", LogType.Log, false, true, true);
 		#endregion
 
 		// TEMP

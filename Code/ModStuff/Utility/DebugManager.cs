@@ -13,7 +13,7 @@ namespace ModStuff.Utility
 			Error
 		}
 
-		public static void LogDebugMessage(string message, LogType logType = LogType.Log, bool includeStackTrace = true, bool isHeader = false, bool addWhiteSpace = true)
+		public static void LogToFile(string message, LogType logType = LogType.Log, bool includeStackTrace = true, bool isHeader = false, bool addWhiteSpace = true)
 		{
 			string output = FormatDebugMessage(message, logType, isHeader, addWhiteSpace);
 
@@ -26,7 +26,7 @@ namespace ModStuff.Utility
 					string line = string.Empty;
 					while((line = reader.ReadLine()) != null)
 					{
-						if (line.Contains(nameof(LogDebugMessage))) continue;
+						if (line.Contains(nameof(LogToFile))) continue;
 						output += "-> " + line + "\n";
 					}
 				}
@@ -35,14 +35,17 @@ namespace ModStuff.Utility
 			Debug.Log(output);
 		}
 
-		public static string LogDebugMessageToConsole(string message,  MessageType type, bool doFormat = true)
+		public static string LogToConsole(string message, MessageType type = MessageType.Info, bool includeStackTraceOnError = false, bool doFormat = true)
 		{
 			string output = string.Empty;
 			string infoColor = "<color=#141414>";
 			string successColor = "<color=#078716>";
 			string warningColor = "<color=#c95e00>";
 			string errorColor = "<color=#db1414>";
+			string inputColor = "<color=#6e6e6e>";
+			string outputColor = "<color=#3d3d3d>";
 
+			// Add beginning formatting
 			switch (type)
 			{
 				case MessageType.Success:
@@ -62,7 +65,24 @@ namespace ModStuff.Utility
 			}
 
 			output += message;
-			if (doFormat) output += "</color>";
+
+			// Add final formatting
+			if (doFormat)
+			{
+				// Replace any input/output tags for emphasis
+				output = output.Replace("<in>", inputColor + "<i>");
+				output = output.Replace("</in>", "</i></color>");
+				output = output.Replace("<out>", outputColor + "[");
+				output = output.Replace("</out>", "]</color>");
+
+				output += "</color>";
+
+				// Add stacktrace
+				if (type == MessageType.Error && includeStackTraceOnError)
+				{
+					output += "\n\n<size=15>-------------------------\n" + StackTraceUtility.ExtractStackTrace() + "</size>";
+				}
+			}
 
 			return output;
 		}

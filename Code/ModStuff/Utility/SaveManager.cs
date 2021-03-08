@@ -32,7 +32,7 @@ namespace ModStuff.Utility
 					PlayerPrefs.SetString(prefName, _value);
 					break;
 				default:
-					DebugManager.LogDebugMessage(value.GetType().ToString() + " is not a valid type for PlayerPrefs. Value must be of type `int`, `float`, or `string`.", LogType.Error);
+					DebugManager.LogToFile(value.GetType().ToString() + " is not a valid type for PlayerPrefs. Value must be of type `int`, `float`, or `string`.", LogType.Error);
 					break;
 			}
 		}
@@ -50,7 +50,7 @@ namespace ModStuff.Utility
 				case TypeCode.String:
 					return PlayerPrefs.GetString(prefName);
 				default:
-					DebugManager.LogDebugMessage(type.ToString() + " is not a valid t ype for PlayerPrefs. Type must be of type `int`, `float`, or `string`. Returning null.", LogType.Error);
+					DebugManager.LogToFile(type.ToString() + " is not a valid t ype for PlayerPrefs. Type must be of type `int`, `float`, or `string`. Returning null.", LogType.Error);
 					return null;
 			}
 		}
@@ -84,7 +84,7 @@ namespace ModStuff.Utility
 			Entity fromEnt = Core.GetObjComp<Entity>("PlayerEnt");
 			if (fromEnt != null) { return fromEnt.GetStateVariable(path); }
 
-			DebugManager.LogDebugMessage("'PlayerEnt' was not found. Returning 0.", LogType.Warning);
+			DebugManager.LogToFile("'PlayerEnt' was not found. Returning 0.", LogType.Warning);
 			return 0;
 		}
 
@@ -118,7 +118,7 @@ namespace ModStuff.Utility
 				saver.SaveData(key, value);
 				if (doSave) GetSaverOwner().SaveAll();
 			}
-			else DebugManager.LogDebugMessage("[Save Data] Path " + path + " could not be loaded. Unable to save the requested data.", LogType.Warning);
+			else DebugManager.LogToFile("[Save Data] Path " + path + " could not be loaded. Unable to save the requested data.", LogType.Warning);
 		}
 
 		public static string LoadFromSaveFile(string path)
@@ -131,7 +131,7 @@ namespace ModStuff.Utility
 				return saver.LoadData(key);
 			}
 
-			DebugManager.LogDebugMessage("[Save Data] Path " + path + " could not be loaded. Returning empty string.", LogType.Warning);
+			DebugManager.LogToFile("[Save Data] Path " + path + " could not be loaded. Returning empty string.", LogType.Warning);
 			return string.Empty;
 		}
 
@@ -164,7 +164,7 @@ namespace ModStuff.Utility
 				return;
 			}
 
-			DebugManager.LogDebugMessage("[Save Data] Path " + path + " could not be loaded. Cannot delete save data that was not found.", LogType.Warning);
+			DebugManager.LogToFile("[Save Data] Path " + path + " could not be loaded. Cannot delete save data that was not found.", LogType.Warning);
 		}
 
 		#endregion
@@ -216,7 +216,7 @@ namespace ModStuff.Utility
 				if (owner.name == "MainSaver") { return owner; }
 			}
 
-			DebugManager.LogDebugMessage("SaverOwner named 'MainSaver' was not found. Returning null.", LogType.Warning);
+			DebugManager.LogToFile("SaverOwner named 'MainSaver' was not found. Returning null.", LogType.Warning);
 			return null;
 		}
 
