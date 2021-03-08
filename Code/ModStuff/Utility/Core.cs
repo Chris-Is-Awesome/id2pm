@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -59,7 +58,7 @@ namespace ModStuff.Utility
 			}
 
 			// If no fade, load scene instantly
-			if (doFade)
+			if (!doFade)
 			{
 				SceneManager.LoadScene(scene);
 				return;
