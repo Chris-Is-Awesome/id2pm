@@ -324,5 +324,63 @@ namespace ModStuff.UI
 
             return textObj;
         }
+
+       // Automatically add line breaks to given text; ignores rich text tags
+       public static string AddLineBreaks(string text, TextMesh mesh, float maxWidthOverride = 0f)
+		{
+            string output = text;
+            float maxWidth = maxWidthOverride > 0 ? maxWidthOverride : 920f;
+			float textWidth = 0;
+            int endIndexOfTag = -1;
+            bool isInTag = false;
+
+            for (int i = 0; i < output.Length - 1; i++)
+			{
+                char c = output[i];
+
+                // If line break, continue and reset width (new line)
+                if (c == '\n')
+                {
+                    textWidth = 0;
+                    continue;
+                }
+
+                // Check if rich text tag
+                if (c == '<')
+                {
+                    isInTag = true;
+                }
+                else if (c == '>')
+                {
+                    if (endIndexOfTag >= 0)
+                    {
+                        endIndexOfTag = text.IndexOf(c, endIndexOfTag);
+                    }
+                    else
+                    {
+                        endIndexOfTag = text.IndexOf(c);
+                    }
+
+                    isInTag = false;
+                }
+
+                if (mesh != null && mesh.font.GetCharacterInfo(c, out CharacterInfo charInfo, mesh.fontSize, mesh.fontStyle))
+				{
+                    if (!isInTag)
+                    {
+                        textWidth += charInfo.advance;
+                    }
+                }
+
+                // Add new line if at max width
+                if (!isInTag && textWidth > maxWidth)
+                {
+                    output = output.Insert(i, "\n");
+                    textWidth = 0;
+                }
+            }
+
+            return output;
+		}
     }
 }

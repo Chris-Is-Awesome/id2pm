@@ -73,10 +73,9 @@ public class DebugMenu : MonoBehaviour
 		if (words.Length > 0)
 		{
 			string command = words[0];
-			DebugCommandHandler.CommandFunc commandFunc;
 
 			// If command is valid
-			if (commandHandler.allCommands.TryGetValue(command, out commandFunc))
+			if (commandHandler.allCommands.TryGetValue(command, out DebugCommandHandler.CommandFunc commandFunc))
 			{
 				string[] arguments = words.Skip(1).ToArray(); // Get command arguments
 				commandFunc(arguments); // Invoke command
@@ -88,13 +87,17 @@ public class DebugMenu : MonoBehaviour
 					output += "Arg[" + i + "]: " + arguments[i] + "\n";
 				}
 				output += "\n";
-				DebugManager.LogDebugMessage(output, LogType.Log, false, false, false);
+				DebugManager.LogToFile(output, LogType.Log, false, false, false);
 			}
 			// If command invalid
 			else
 			{
-				OutputText("ERROR: '" + command + "' is not a command!");
+				string output = "<in>" + command + "</in> is not a command. Use <out>help</out> to get list of commands";
+				OutputText(DebugManager.LogToConsole(output, DebugManager.MessageType.Error));
 			}
+
+			TextMesh outputTextMesh = transform.Find("InfoValue").GetChild(0).GetComponent<TextMesh>();
+			outputTextMesh.text = ModStuff.UI.UIText.AddLineBreaks(outputTextMesh.text, outputTextMesh);
 		}
 	}
 
@@ -301,7 +304,10 @@ public class DebugMenu : MonoBehaviour
 		if (outputText != null)
 		{
 			outputText.localPosition = new Vector3(0.3f, 5.3f, 0f);
-			outputText.GetChild(0).GetComponent<TextMesh>().fontSize = 20;
+			TextMesh outputTextMesh = outputText.GetChild(0).GetComponent<TextMesh>();
+			outputTextMesh.fontSize = 20;
+			outputTextMesh.alignment = TextAlignment.Left;
+			outputTextMesh.anchor = TextAnchor.UpperLeft;
 		}
 
 		// Modify input field
