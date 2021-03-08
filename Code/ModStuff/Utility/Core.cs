@@ -48,7 +48,7 @@ namespace ModStuff.Utility
 			return string.Equals(string1, string2, StringComparison.OrdinalIgnoreCase);
 		}
 
-		public static void LoadScene(string scene, string spawn, bool doSave = true, bool doFade = true, FadeType fadeType = FadeType.Circle, Color? fadeColor = null, float fadeOutTime = 0.5f, float fadeInTime = 1f)
+		public static void LoadScene(string scene, string spawn = "", bool doSave = true, bool doFade = true, FadeType fadeType = FadeType.Circle, Color? fadeColor = null, float fadeOutTime = 0.5f, float fadeInTime = 1f)
 		{
 			// If saving, trigger save
 			if (doSave)
