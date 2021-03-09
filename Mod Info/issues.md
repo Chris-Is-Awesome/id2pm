@@ -1,0 +1,1 @@
+﻿* When using `goto` to load into a room in a different scene, it fails to load Entities
