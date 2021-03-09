@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -69,6 +70,54 @@ namespace ModStuff.Utility
 			SceneDoor.StartLoad(scene, spawn, fadeData, SaveManager.GetSaverOwner());
 		}
 
+		public static void LoadRoom(string scene, string room, Vector3? positionForPlayer = null, Vector3? facingDirectionForPlayer = null)
+		{
+			LevelRoom realRoom;
+
+			// If not in scene with room
+			if (GetLoadedScene().name != scene)
+			{
+				// Load scene
+				LoadScene(scene);
+
+				// Wait until player has spawned
+				PlayerSpawner.RegisterSpawnListener(delegate
+				{
+					// Load room
+					realRoom = GameObject.Find("LevelRoot").GetComponent<LevelRoot>().GetRoom(room);
+					LevelRoom.SetCurrentActiveRoom(realRoom, true); // Sets room as active & unloads prior room
+					GameObject.Find("Cameras").transform.parent.GetComponent<CameraContainer>().SetRoom(realRoom); // Set camera to look at room
+
+					// Teleport player
+					if (positionForPlayer != null)
+					{
+						Transform playerEnt = GameObject.Find("PlayerEnt").transform;
+						playerEnt.position = (Vector3)positionForPlayer; // Teleport player
+
+						if (facingDirectionForPlayer != null) playerEnt.localEulerAngles = (Vector3)facingDirectionForPlayer; // Change player facing direction
+					}
+				});
+			}
+			else
+			{
+				ClosePauseMenu(); // Unpause game (prevents issue with entity animations breaking if visible upon spawn while paused on first frame)
+
+				// Load room
+				realRoom = GameObject.Find("LevelRoot").GetComponent<LevelRoot>().GetRoom(room);
+				LevelRoom.SetCurrentActiveRoom(realRoom, true); // Sets room as active & unloads prior room
+				GameObject.Find("Cameras").transform.parent.GetComponent<CameraContainer>().SetRoom(realRoom); // Sets camera to look at room
+
+				// Teleport player
+				if (positionForPlayer != null)
+				{
+					Transform playerEnt = GameObject.Find("PlayerEnt").transform;
+					playerEnt.position = (Vector3)positionForPlayer; // Teleport player
+
+					if (facingDirectionForPlayer != null) playerEnt.localEulerAngles = (Vector3)facingDirectionForPlayer; // Change player facing direction
+				}
+			}
+		}
+
 		static private FadeEffectData MakeFadeEffect(FadeType type, Color? color, float outTime, float inTime)
 		{
 			string fadeType;
@@ -122,6 +171,18 @@ namespace ModStuff.Utility
 		public static LevelRoom GetRoomPlayerIsIn()
 		{
 			return LevelRoom.GetRoomForPosition(GameObject.Find("PlayerEnt").transform.position);
+		}
+
+		public static void ClosePauseMenu()
+		{
+			// Closes debug menu & pause menu
+			GameObject pauseOverlay = GameObject.Find("PauseOverlay");
+
+			if (pauseOverlay != null)
+			{
+				pauseOverlay.GetComponentInChildren<DebugMenu>().Hide();
+				pauseOverlay.GetComponent<PauseMenu>().Hide();
+			}
 		}
 	}
 }
