@@ -25,6 +25,7 @@ namespace ModStuff.Utility
 				{ "help", new CommandFunc(Help) },
 				{ "goto", new CommandFunc(Goto) },
 				{ "speed", new CommandFunc(Speed) },
+				{ "god", new CommandFunc(God) },
 			};
 		}
 
@@ -46,6 +47,11 @@ namespace ModStuff.Utility
 		private void Speed(string[] args)
 		{
 			OutputText(SpeedCommand.Instance.RunCommand(args));
+		}
+
+		private void God(string[] args)
+		{
+			OutputText(GodCommand.Instance.RunCommand(args));
 		}
 
 		private void OutputText(string output)
