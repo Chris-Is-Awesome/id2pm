@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using ModStuff.Utility;
+using ModStuff;
 
 public class LudositySplash : MonoBehaviour
 {

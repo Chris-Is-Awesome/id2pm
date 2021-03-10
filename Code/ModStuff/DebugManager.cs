@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 
-namespace ModStuff.Utility
+namespace ModStuff
 {
 	public static class DebugManager
 	{

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using ModStuff.Utility;
 
 namespace ModStuff.Cheats
 {

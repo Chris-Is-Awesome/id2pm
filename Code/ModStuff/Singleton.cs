@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ModStuff.Utility
+namespace ModStuff
 {
 	/// <summary>
 	/// Inherit from this base class to create a singleton.

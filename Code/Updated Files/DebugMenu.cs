@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using ModStuff.Utility;
+using ModStuff;
 
 public class DebugMenu : MonoBehaviour
 {

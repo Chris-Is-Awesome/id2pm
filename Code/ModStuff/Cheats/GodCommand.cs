@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using ModStuff.Utility;
 
 namespace ModStuff.Cheats
 {
@@ -10,16 +9,6 @@ namespace ModStuff.Cheats
 			return "Toggles Ittle invincibility. While active, you take no hit knockback and can't fall into pits.";
 		}
 
-		private static bool isActive;
-
-		public static bool IsActive
-		{
-			get
-			{
-				return isActive;
-			}
-		}
-
 		private GameObject player;
 		private Entity entity;
 		private Killable killable;
@@ -27,23 +16,38 @@ namespace ModStuff.Cheats
 		private Envirodeathable envirodeathable;
 		private EntityEnvirodeathable entityEnvirodeathable;
 
-		public string RunCommand(string[] args)
+		public string RunCommand(string[] args, bool isActive)
 		{
 			GetReferences();
 
-			isActive = !isActive; // Toggle
-			hittable.Disable = isActive; // Disable hurtbox
-			
 			if (isActive)
 			{
-				if (envirodeathable != null) Destroy(envirodeathable); // Disable falling & spikes
-				killable.CurrentHp = killable.MaxHp; // Full heal
-
+				ToggleOn();
 				return DebugManager.LogToConsole("Godmode is now <color=green>active</color> for Ittle.");
 			}
 
-			entityEnvirodeathable.Enable(entity);
+			ToggleOff();
 			return DebugManager.LogToConsole("Godmode is now <color=red>deactivated</color> for Ittle.");
+		}
+
+		private void ToggleOn()
+		{
+			GetReferences();
+			hittable.Disable = true;
+			if (envirodeathable != null) Destroy(envirodeathable);
+			killable.CurrentHp = killable.MaxHp;
+
+			PlayerSpawner.RegisterSpawnListener(delegate
+			{
+				ToggleOn();
+			});
+		}
+
+		private void ToggleOff()
+		{
+			hittable.Disable = false;
+			entityEnvirodeathable.Enable(entity);
+			PlayerSpawner.ClearListeners();
 		}
 
 		private void GetReferences()

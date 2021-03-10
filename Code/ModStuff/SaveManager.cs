@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace ModStuff.Utility
+namespace ModStuff
 {
 	public static class SaveManager
 	{
@@ -74,14 +74,14 @@ namespace ModStuff.Utility
 
 		public static void SaveToEnt(string path, int value, bool doSave = true)
 		{
-			Entity toEnt = Core.GetObjComp<Entity>("PlayerEnt");
+			Entity toEnt = GameObject.Find("PlayerEnt").GetComponent<Entity>();
 			if (toEnt != null) { toEnt.SetStateVariable(path, value); }
 			if (doSave) { GetSaverOwner().SaveAll(); }
 		}
 
 		public static int LoadFromEnt(string path)
 		{
-			Entity fromEnt = Core.GetObjComp<Entity>("PlayerEnt");
+			Entity fromEnt = GameObject.Find("PlayerEnt").GetComponent<Entity>();
 			if (fromEnt != null) { return fromEnt.GetStateVariable(path); }
 
 			DebugManager.LogToFile("'PlayerEnt' was not found. Returning 0.", LogType.Warning);

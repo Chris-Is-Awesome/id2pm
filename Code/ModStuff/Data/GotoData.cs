@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using ModStuff.Utility;
 
 namespace ModStuff.Data
 {
@@ -220,7 +219,7 @@ namespace ModStuff.Data
 			{
 				SceneData sceneData = data[i];
 
-				if (Core.DoStringsMatch(sceneData.realSceneName, scene))
+				if (StringHelper.DoStringsMatch(sceneData.realSceneName, scene))
 				{
 					return sceneData;
 				}
@@ -229,7 +228,7 @@ namespace ModStuff.Data
 				{
 					string otherName = sceneData.otherNames[j];
 
-					if (Core.DoStringsMatch(otherName, scene))
+					if (StringHelper.DoStringsMatch(otherName, scene))
 					{
 						return sceneData;
 					}
@@ -253,7 +252,7 @@ namespace ModStuff.Data
 				{
 					SpawnData spawnData = sceneData.spawns[i];
 
-					if (Core.DoStringsMatch(spawnData.realSpawnName, spawn))
+					if (StringHelper.DoStringsMatch(spawnData.realSpawnName, spawn))
 					{
 						return spawnData;
 					}
@@ -262,7 +261,7 @@ namespace ModStuff.Data
 					{
 						string otherName = spawnData.otherNames[j];
 
-						if (Core.DoStringsMatch(otherName, spawn))
+						if (StringHelper.DoStringsMatch(otherName, spawn))
 						{
 							return spawnData;
 						}

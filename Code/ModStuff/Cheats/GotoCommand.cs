@@ -1,5 +1,4 @@
 ﻿using ModStuff.Data;
-using ModStuff.Utility;
 
 namespace ModStuff.Cheats
 {
@@ -37,10 +36,10 @@ namespace ModStuff.Cheats
 						{
 							GotoData.RoomData room = sceneData.rooms[i];
 
-							if (Core.DoStringsMatch(room.roomName, wantedSpawn))
+							if (StringHelper.DoStringsMatch(room.roomName, wantedSpawn))
 							{
 								// Load room
-								Core.LoadRoom(sceneData.realSceneName, room.roomName, room.spawnPosition, room.facingAngle);
+								SceneAndRoomHelper.LoadRoom(sceneData.realSceneName, room.roomName, room.spawnPosition, room.facingAngle);
 								return DebugManager.LogToConsole("Now loading <in>" + sceneData.sceneName + "</in> room <in>" + room.roomName + "</in>...");
 							}
 						}
@@ -90,9 +89,9 @@ namespace ModStuff.Cheats
 		private void DoLoad(GotoData.SceneData sceneData, GotoData.SpawnData spawnData = null)
 		{
 			// Load with spawn
-			if (spawnData != null) Core.LoadScene(sceneData.realSceneName, spawnData.realSpawnName);
+			if (spawnData != null) SceneAndRoomHelper.LoadScene(sceneData.realSceneName, spawnData.realSpawnName);
 			// Load with fallback spawn
-			else Core.LoadScene(sceneData.realSceneName);
+			else SceneAndRoomHelper.LoadScene(sceneData.realSceneName);
 		}
 	}
 }

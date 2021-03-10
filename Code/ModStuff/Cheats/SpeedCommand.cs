@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using ModStuff.Utility;
 
 namespace ModStuff.Cheats
 {
@@ -24,7 +23,7 @@ namespace ModStuff.Cheats
 				string arg0 = args[0];
 
 				// If resetting all Entities
-				if (Core.DoStringsMatch(arg0, "reset") || Core.DoStringsMatch(arg0, "default") || Core.DoStringsMatch(arg0, "def"))
+				if (StringHelper.DoStringsMatch(arg0, "reset") || StringHelper.DoStringsMatch(arg0, "default") || StringHelper.DoStringsMatch(arg0, "def"))
 				{
 					List<RigidBodyController> allRigidbodies = GetAllRigidbodies();
 					int numOfRigidbodies = 0;
@@ -54,15 +53,15 @@ namespace ModStuff.Cheats
 						if (ParseArgToNumber(arg1, out float velMultiplier))
 						{
 							// If applying to Ittle
-							if (Core.DoStringsMatch(arg0, "self") || Core.DoStringsMatch(arg0, "player") || Core.DoStringsMatch(arg0, "ittle"))
+							if (StringHelper.DoStringsMatch(arg0, "self") || StringHelper.DoStringsMatch(arg0, "player") || StringHelper.DoStringsMatch(arg0, "ittle"))
 							{
-								RigidBodyController rigidbody = Core.GetObjComp<RigidBodyController>("PlayerEnt");
+								RigidBodyController rigidbody = GameObject.Find("PlayerEnt").GetComponent<RigidBodyController>();
 								SetVelocityForRigidbody(rigidbody, velMultiplier);
 
 								return DebugManager.LogToConsole("Set speed multiplier to <in>" + velMultiplier + "</in> for <in>Ittle</in>.", DebugManager.MessageType.Success);
 							}
 							// If applying to everyone
-							else if (Core.DoStringsMatch(arg0, "all") || Core.DoStringsMatch(arg0, "everyone"))
+							else if (StringHelper.DoStringsMatch(arg0, "all") || StringHelper.DoStringsMatch(arg0, "everyone"))
 							{
 								List<RigidBodyController> allRigidbodies = GetAllRigidbodies();
 								int numOfRigidbodies = 0;

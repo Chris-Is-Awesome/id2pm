@@ -2,10 +2,28 @@
 using UnityEngine;
 using ModStuff.Cheats;
 
-namespace ModStuff.Utility
+namespace ModStuff
 {
 	public class DebugCommandHandler : Singleton<DebugCommandHandler>
 	{
+		public class CommandToReactivate
+		{
+			public CommandFunc command;
+			public ReactivationTrigger trigger;
+
+			public CommandToReactivate(CommandFunc command, ReactivationTrigger trigger)
+			{
+				this.command = command;
+				this.trigger = trigger;
+			}
+		}
+
+		public enum ReactivationTrigger
+		{
+			OnLevelLoad,
+			OnPlayerSpawn,
+		}
+
 		public delegate void CommandFunc(string[] args);
 		public Dictionary<string, CommandFunc> allCommands;
 
@@ -15,6 +33,7 @@ namespace ModStuff.Utility
 		private void Awake()
 		{
 			InitializeCommands();
+			DontDestroyOnLoad(this);
 		}
 
 		private void InitializeCommands()
@@ -49,9 +68,18 @@ namespace ModStuff.Utility
 			OutputText(SpeedCommand.Instance.RunCommand(args));
 		}
 
+		private static bool isGodActive;
+		public static bool IsGodActive
+		{
+			get
+			{
+				return isGodActive;
+			}
+		}
 		private void God(string[] args)
 		{
-			OutputText(GodCommand.Instance.RunCommand(args));
+			isGodActive = !isGodActive;
+			OutputText(GodCommand.Instance.RunCommand(args, isGodActive));
 		}
 
 		private void OutputText(string output)

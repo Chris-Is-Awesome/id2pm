@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using ModStuff.Utility;
 
 namespace ModStuff.UI
 {
