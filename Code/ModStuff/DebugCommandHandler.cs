@@ -68,18 +68,9 @@ namespace ModStuff
 			OutputText(SpeedCommand.Instance.RunCommand(args));
 		}
 
-		private static bool isGodActive;
-		public static bool IsGodActive
-		{
-			get
-			{
-				return isGodActive;
-			}
-		}
 		private void God(string[] args)
 		{
-			isGodActive = !isGodActive;
-			OutputText(GodCommand.Instance.RunCommand(args, isGodActive));
+			OutputText(GodCommand.Instance.RunCommand(args));
 		}
 
 		private void OutputText(string output)

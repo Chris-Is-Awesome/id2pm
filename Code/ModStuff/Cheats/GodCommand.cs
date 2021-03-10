@@ -4,13 +4,17 @@ namespace ModStuff.Cheats
 {
 	public class GodCommand : SingletonForCheats<GodCommand>
 	{
+		private bool isActive;
+
 		public static string GetHelp()
 		{
 			return "Toggles Ittle invincibility. While active, you take no hit knockback and can't fall into pits.";
 		}
 
-		public string RunCommand(string[] args, bool isActive)
+		public string RunCommand(string[] args)
 		{
+			isActive = !isActive;
+
 			if (isActive)
 			{
 				ToggleOn();
