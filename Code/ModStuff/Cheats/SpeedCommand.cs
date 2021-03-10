@@ -6,7 +6,7 @@ namespace ModStuff.Cheats
 {
 	public class SpeedCommand : Singleton<SpeedCommand>
 	{
-		public string GetHelp()
+		public static string GetHelp()
 		{
 			string description = "<in>speed</in> lets you change Ittle's speed. You can move faster or slower. Also affects roll speed. A negative speed value will let you move in reverse.\n\n";
 			string usage = "<out>speed [int]{speed}</out> OR <out>speed [string]{reset/default}</out>";

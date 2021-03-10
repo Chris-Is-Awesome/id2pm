@@ -6,6 +6,17 @@ namespace ModStuff.Cheats
 {
 	public class GotoCommand : Singleton<GotoCommand>
 	{
+		public static string GetHelp()
+		{
+			// TODO: Make help command
+
+			string description = "<in>goto</in> allows you to load into any scene with any spawn. If you don't specify a room/spawn, you'll load at the fallback/default spawn. Many shorthand names/abbreviations are supported for scene/spawn names. For a list of valid scene, room, and spawn names, check the GitHub.\n\n"; // TODO: Add link to .md file
+			string usage = "<out>goto [scene], [room/spawn] (optional)</out>";
+			string examples = "<out>goto pillowfort checkpoint</out>, <out>goto pillowfort room C</out>, <out>goto pillowfort</out>";
+
+			return description + usage + examples;
+		}
+
 		public string RunCommand(string[] args)
 		{
 			// If args given
@@ -77,24 +88,12 @@ namespace ModStuff.Cheats
 			return DebugManager.LogToConsole(GetHelp());
 		}
 
-
 		private void DoLoad(GotoData.SceneData sceneData, GotoData.SpawnData spawnData = null)
 		{
 			// Load with spawn
 			if (spawnData != null) Core.LoadScene(sceneData.realSceneName, spawnData.realSpawnName);
 			// Load with fallback spawn
 			else Core.LoadScene(sceneData.realSceneName);
-		}
-
-		public string GetHelp()
-		{
-			// TODO: Make help command
-			
-			string description = "<in>goto</in> allows you to load into any scene with any spawn. If you don't specify a room/spawn, you'll load at the fallback/default spawn. Many shorthand names/abbreviations are supported for scene/spawn names. For a list of valid scene, room, and spawn names, check the GitHub.\n\n"; // TODO: Add link to .md file
-			string usage = "<out>goto [scene], [room/spawn] (optional)</out>";
-			string examples = "<out>goto pillowfort checkpoint</out>, <out>goto pillowfort room C</out>, <out>goto pillowfort</out>";
-
-			return description + usage + examples;
 		}
 	}
 }
