@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using ModStuff.Utility;
 
 namespace ModStuff.Cheats
@@ -12,9 +11,8 @@ namespace ModStuff.Cheats
 			{
 				Moveable moveableData = Core.GetObjComp<Moveable>("PlayerEnt");
 				RollAction rollData = Core.GetObjComp<RollAction>("PlayerEnt");
-
-				float defMoveSpeed = 4f;
-				float defRollSpeed = 5f;
+				float defMoveSpeed = 5f;
+				List<string> resetArgs = new List<string> { "reset", "default", "def" };
 
 				if (moveableData != null)
 				{
@@ -22,20 +20,26 @@ namespace ModStuff.Cheats
 					if (float.TryParse(args[0], out float speed))
 					{
 						moveableData._moveSpeed = speed;
-						rollData._speed = speed + 1;
+						rollData._speed = speed;
 
 						return DebugManager.LogToConsole("Set move speed to <in>" + speed + "</in>");
 					}
 					// If resetting to default
-					else if (args[0] == "reset" || args[0] == "default")
+					else
 					{
-						moveableData._moveSpeed = defMoveSpeed;
-						rollData._speed = defRollSpeed;
+						for (int i = 0; i < resetArgs.Count; i++)
+						{
+							if (Core.DoStringsMatch(resetArgs[i], args[0]))
+							{
+								moveableData._moveSpeed = defMoveSpeed;
+								rollData._speed = defMoveSpeed;
 
-						return DebugManager.LogToConsole("Reset move speed to default (" + defMoveSpeed + ").");
+								return DebugManager.LogToConsole("Reset move speed to default (" + defMoveSpeed + ").");
+							}
+						}
 					}
 
-					else return DebugManager.LogToConsole("<in>" + args[0] + "</in> is not a valid speed value. Use <out>help speed</out> for more info.", DebugManager.MessageType.Error);
+					return DebugManager.LogToConsole("<in>" + args[0] + "</in> is not a valid speed value. Use <out>help speed</out> for more info.", DebugManager.MessageType.Error);
 				}
 			}
 
