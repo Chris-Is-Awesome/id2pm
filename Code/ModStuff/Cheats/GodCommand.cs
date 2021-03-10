@@ -9,17 +9,8 @@ namespace ModStuff.Cheats
 			return "Toggles Ittle invincibility. While active, you take no hit knockback and can't fall into pits.";
 		}
 
-		private GameObject player;
-		private Entity entity;
-		private Killable killable;
-		private EntityHittable hittable;
-		private Envirodeathable envirodeathable;
-		private EntityEnvirodeathable entityEnvirodeathable;
-
 		public string RunCommand(string[] args, bool isActive)
 		{
-			GetReferences();
-
 			if (isActive)
 			{
 				ToggleOn();
@@ -32,9 +23,17 @@ namespace ModStuff.Cheats
 
 		private void ToggleOn()
 		{
-			GetReferences();
-			hittable.Disable = true;
+			GameObject playerObj = VarHelper.PlayerObj;
+
+			// Disable hurtbox
+			playerObj.transform.Find("Hittable").GetComponent<EntityHittable>().Disable = true;
+
+			// Disable void planes
+			Envirodeathable envirodeathable = playerObj.GetComponent<Envirodeathable>();
 			if (envirodeathable != null) Destroy(envirodeathable);
+
+			// Full heal
+			Killable killable = playerObj.transform.Find("Hittable").GetComponent<Killable>();
 			killable.CurrentHp = killable.MaxHp;
 
 			PlayerSpawner.RegisterSpawnListener(delegate
@@ -45,19 +44,17 @@ namespace ModStuff.Cheats
 
 		private void ToggleOff()
 		{
-			hittable.Disable = false;
-			entityEnvirodeathable.Enable(entity);
-			PlayerSpawner.ClearListeners();
-		}
+			GameObject playerObj = VarHelper.PlayerObj;
 
-		private void GetReferences()
-		{
-			if (player == null) player = GameObject.Find("PlayerEnt");
-			if (entity == null) entity = player.GetComponent<Entity>();
-			if (killable == null) killable = player.transform.Find("Hittable").GetComponent<Killable>();
-			if (hittable == null) hittable = killable.GetComponent<EntityHittable>();
-			if (envirodeathable == null) envirodeathable = player.GetComponent<Envirodeathable>();
-			if (entityEnvirodeathable == null) entityEnvirodeathable = player.transform.Find("Envirodeath").GetComponent<EntityEnvirodeathable>();
+			// Enable hurtbox
+			playerObj.transform.Find("Hittable").GetComponent<EntityHittable>().Disable = false;
+
+			// Enable void planes
+			Entity entity = playerObj.GetComponent<Entity>();
+			EntityEnvirodeathable entityEnvirodeathable = playerObj.transform.Find("Envirodeath").GetComponent<EntityEnvirodeathable>();
+			entityEnvirodeathable.Enable(entity);
+
+			PlayerSpawner.ClearListeners();
 		}
 	}
 }
