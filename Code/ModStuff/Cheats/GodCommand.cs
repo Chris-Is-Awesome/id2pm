@@ -2,7 +2,7 @@
 
 namespace ModStuff.Cheats
 {
-	public class GodCommand : Singleton<GodCommand>
+	public class GodCommand : SingletonForCheats<GodCommand>
 	{
 		public static string GetHelp()
 		{

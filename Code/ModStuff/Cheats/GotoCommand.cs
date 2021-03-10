@@ -2,7 +2,7 @@
 
 namespace ModStuff.Cheats
 {
-	public class GotoCommand : Singleton<GotoCommand>
+	public class GotoCommand : SingletonForCheats<GotoCommand>
 	{
 		public static string GetHelp()
 		{

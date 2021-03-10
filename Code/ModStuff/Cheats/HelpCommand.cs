@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace ModStuff.Cheats
 {
-	public class HelpCommand : Singleton<HelpCommand>
+	public class HelpCommand : SingletonForCheats<HelpCommand>
 	{
 		public static string GetHelp()
 		{
