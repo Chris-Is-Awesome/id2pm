@@ -36,7 +36,7 @@ namespace ModStuff.Cheats
 			
 			if (isActive)
 			{
-				if (envirodeathable != null) Destroy(envirodeathable); // Disable environmental damage
+				if (envirodeathable != null) Destroy(envirodeathable); // Disable falling & spikes
 				killable.CurrentHp = killable.MaxHp; // Full heal
 
 				return DebugManager.LogToConsole("Godmode is now <color=green>active</color> for Ittle.");
