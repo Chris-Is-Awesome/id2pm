@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using ModStuff.Data;
+﻿using ModStuff.Data;
 using ModStuff.Utility;
 
 namespace ModStuff.Cheats
