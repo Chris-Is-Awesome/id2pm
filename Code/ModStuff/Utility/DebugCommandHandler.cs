@@ -22,6 +22,7 @@ namespace ModStuff.Utility
 			allCommands = new Dictionary<string, CommandFunc>
 			{
 				{ "test", new CommandFunc(Test) },
+				{ "help", new CommandFunc(Help) },
 				{ "goto", new CommandFunc(Goto) },
 				{ "speed", new CommandFunc(Speed) },
 			};
@@ -30,6 +31,11 @@ namespace ModStuff.Utility
 		private void Test(string[] args)
 		{
 			OutputText(TestCommand.Instance.RunCommand(args));
+		}
+
+		private void Help(string[] args)
+		{
+			OutputText(HelpCommand.Instance.RunCommand(args));
 		}
 
 		private void Goto(string[] args)
