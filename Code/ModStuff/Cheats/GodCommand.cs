@@ -7,7 +7,7 @@ namespace ModStuff.Cheats
 	{
 		public static string GetHelp()
 		{
-			return "You really need help <i>here</i>?! At this point, you really should consult Tippsie...";
+			return "Toggles Ittle invincibility. While active, you take no hit knockback and can't fall into pits.";
 		}
 
 		private static bool isActive;
