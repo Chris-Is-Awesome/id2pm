@@ -22,12 +22,24 @@ namespace ModStuff.Utility
 			allCommands = new Dictionary<string, CommandFunc>
 			{
 				{ "test", new CommandFunc(Test) },
+				{ "goto", new CommandFunc(Goto) },
+				{ "speed", new CommandFunc(Speed) },
 			};
 		}
 
 		private void Test(string[] args)
 		{
 			OutputText(TestCommand.Instance.RunCommand(args));
+		}
+
+		private void Goto(string[] args)
+		{
+			OutputText(GotoCommand.Instance.RunCommand(args));
+		}
+
+		private void Speed(string[] args)
+		{
+			OutputText(SpeedCommand.Instance.RunCommand(args));
 		}
 
 		private void OutputText(string output)
