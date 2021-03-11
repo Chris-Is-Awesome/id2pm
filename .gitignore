@@ -5,6 +5,7 @@
 
 # E2D-specific
 [Vv]anilla Files/
+updateAssembly.bat
 
 # User-specific files
 *.rsuser
