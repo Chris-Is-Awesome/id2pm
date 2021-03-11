@@ -27,6 +27,8 @@ namespace ModStuff.Cheats
 
 		private void ToggleOn()
 		{
+			if (!isActive) return;
+
 			GameObject playerObj = VarHelper.PlayerObj;
 
 			// Disable hurtbox
@@ -42,6 +44,7 @@ namespace ModStuff.Cheats
 
 			PlayerSpawner.RegisterSpawnListener(delegate
 			{
+				DebugManager.LogToFile("[Cheat] God mode active for Ittle");
 				ToggleOn();
 			});
 		}
@@ -57,8 +60,6 @@ namespace ModStuff.Cheats
 			Entity entity = playerObj.GetComponent<Entity>();
 			EntityEnvirodeathable entityEnvirodeathable = playerObj.transform.Find("Envirodeath").GetComponent<EntityEnvirodeathable>();
 			entityEnvirodeathable.Enable(entity);
-
-			PlayerSpawner.ClearListeners();
 		}
 	}
 }

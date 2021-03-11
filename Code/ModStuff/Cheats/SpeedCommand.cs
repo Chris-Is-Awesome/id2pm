@@ -5,10 +5,12 @@ namespace ModStuff.Cheats
 {
 	public class SpeedCommand : SingletonForCheats<SpeedCommand>
 	{
+		private bool isActive;
+
 		public static string GetHelp()
 		{
-			string description = "<in>speed</in> lets you change the speed of various Entities. You can move faster or slower. Also affects roll speed. A negative speed value will let you move in reverse.\n\n";
-			string usage = "<out>speed [int]{speed}</out> OR <out>speed [string]{reset/default}</out>";
+			string description = "<in>speed</in> lets you change the speed of Ittle. You can move faster or slower. Also affects roll & knockback speeds. A negative speed value will let you move in reverse.\n\n";
+			string usage = "<out>speed [float]{speed}</out> OR <out>speed [string]{reset/default}</out>";
 			string examples = "<out>speed 15</out>, <out>speed -5</out>, <out>speed reset</out>";
 
 			return description + usage + examples;
@@ -21,41 +23,47 @@ namespace ModStuff.Cheats
 			{
 				string arg0 = args[0];
 
-				// If resetting all Entities
+				// If resetting
 				if (IsValidArgOfMany(arg0, new List<string> { "reset", "default", "def" }))
 				{
-					ResetSpeed();
-					return DebugManager.LogToConsole("Reset speed for all Entities.", DebugManager.MessageType.Success);
+					ToggleOff();
+					return DebugManager.LogToConsole("Reset speed for Ittle to default.");
 				}
 				// If not resetting & number is given
-				else if (TryParseToFloat(arg0, out float velMultiplier))
+				else if (TryParseToFloat(arg0, out float multiplier))
 				{
-					velMultiplier /= 5;
-					SetSpeed(velMultiplier);
-					return DebugManager.LogToConsole("Set Ittle's speed to <in>" + velMultiplier + "</in>");
+					isActive = true;
+					ToggleOn(multiplier);
+					return DebugManager.LogToConsole("Set Ittle's speed to <in>" + multiplier + "</in>");
 				}
 
 				// If arg0 is invalid
 				return DebugManager.LogToConsole("Value <in>" + arg0 + "</in> is not a valid value. Use <out>help speed</out> for more info.", DebugManager.MessageType.Error);
 			}
 
+			// If no args given
 			return DebugManager.LogToConsole(GetHelp());
 		}
 
-		private void SetSpeed(float multiplier)
+		private void ToggleOn(float multiplier)
 		{
-			RigidBodyController rigidbody = GameObject.Find("PlayerEnt").GetComponent<RigidBodyController>();
-			SetSpeedForRigidbody(rigidbody, multiplier);
-		}
+			if (!isActive) return;
 
-		private void ResetSpeed()
-		{
-			SetSpeed(1);
-		}
-
-		private void SetSpeedForRigidbody(RigidBodyController rigidbody, float multiplier)
-		{
+			RigidBodyController rigidbody = VarHelper.PlayerObj.GetComponent<RigidBodyController>();
 			rigidbody.SetCustomVelocity(multiplier);
+
+			PlayerSpawner.RegisterSpawnListener(delegate
+			{
+				DebugManager.LogToFile("[Cheat] Ittle's speed set to " + multiplier);
+				ToggleOn(multiplier);
+			});
+		}
+
+		private void ToggleOff()
+		{
+			isActive = false;
+			RigidBodyController rigidbody = VarHelper.PlayerObj.GetComponent<RigidBodyController>();
+			rigidbody.SetCustomVelocity(1);
 		}
 	}
 }
