@@ -3,20 +3,9 @@ using UnityEngine;
 
 namespace ModStuff.Cheats
 {
-	public class SpeedCommand : SingletonForCheats<SpeedCommand>
+	public class SpeedCommand : DebugCommand
 	{
-		private bool isActive;
-
-		public static string GetHelp()
-		{
-			string description = "<in>speed</in> lets you change the speed of Ittle. You can move faster or slower. Also affects roll & knockback speeds. A negative speed value will let you move in reverse.\n\n";
-			string usage = "<out>speed [float]{speed}</out> OR <out>speed [string]{reset/default}</out>";
-			string examples = "<out>speed 15</out>, <out>speed -5</out>, <out>speed reset</out>";
-
-			return description + usage + examples;
-		}
-
-		public string RunCommand(string[] args)
+		public override string RunCommand(string[] args)
 		{
 			// If args given
 			if (args.Length > 0)
@@ -64,6 +53,15 @@ namespace ModStuff.Cheats
 			isActive = false;
 			RigidBodyController rigidbody = VarHelper.PlayerObj.GetComponent<RigidBodyController>();
 			rigidbody.SetCustomVelocity(1);
+		}
+
+		public static string GetHelp()
+		{
+			string description = "<in>speed</in> lets you change the speed of Ittle. You can move faster or slower. Also affects roll & knockback speeds. A negative speed value will let you move in reverse.\n\n";
+			string usage = "<out>speed [float]{speed}</out> OR <out>speed [string]{reset/default}</out>";
+			string examples = "<out>speed 15</out>, <out>speed -5</out>, <out>speed reset</out>";
+
+			return description + usage + examples;
 		}
 	}
 }

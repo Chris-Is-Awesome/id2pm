@@ -181,7 +181,6 @@ public class PauseMenu : EntityOverlayWindow
 		if (Input.GetKey(commandHandler.keyToOpenDebugMenu))
 		{
 			menuImpl.SwitchToScreen("debugRoot", null);
-			commandHandler.debugMenu = _debugMenu;
 		}
 		else if (Input.GetKey(this._debugStartCode))
 		{

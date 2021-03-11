@@ -78,7 +78,7 @@ public class DebugMenu : MonoBehaviour
 			if (commandHandler.allCommands.TryGetValue(command, out DebugCommandHandler.CommandFunc commandFunc))
 			{
 				string[] arguments = words.Skip(1).ToArray(); // Get command arguments
-				commandFunc(arguments); // Invoke command
+				OutputText(commandFunc(arguments)); // Invoke command
 
 				// Debug output
 				string output = "[Debug Console] Running command: '" + command + "' with " + arguments.Length + " argument(s)";
