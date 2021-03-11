@@ -12,7 +12,7 @@ public class RigidBodyController : MonoBehaviour
 
 	Vector3 previousPosition;
 
-	public float velocityMultiplier; // Added
+	float velocityMultiplier; // Added - MUST BE LEFT PRIVATE OR SCENE DATA WILL CORRUPT LIKELY DUE TO PREFAB SERIALIZAATION
 
 	void Awake()
 	{
@@ -37,6 +37,11 @@ public class RigidBodyController : MonoBehaviour
 	void OnDisable()
 	{
 		this.accumVel = Vector3.zero;
+	}
+
+	public void SetCustomVelocity(float multiplier)
+	{
+		velocityMultiplier = multiplier;
 	}
 
 	public void SetVelocity(Vector3 vel)

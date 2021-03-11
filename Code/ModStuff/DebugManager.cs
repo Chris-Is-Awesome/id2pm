@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using UnityEngine;
 
 namespace ModStuff
@@ -13,9 +14,17 @@ namespace ModStuff
 			Error
 		}
 
-		public static void LogToFile(string message, LogType logType = LogType.Log, bool includeStackTrace = true, bool isHeader = false, bool addWhiteSpace = true)
+		public static void EnableDebugging()
 		{
-			string output = FormatDebugMessage(message, logType, isHeader, addWhiteSpace);
+			// Enable Unity logging
+			Debug.logger.logEnabled = true;
+			Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
+			Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
+		}
+
+		public static void LogToFile(string message, LogType logType = LogType.Log, bool includeStackTrace = true, bool addWhiteSpace = true)
+		{
+			string output = FormatDebugMessage(message, logType, addWhiteSpace);
 
 			if (includeStackTrace)
 			{
@@ -87,30 +96,25 @@ namespace ModStuff
 			return output;
 		}
 
-		private static string FormatDebugMessage(string message, LogType logType, bool isHeader, bool addWhiteSpace)
+		private static string FormatDebugMessage(string message, LogType logType, bool addWhiteSpace)
 		{
-			string formattedMessage =  message;
+			string formattedMessage = message;
 
 			switch (logType)
 			{
 				case LogType.Warning:
-					formattedMessage = "[WARN]: " + formattedMessage;
+					formattedMessage = "[WARN] " + formattedMessage;
 					break;
 				case LogType.Error:
-					formattedMessage = "[ERROR]: " + formattedMessage;
+					formattedMessage = "[ERROR] " + formattedMessage;
 					break;
-			}
-
-			if (isHeader)
-			{
-				formattedMessage = "---------- " + formattedMessage + " ----------";
 			}
 
 			formattedMessage = "[E2D] " + formattedMessage;
 
 			if (addWhiteSpace)
 			{
-				formattedMessage = "\n" + formattedMessage + "\n";
+				formattedMessage = "\n" + formattedMessage;
 			}
 
 			return formattedMessage;

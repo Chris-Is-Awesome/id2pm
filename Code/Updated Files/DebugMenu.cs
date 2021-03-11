@@ -81,13 +81,14 @@ public class DebugMenu : MonoBehaviour
 				commandFunc(arguments); // Invoke command
 
 				// Debug output
-				string output = "\n[Debug Console] Running command: '" + command + "' with " + arguments.Length + " arguments\n";
+				string output = "[Debug Console] Running command: '" + command + "' with " + arguments.Length + " argument(s)";
+				if (arguments.Length > 0) output += "\n";
 				for (int i = 0; i < arguments.Length; i++)
 				{
-					output += "Arg[" + i + "]: " + arguments[i] + "\n";
+					output += "Arg[" + i + "]: " + arguments[i];
+					if (i < arguments.Length - 1) output += "\n";
 				}
-				output += "\n";
-				DebugManager.LogToFile(output, LogType.Log, false, false, false);
+				DebugManager.LogToFile(output, LogType.Log, false);
 			}
 			// If command invalid
 			else

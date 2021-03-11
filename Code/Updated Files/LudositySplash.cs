@@ -19,12 +19,8 @@ public class LudositySplash : MonoBehaviour
 
 	void Start()
 	{
-		#region Enable Debug Logging
-		Debug.logger.logEnabled = true;
-		Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
-		Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
-		DebugManager.LogToFile("GAME STARTED", LogType.Log, false, true, true);
-		#endregion
+		// Enable Unity debug logging
+		DebugManager.EnableDebugging();
 
 		// TEMP
 		Utility.LoadLevel("MainMenu");

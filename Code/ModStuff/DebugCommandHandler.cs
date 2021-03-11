@@ -6,24 +6,6 @@ namespace ModStuff
 {
 	public class DebugCommandHandler : Singleton<DebugCommandHandler>
 	{
-		public class CommandToReactivate
-		{
-			public CommandFunc command;
-			public ReactivationTrigger trigger;
-
-			public CommandToReactivate(CommandFunc command, ReactivationTrigger trigger)
-			{
-				this.command = command;
-				this.trigger = trigger;
-			}
-		}
-
-		public enum ReactivationTrigger
-		{
-			OnLevelLoad,
-			OnPlayerSpawn,
-		}
-
 		public delegate void CommandFunc(string[] args);
 		public Dictionary<string, CommandFunc> allCommands;
 
@@ -33,7 +15,6 @@ namespace ModStuff
 		private void Awake()
 		{
 			InitializeCommands();
-			DontDestroyOnLoad(this);
 		}
 
 		private void InitializeCommands()
