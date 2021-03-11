@@ -22,7 +22,7 @@ namespace ModStuff
 			Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
 		}
 
-		public static void LogToFile(string message, LogType logType = LogType.Log, bool includeStackTrace = true, bool addWhiteSpace = true)
+		public static void LogToFile(string message, LogType logType = LogType.Log, bool includeStackTrace = false, bool addWhiteSpace = true)
 		{
 			string output = FormatDebugMessage(message, logType, addWhiteSpace);
 
@@ -114,7 +114,7 @@ namespace ModStuff
 
 			if (addWhiteSpace)
 			{
-				formattedMessage = "\n" + formattedMessage;
+				formattedMessage = "\n" + formattedMessage + "\n";
 			}
 
 			return formattedMessage;
