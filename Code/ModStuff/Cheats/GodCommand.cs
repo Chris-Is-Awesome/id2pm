@@ -2,16 +2,9 @@
 
 namespace ModStuff.Cheats
 {
-	public class GodCommand : SingletonForCheats<GodCommand>
+	public class GodCommand : DebugCommand
 	{
-		private bool isActive;
-
-		public static string GetHelp()
-		{
-			return "Toggles Ittle invincibility. While active, you take no hit knockback and can't fall into pits.";
-		}
-
-		public string RunCommand(string[] args)
+		public override string RunCommand(string[] args)
 		{
 			isActive = !isActive;
 
@@ -36,7 +29,7 @@ namespace ModStuff.Cheats
 
 			// Disable void planes
 			Envirodeathable envirodeathable = playerObj.GetComponent<Envirodeathable>();
-			if (envirodeathable != null) Destroy(envirodeathable);
+			if (envirodeathable != null) Object.Destroy(envirodeathable);
 
 			// Full heal
 			Killable killable = playerObj.transform.Find("Hittable").GetComponent<Killable>();
@@ -60,6 +53,11 @@ namespace ModStuff.Cheats
 			Entity entity = playerObj.GetComponent<Entity>();
 			EntityEnvirodeathable entityEnvirodeathable = playerObj.transform.Find("Envirodeath").GetComponent<EntityEnvirodeathable>();
 			entityEnvirodeathable.Enable(entity);
+		}
+
+		public static string GetHelp()
+		{
+			return "Toggles Ittle invincibility. While active, you take no hit knockback and can't fall into pits.";
 		}
 	}
 }

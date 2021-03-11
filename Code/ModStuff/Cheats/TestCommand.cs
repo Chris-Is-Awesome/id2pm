@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace ModStuff.Cheats
 {
-	public class TestCommand : Singleton<TestCommand>
+	public class TestCommand : DebugCommand
 	{
-		public string RunCommand(string[] args)
+		public override string RunCommand(string[] args)
 		{
 			string roomName = SceneAndRoomHelper.GetRoomPlayerIsIn().RoomName;
 			Vector3 pos = GameObject.Find("PlayerEnt").transform.position;
