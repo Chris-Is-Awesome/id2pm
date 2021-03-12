@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Collections.Generic;
 
 namespace ModStuff.Cheats
 {
@@ -7,17 +6,44 @@ namespace ModStuff.Cheats
 	{
 		public override string RunCommand(string[] args)
 		{
-			// If args given
-			if (args.Length > 0)
+			// If args given, output command help
+			if (args.Length > 0) return GetHelpForCommand(args[0]);
+
+			// If no args given, output list of commands
+			return GetListOfCommands();
+		}
+
+		private string GetHelpForCommand(string arg)
+		{
+			DebugCommandHandler.CommandInfo command = DebugCommandHandler.Instance.GetCommand(arg); // Get command
+
+			// If valid command
+			if (command != null) return command.methodToInvoke.Method.DeclaringType.GetMethod("GetHelp").Invoke(null, null).ToString();
+
+			// If invalid command
+			return "<in>" + arg + "</in> is not a command. Use <out>help</out> to get list of commands";
+		}
+
+		private string GetListOfCommands()
+		{
+			string output = string.Empty;
+			List<DebugCommandHandler.CommandInfo> allCommands = DebugCommandHandler.Instance.allCommands;
+
+			for (int i = 0; i < allCommands.Count; i++)
 			{
-				string arg0 = args[0];
-				string className = "ModStuff.Cheats." + char.ToUpper(arg0[0]) + arg0.Substring(1) + "Command";
-				MethodInfo command = Type.GetType(className).GetMethod("GetHelp");
-				return DebugManager.LogToConsole(command.Invoke(null, null).ToString());
+				DebugCommandHandler.CommandInfo command = allCommands[i];
+
+				// If is dev command, only output if is dev build
+				if (command.isDevOnly)
+				{
+					if (!VersionHelper.IsDevBuild) continue;
+				}
+
+				output += command.nameOfCommand;
+				if (i < allCommands.Count - 1) output += ", ";
 			}
 
-			// TODO: Output list of commands
-			return "This will print a list of commands... eventually...";
+			return output;
 		}
 
 		public static string GetHelp()

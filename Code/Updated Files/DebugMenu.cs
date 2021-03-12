@@ -72,31 +72,35 @@ public class DebugMenu : MonoBehaviour
 		// Check if command given
 		if (words.Length > 0)
 		{
-			string command = words[0];
-
+			string command = words[0]; // Get command name
+			DebugCommandHandler.CommandInfo commandToRun = commandHandler.GetCommand(command); // Get command
+			
 			// If command is valid
-			if (commandHandler.allCommands.TryGetValue(command, out DebugCommandHandler.CommandFunc commandFunc))
+			if (commandToRun != null)
 			{
 				string[] arguments = words.Skip(1).ToArray(); // Get command arguments
-				OutputText(commandFunc(arguments)); // Invoke command
+
+				// Run command
+				OutputText(DebugManager.LogToConsole(commandToRun.methodToInvoke(arguments)));
 
 				// Debug output
-				string output = "[Debug Console] Running command: '" + command + "' with " + arguments.Length + " argument(s)";
+				string output = "[Debug Console] Running command: '" + commandToRun.nameOfCommand + "' with " + arguments.Length + " argument(s)";
 				if (arguments.Length > 0) output += "\n";
-				for (int i = 0; i < arguments.Length; i++)
+				for (int j = 0; j < arguments.Length; j++)
 				{
-					output += "Arg[" + i + "]: " + arguments[i];
-					if (i < arguments.Length - 1) output += "\n";
+					output += "Arg[" + j + "]: " + arguments[j];
+					if (j < arguments.Length - 1) output += "\n";
 				}
 				DebugManager.LogToFile(output, LogType.Log, false);
 			}
-			// If command invalid
+			// If command is not valid
 			else
 			{
 				string output = "<in>" + command + "</in> is not a command. Use <out>help</out> to get list of commands";
 				OutputText(DebugManager.LogToConsole(output, DebugManager.MessageType.Error));
 			}
 
+			// Format output
 			TextMesh outputTextMesh = transform.Find("InfoValue").GetChild(0).GetComponent<TextMesh>();
 			outputTextMesh.text = ModStuff.UI.UIText.AddLineBreaks(outputTextMesh.text, outputTextMesh);
 		}
