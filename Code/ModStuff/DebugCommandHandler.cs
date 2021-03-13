@@ -50,7 +50,7 @@ namespace ModStuff
 				{ new CommandInfo("Help", new ActivationMethod(helpCommand.Activate)) },
 			};
 
-			DebugManager.LogToFile(this.GetType().ToString() + " initialized");
+			DebugManager.LogToFile("DebugCommandHandler initialized");
 		}
 
 		public CommandInfo GetCommand(string commandName)

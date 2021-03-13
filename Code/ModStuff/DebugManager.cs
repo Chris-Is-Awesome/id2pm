@@ -110,7 +110,8 @@ namespace ModStuff
 					break;
 			}
 
-			formattedMessage = "[E2D] " + formattedMessage;
+			string timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
+			formattedMessage = "[E2D] [" + timestamp + "] " + formattedMessage;
 
 			if (addWhiteSpace)
 			{
