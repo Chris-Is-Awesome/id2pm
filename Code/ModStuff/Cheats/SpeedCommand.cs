@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 namespace ModStuff.Cheats
 {
 	public class SpeedCommand : DebugCommand
 	{
-		public override string RunCommand(string[] args)
+		public override string Activate(string[] args)
 		{
 			// If args given
 			if (args.Length > 0)
@@ -15,7 +14,7 @@ namespace ModStuff.Cheats
 				// If resetting
 				if (IsValidArgOfMany(arg0, new List<string> { "reset", "default", "def" }))
 				{
-					ToggleOff();
+					Deactivate();
 					return DebugManager.LogToConsole("Reset speed for Ittle to default.");
 				}
 				// If not resetting & number is given
@@ -34,6 +33,13 @@ namespace ModStuff.Cheats
 			return DebugManager.LogToConsole(GetHelp());
 		}
 
+		public void Deactivate()
+		{
+			RigidBodyController rigidbody = VarHelper.PlayerObj.GetComponent<RigidBodyController>();
+			rigidbody.SetCustomVelocity(1);
+			isActive = false;
+		}
+
 		private void ToggleOn(float multiplier)
 		{
 			if (!isActive) return;
@@ -47,13 +53,7 @@ namespace ModStuff.Cheats
 				ToggleOn(multiplier);
 			});
 		}
-
-		private void ToggleOff()
-		{
-			isActive = false;
-			RigidBodyController rigidbody = VarHelper.PlayerObj.GetComponent<RigidBodyController>();
-			rigidbody.SetCustomVelocity(1);
-		}
+		
 
 		public static string GetHelp()
 		{

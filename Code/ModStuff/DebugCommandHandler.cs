@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using ModStuff.Cheats;
 
@@ -9,18 +10,21 @@ namespace ModStuff
 		public class CommandInfo
 		{
 			public string nameOfCommand;
-			public CommandFunc methodToInvoke;
+			public ActivationMethod activationMethod;
+			public DeactivationMethod deactivationMethod;
 			public bool isDevOnly;
 
-			public CommandInfo (string nameOfCommand, CommandFunc methodToInvoke, bool isDevOnly = false)
+			public CommandInfo (string nameOfCommand, ActivationMethod activationMethod, DeactivationMethod deactivationMethod = null, bool isDevOnly = false)
 			{
 				this.nameOfCommand = nameOfCommand;
-				this.methodToInvoke = methodToInvoke;
+				this.activationMethod = activationMethod;
+				this.deactivationMethod = deactivationMethod;
 				this.isDevOnly = isDevOnly;
 			}
 		}
 
-		public delegate string CommandFunc(string[] args);
+		public delegate string ActivationMethod(string[] args);
+		public delegate void DeactivationMethod();
 		public List<CommandInfo> allCommands;
 
 		public KeyCode keyToOpenDebugMenu = KeyCode.F1;
@@ -39,11 +43,11 @@ namespace ModStuff
 			{
 				// Do not put dev commands at bottom of list, as this will add extra comma in help command and
 				// is more performant to just not list dev command last rather than remove that trailing comma
-				{ new CommandInfo("Test", new CommandFunc(testCommand.RunCommand), true) },
-				{ new CommandInfo("Goto", new CommandFunc(gotoCommand.RunCommand)) },
-				{ new CommandInfo("Speed", new CommandFunc(speedCommand.RunCommand)) },
-				{ new CommandInfo("God", new CommandFunc(godCommand.RunCommand)) },
-				{ new CommandInfo("Help", new CommandFunc(helpCommand.RunCommand)) },
+				{ new CommandInfo("Test", new ActivationMethod(testCommand.Activate), null, true) },
+				{ new CommandInfo("Goto", new ActivationMethod(gotoCommand.Activate)) },
+				{ new CommandInfo("Speed", new ActivationMethod(speedCommand.Activate), new DeactivationMethod(speedCommand.Deactivate)) },
+				{ new CommandInfo("God", new ActivationMethod(godCommand.Activate), new DeactivationMethod(godCommand.Deactivate)) },
+				{ new CommandInfo("Help", new ActivationMethod(helpCommand.Activate)) },
 			};
 
 			DebugManager.LogToFile(this.GetType().ToString() + " initialized");
@@ -61,6 +65,35 @@ namespace ModStuff
 			}
 
 			return null;
+		}
+
+		public bool IsCommandActive(CommandInfo command)
+		{
+			Type commandClass = command.activationMethod.Method.DeclaringType;
+			return (bool)commandClass.GetField("isActive").GetValue(command.activationMethod.Target);
+		}
+
+		public void ActivateCommand(CommandInfo command, string[] args = null)
+		{
+			// Only activate if not already active, otherwise don't bother (saves on performance)
+			if (!IsCommandActive(command)) command.activationMethod.Invoke(args);
+		}
+
+		public void DeactivateCommand(CommandInfo command)
+		{
+			// Only deactivate if active, otherwise don't bother (saves on performance)
+			if (IsCommandActive(command)) command.deactivationMethod.Invoke();
+		}
+
+		public void DeactivateAllCommands()
+		{
+			for (int i = 0; i < allCommands.Count; i++)
+			{
+				CommandInfo command = allCommands[i];
+
+				// Only deactivate if active, otherwise don't bother (saves on performance)
+				if (IsCommandActive(command)) command.deactivationMethod.Invoke();
+			}
 		}
 	}
 }
