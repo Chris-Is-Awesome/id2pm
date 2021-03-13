@@ -4,7 +4,7 @@ namespace ModStuff
 {
 	public abstract class DebugCommand
 	{
-		public abstract string RunCommand(string[] args);
+		public abstract string Activate(string[] args);
 
 		public bool isActive;
 

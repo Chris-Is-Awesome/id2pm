@@ -4,7 +4,7 @@ namespace ModStuff.Cheats
 {
 	public class HelpCommand : DebugCommand
 	{
-		public override string RunCommand(string[] args)
+		public override string Activate(string[] args)
 		{
 			// If args given, output command help
 			if (args.Length > 0) return GetHelpForCommand(args[0]);
@@ -18,7 +18,7 @@ namespace ModStuff.Cheats
 			DebugCommandHandler.CommandInfo command = DebugCommandHandler.Instance.GetCommand(arg); // Get command
 
 			// If valid command
-			if (command != null) return command.methodToInvoke.Method.DeclaringType.GetMethod("GetHelp").Invoke(null, null).ToString();
+			if (command != null) return command.activationMethod.Method.DeclaringType.GetMethod("GetHelp").Invoke(null, null).ToString();
 
 			// If invalid command
 			return "<in>" + arg + "</in> is not a command. Use <out>help</out> to get list of commands";

@@ -19,7 +19,7 @@
 			get
 			{
 				// TODO: Return true depending on Steam user currently playing?
-				return false;
+				return true;
 			}
 		}
 

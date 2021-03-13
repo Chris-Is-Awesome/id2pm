@@ -4,21 +4,36 @@ namespace ModStuff.Cheats
 {
 	public class GodCommand : DebugCommand
 	{
-		public override string RunCommand(string[] args)
+		public override string Activate(string[] args)
 		{
 			isActive = !isActive;
 
 			if (isActive)
 			{
-				ToggleOn();
+				RunCommand();
 				return DebugManager.LogToConsole("Godmode is now <color=green>active</color> for Ittle.");
 			}
 
-			ToggleOff();
+			Deactivate();
 			return DebugManager.LogToConsole("Godmode is now <color=red>deactivated</color> for Ittle.");
 		}
 
-		private void ToggleOn()
+		public void Deactivate()
+		{
+			GameObject playerObj = VarHelper.PlayerObj;
+
+			// Enable hurtbox
+			playerObj.transform.Find("Hittable").GetComponent<EntityHittable>().Disable = false;
+
+			// Enable void planes
+			Entity entity = playerObj.GetComponent<Entity>();
+			EntityEnvirodeathable entityEnvirodeathable = playerObj.transform.Find("Envirodeath").GetComponent<EntityEnvirodeathable>();
+			entityEnvirodeathable.Enable(entity);
+
+			isActive = false;
+		}
+
+		private void RunCommand()
 		{
 			if (!isActive) return;
 
@@ -38,21 +53,8 @@ namespace ModStuff.Cheats
 			PlayerSpawner.RegisterSpawnListener(delegate
 			{
 				DebugManager.LogToFile("[Cheat] God mode active for Ittle");
-				ToggleOn();
+				RunCommand();
 			});
-		}
-
-		private void ToggleOff()
-		{
-			GameObject playerObj = VarHelper.PlayerObj;
-
-			// Enable hurtbox
-			playerObj.transform.Find("Hittable").GetComponent<EntityHittable>().Disable = false;
-
-			// Enable void planes
-			Entity entity = playerObj.GetComponent<Entity>();
-			EntityEnvirodeathable entityEnvirodeathable = playerObj.transform.Find("Envirodeath").GetComponent<EntityEnvirodeathable>();
-			entityEnvirodeathable.Enable(entity);
 		}
 
 		public static string GetHelp()

@@ -4,7 +4,7 @@ namespace ModStuff.Cheats
 {
 	public class GotoCommand : DebugCommand
 	{
-		public override string RunCommand(string[] args)
+		public override string Activate(string[] args)
 		{
 			// If args given
 			if (args.Length > 0)
