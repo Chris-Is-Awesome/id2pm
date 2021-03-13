@@ -1,1 +1,2 @@
-﻿* When using `goto` to load into a room in a different scene, it fails to load Entities
+﻿* DebugCommands - When using `goto` to load into a room in a different scene, it fails to load Entities.
+* EventListener - When OnEntityDeath runs, it includes player warping. Void outs are already fixed.
