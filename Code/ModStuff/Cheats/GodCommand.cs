@@ -10,32 +10,19 @@ namespace ModStuff.Cheats
 
 			if (isActive)
 			{
-				RunCommand();
-				return DebugManager.LogToConsole("Godmode is now <color=green>active</color> for Ittle.");
+				RunCommand(false);
+				EventListener.OnPlayerSpawn += RunCommand;
+				return "Godmode is now <color=green>active</color> for Ittle.";
 			}
 
 			Deactivate();
-			return DebugManager.LogToConsole("Godmode is now <color=red>deactivated</color> for Ittle.");
+			return "Godmode is now <color=red>deactivated</color> for Ittle.";
 		}
 
-		public void Deactivate()
-		{
-			GameObject playerObj = VarHelper.PlayerObj;
-
-			// Enable hurtbox
-			playerObj.transform.Find("Hittable").GetComponent<EntityHittable>().Disable = false;
-
-			// Enable void planes
-			Entity entity = playerObj.GetComponent<Entity>();
-			EntityEnvirodeathable entityEnvirodeathable = playerObj.transform.Find("Envirodeath").GetComponent<EntityEnvirodeathable>();
-			entityEnvirodeathable.Enable(entity);
-
-			isActive = false;
-		}
-
-		private void RunCommand()
+		private void RunCommand(bool isRespawn)
 		{
 			if (!isActive) return;
+			if (isRespawn) return;
 
 			GameObject playerObj = VarHelper.PlayerObj;
 
@@ -50,11 +37,23 @@ namespace ModStuff.Cheats
 			Killable killable = playerObj.transform.Find("Hittable").GetComponent<Killable>();
 			killable.CurrentHp = killable.MaxHp;
 
-			PlayerSpawner.RegisterSpawnListener(delegate
-			{
-				DebugManager.LogToFile("[Cheat] God mode active for Ittle");
-				RunCommand();
-			});
+			DebugManager.LogToFile("[Cheat] God mode activated for Ittle");
+		}
+
+		public void Deactivate()
+		{
+			EventListener.OnPlayerSpawn -= RunCommand;
+			GameObject playerObj = VarHelper.PlayerObj;
+
+			// Enable hurtbox
+			playerObj.transform.Find("Hittable").GetComponent<EntityHittable>().Disable = false;
+
+			// Enable void planes
+			Entity entity = playerObj.GetComponent<Entity>();
+			EntityEnvirodeathable entityEnvirodeathable = playerObj.transform.Find("Envirodeath").GetComponent<EntityEnvirodeathable>();
+			entityEnvirodeathable.Enable(entity);
+
+			isActive = false;
 		}
 
 		public static string GetHelp()
