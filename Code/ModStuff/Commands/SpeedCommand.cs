@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace ModStuff.Cheats
+namespace ModStuff.Commands
 {
 	public class SpeedCommand : DebugCommand
 	{
+		private float multiplier;
+
 		public override string Activate(string[] args)
 		{
 			// If args given
@@ -15,14 +17,15 @@ namespace ModStuff.Cheats
 				if (IsValidArgOfMany(arg0, new List<string> { "reset", "default", "def" }))
 				{
 					Deactivate();
-					return DebugManager.LogToConsole("Reset speed for Ittle to default.");
+					return "Reset speed for Ittle to default.";
 				}
 				// If not resetting & number is given
-				else if (TryParseToFloat(arg0, out float multiplier))
+				else if (TryParseToFloat(arg0, out multiplier))
 				{
 					isActive = true;
-					ToggleOn(multiplier);
-					return DebugManager.LogToConsole("Set Ittle's speed to <in>" + multiplier + "</in>");
+					RunCommand(false);
+					EventListener.OnPlayerSpawn += RunCommand;
+					return "Set Ittle's speed to <in>" + multiplier + "</in>";
 				}
 
 				// If arg0 is invalid
@@ -30,30 +33,27 @@ namespace ModStuff.Cheats
 			}
 
 			// If no args given
-			return DebugManager.LogToConsole(GetHelp());
+			return GetHelp();
 		}
 
-		public void Deactivate()
-		{
-			RigidBodyController rigidbody = VarHelper.PlayerObj.GetComponent<RigidBodyController>();
-			rigidbody.SetCustomVelocity(1);
-			isActive = false;
-		}
-
-		private void ToggleOn(float multiplier)
+		private void RunCommand(bool isRespawn)
 		{
 			if (!isActive) return;
+			if (isRespawn) return;
 
 			RigidBodyController rigidbody = VarHelper.PlayerObj.GetComponent<RigidBodyController>();
 			rigidbody.SetCustomVelocity(multiplier);
 
-			PlayerSpawner.RegisterSpawnListener(delegate
-			{
-				DebugManager.LogToFile("[Cheat] Ittle's speed set to " + multiplier);
-				ToggleOn(multiplier);
-			});
+			DebugManager.LogToFile("[Cheat] Ittle's speed set to " + multiplier);
 		}
-		
+
+		public void Deactivate()
+		{
+			EventListener.OnPlayerSpawn -= RunCommand;
+			RigidBodyController rigidbody = VarHelper.PlayerObj.GetComponent<RigidBodyController>();
+			rigidbody.SetCustomVelocity(1);
+			isActive = false;
+		}
 
 		public static string GetHelp()
 		{

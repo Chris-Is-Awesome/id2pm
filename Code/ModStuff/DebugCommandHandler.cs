@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using ModStuff.Cheats;
+using ModStuff.Commands;
 
 namespace ModStuff
 {
@@ -27,17 +27,18 @@ namespace ModStuff
 		public delegate void DeactivationMethod();
 		public List<CommandInfo> allCommands;
 
+		// References to commands
+		public TestCommand testCommand = new TestCommand();
+		public GotoCommand gotoCommand = new GotoCommand();
+		public SpeedCommand speedCommand = new SpeedCommand();
+		public GodCommand godCommand = new GodCommand();
+		public HelpCommand helpCommand = new HelpCommand();
+		public LikeABossCommand likeABossCommand = new LikeABossCommand();
+
 		public KeyCode keyToOpenDebugMenu = KeyCode.F1;
 
 		private void Awake()
 		{
-			// References to commands
-			TestCommand testCommand = new TestCommand();
-			GotoCommand gotoCommand = new GotoCommand();
-			SpeedCommand speedCommand = new SpeedCommand();
-			GodCommand godCommand = new GodCommand();
-			HelpCommand helpCommand = new HelpCommand();
-
 			// Create commands
 			allCommands = new List<CommandInfo>
 			{
@@ -48,6 +49,7 @@ namespace ModStuff
 				{ new CommandInfo("Speed", new ActivationMethod(speedCommand.Activate), new DeactivationMethod(speedCommand.Deactivate)) },
 				{ new CommandInfo("God", new ActivationMethod(godCommand.Activate), new DeactivationMethod(godCommand.Deactivate)) },
 				{ new CommandInfo("Help", new ActivationMethod(helpCommand.Activate)) },
+				{ new CommandInfo("LikeABoss", new ActivationMethod(likeABossCommand.Activate), new DeactivationMethod(likeABossCommand.Deactivate)) },
 			};
 
 			DebugManager.LogToFile("DebugCommandHandler initialized");

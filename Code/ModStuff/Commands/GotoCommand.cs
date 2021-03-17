@@ -1,6 +1,6 @@
 ﻿using ModStuff.Data;
 
-namespace ModStuff.Cheats
+namespace ModStuff.Commands
 {
 	public class GotoCommand : DebugCommand
 	{
@@ -29,7 +29,7 @@ namespace ModStuff.Cheats
 							{
 								// Load room
 								SceneAndRoomHelper.LoadRoom(sceneData.realSceneName, room.roomName, room.spawnPosition, room.facingAngle);
-								return DebugManager.LogToConsole("Now loading <in>" + sceneData.sceneName + "</in> room <in>" + room.roomName + "</in>...");
+								return "Now loading <in>" + sceneData.sceneName + "</in> room <in>" + room.roomName + "</in>...";
 							}
 						}
 
@@ -40,7 +40,7 @@ namespace ModStuff.Cheats
 						{
 							// Load scene at spawn point
 							DoLoad(sceneData, spawnData);
-							return DebugManager.LogToConsole("Now loading <in>" + sceneData.sceneName + "</in> at <in>" + spawnData.spawnName + "</in>...");
+							return "Now loading <in>" + sceneData.sceneName + "</in> at <in>" + spawnData.spawnName + "</in>...";
 						}
 
 						// If invalid spawn, check if there's a 2nd scene
@@ -52,7 +52,7 @@ namespace ModStuff.Cheats
 						{
 							// Load scene at spawn point
 							DoLoad(sceneData, spawnData);
-							return DebugManager.LogToConsole("Now loading <in>" + sceneData.sceneName + "</in> at <in>" + spawnData.spawnName + "</in>...");
+							return "Now loading <in>" + sceneData.sceneName + "</in> at <in>" + spawnData.spawnName + "</in>...";
 						}
 
 						// If invalid spawn
@@ -63,7 +63,7 @@ namespace ModStuff.Cheats
 					{
 						// Load scene at fallback spawn
 						DoLoad(sceneData);
-						return DebugManager.LogToConsole("Now loading <in>" + sceneData.sceneName + "</in> at default spawn...");
+						return "Now loading <in>" + sceneData.sceneName + "</in> at default spawn...";
 					}
 				}
 
