@@ -61,6 +61,7 @@ namespace ModStuff
 		{
 			//string state = isActive ? "spawned" : "despawned";
 			//DebugManager.LogToFile("[OnEntitySpawn] Entity " + ent.name + " has " + state);
+			VarHelper.AddEnts(ent, isActive);
 			OnEntitySpawn?.Invoke(ent, isActive);
 		}
 
@@ -146,8 +147,8 @@ namespace ModStuff
 
 		public static void FileLoad(bool isNew, IDataSaver saver = null)
 		{
-			string state = isNew ? "new file was created" : "file was loaded";
-			DebugManager.LogToFile("[OnFileLoad] A " + state);
+			//string state = isNew ? "new file was created" : "file was loaded";
+			//DebugManager.LogToFile("[OnFileLoad] A " + state);
 			OnFileLoad?.Invoke(isNew, saver);
 		}
 
