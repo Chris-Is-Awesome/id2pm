@@ -148,6 +148,7 @@ public class PauseMenu : EntityOverlayWindow
 			this.menuImpl.ShowFirst();
 		}
 		this.pauseTag = ObjectUpdater.Instance.RequestPause(null);
+		EventListener.GamePause(true); // Invoke custom event
 	}
 
 	protected override void DoHide()
@@ -164,6 +165,7 @@ public class PauseMenu : EntityOverlayWindow
 			this.pauseTag.Release();
 			this.pauseTag = null;
 		}
+		EventListener.GamePause(false); // Invoke custom event
 	}
 
 	protected override void OnDestroy()

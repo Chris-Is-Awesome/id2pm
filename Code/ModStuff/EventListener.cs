@@ -1,64 +1,185 @@
-﻿namespace ModStuff
+﻿using UnityEngine.SceneManagement;
+
+namespace ModStuff
 {
 	public static class EventListener
 	{
 		// Delegates
-		public delegate void OnEntityFunc(Entity ent);
-		public delegate void OnItemFunc(Entity ent, Item item);
-		public delegate void OnDamageFunc(Entity ent, HitData hitData);
-		public delegate void OnVariableFunc(Entity ent, string var, int value);
-		public delegate void OnRoomChangeFunc(Entity ent, LevelRoom toRoom, LevelRoom fromRoom, EntityEventsOwner.RoomEventData data);
+		public delegate void Func();
+		public delegate void BoolFunc(bool value);
+		public delegate void EntFunc(Entity ent);
+		public delegate void EntBoolFunc(Entity ent, bool isActive);
+		public delegate void SceneFunc(Scene scene);
+		public delegate void RoomFunc(LevelRoom room, bool isActive);
+		public delegate void DamageFunc(Entity ent, HitData data);
+		public delegate void ColCollisionFunc(BC_CollisionData data);
+		public delegate void ColTriggerFunc(BC_TriggerData data);
+		public delegate void ItemFunc(Entity ent, Item item);
+		public delegate void VarSaveFunc(Entity ent, string var, int value);
+		public delegate void FileFunc(bool isNew, IDataSaver saver = null);
 
 		// Events
-		public static event OnEntityFunc EntityDeathListener;
-		public static event OnEntityFunc EntityDeactivateListener;
-		public static event OnItemFunc ItemGetListener;
-		public static event OnDamageFunc EntityDamageListener;
-		public static event OnVariableFunc EntityVarListener;
-		public static event OnRoomChangeFunc RoomChangeListener;
 
-		public static void OnEntityDeath(Entity ent)
+		// Entity
+		public static event BoolFunc OnPlayerSpawn;
+		public static event EntBoolFunc OnEntitySpawn;
+		public static event DamageFunc OnDamageDone;
+		public static event EntFunc OnEntityDeath;
+
+		// Scene/room loading
+		public static event SceneFunc OnSceneLoad;
+		public static event RoomFunc OnRoomLoad;
+
+		// Collision
+		public static event ColCollisionFunc OnCollisionEnter;
+		public static event ColCollisionFunc OnCollisionStay;
+		public static event ColCollisionFunc OnCollisionExit;
+		public static event ColTriggerFunc OnTriggerEnter;
+		public static event ColTriggerFunc OnTriggerStay;
+		public static event ColTriggerFunc OnTriggerExit;
+
+		// Game
+		public static event Func OnGameStart;
+		public static event FileFunc OnFileLoad;
+		public static event BoolFunc OnGamePause;
+		public static event Func OnGameQuit;
+
+		// Other
+		public static event ItemFunc OnItemGet;
+		public static event VarSaveFunc OnEntVarSave;
+
+		#region Entity
+
+		public static void PlayerSpawn(bool isRespawn)
 		{
-			// Don't run for player "dying" by voiding out
-			if (ent.GetComponentInChildren<Killable>().CurrentHp <= 0)
-			{
-				DebugManager.LogToFile("[OnEntityDeath] " + ent.name + " has died");
-				EntityDeathListener?.Invoke(ent);
-			}
+			//string state = isRespawn ? "respawned" : "spawned";
+			//DebugManager.LogToFile("[OnplayerSpawn] PlayerEnt has " + state);
+			OnPlayerSpawn?.Invoke(isRespawn);
 		}
 
-		public static void OnEntityDeactivate(Entity ent)
+		public static void EntitySpawn(Entity ent, bool isActive)
 		{
-			DebugManager.LogToFile("[OnEntityDeactivate] " + ent.name + " has deactivated");
-			EntityDeactivateListener?.Invoke(ent);
+			//string state = isActive ? "spawned" : "despawned";
+			//DebugManager.LogToFile("[OnEntitySpawn] Entity " + ent.name + " has " + state);
+			OnEntitySpawn?.Invoke(ent, isActive);
 		}
 
-		public static void OnItemGet(Entity ent, Item item)
+		public static void DamageDone(Entity ent, HitData data)
 		{
-			string itemName = item.ItemId != null ? item.ItemId.name : item.name;
-			DebugManager.LogToFile("[OnItemGet] " + ent.name + " has picked up " + itemName);
-			ItemGetListener?.Invoke(ent, item);
+			//DebugManager.LogToFile("[OnDamageDone] " + data.Attacker.name + " did " + data.GetDamageData().Length + " damage to " + ent.name);
+			OnDamageDone?.Invoke(ent, data);
 		}
 
-		public static void OnEntityDamage(Entity ent, HitData hitData)
+		public static void EntityDeath(Entity ent)
 		{
-			DebugManager.LogToFile("[OnEntityDamage] " + ent.name + " has taken " + hitData.GetDamageData().Length + " damage from " + hitData.Attacker.name);
-			EntityDamageListener?.Invoke(ent, hitData);
+			//DebugManager.LogToFile("[OnEntityDeath] " + ent.name + " has died");
+			OnEntityDeath?.Invoke(ent);
 		}
 
-		public static void OnEntityVarChange(Entity ent, string var, int value)
+		#endregion
+
+		#region Scene/room loading
+
+		public static void SceneLoad()
 		{
-			DebugManager.LogToFile("[OnEntityVarChange] Save flag changed for " + ent.name + ". " + var + " set to " + value);
-			EntityVarListener?.Invoke(ent, var, value);
+			Scene scene = SceneManager.GetActiveScene();
+			//DebugManager.LogToFile("[OnSceneLoad] " + scene.name + " has loaded");
+			OnSceneLoad?.Invoke(scene);
 		}
 
-		public static void OnRoomChange(Entity ent, LevelRoom toRoom, LevelRoom fromRoom, EntityEventsOwner.RoomEventData data)
+		public static void RoomLoad(LevelRoom room, bool isActive)
 		{
-			string roomProgression = string.Empty;
-			if (fromRoom != null) roomProgression += " from room " + fromRoom.RoomName;
-			if (toRoom != null) roomProgression += " to room " + toRoom.RoomName;
-			DebugManager.LogToFile("[OnRoomChange] Room changed" + roomProgression + " ending at position of " + data.targetPos + ", facing " + data.targetDir);
-			RoomChangeListener?.Invoke(ent, toRoom, fromRoom, data);
+			//string state = isActive ? "loaded" : "unloaded";
+			//DebugManager.LogToFile("[OnRoomLoad] " + room.RoomName + " has " + state);
+			OnRoomLoad?.Invoke(room, isActive);
 		}
+
+		#endregion
+
+		#region Collision
+
+		public static void CollisionEnter(BC_CollisionData data)
+		{
+			//DebugManager.LogToFile("[OnCollisionEnter] " + data.collider.name + " entered collision with " + data.myCollider.name + " at point " + data.point.ToString() + " with normal of " + data.normal.ToString());
+			OnCollisionEnter?.Invoke(data);
+		}
+
+		public static void CollisionStay(BC_CollisionData data)
+		{
+			//DebugManager.LogToFile("[OnCollisionStay] " + data.collider.name + " is colliding with " + data.myCollider.name + " at point " + data.point.ToString() + " with normal of " + data.normal.ToString());
+			OnCollisionStay?.Invoke(data);
+		}
+
+		public static void CollisionExit(BC_CollisionData data)
+		{
+			//DebugManager.LogToFile("[OnCollisionExit] " + data.collider.name + " exited collision with " + data.myCollider.name + " at point " + data.point.ToString() + " with normal of " + data.normal.ToString());
+			OnCollisionExit?.Invoke(data);
+		}
+
+		public static void TriggerEnter(BC_TriggerData data)
+		{
+			//DebugManager.LogToFile("[OnTriggerEnter] " + data.collider.name + " entered collision with " + data.myCollider.name);
+			OnTriggerEnter?.Invoke(data);
+		}
+
+		public static void TriggerStay(BC_TriggerData data)
+		{
+			//DebugManager.LogToFile("[OnTriggerStay] " + data.collider.name + " is  colliding with " + data.myCollider.name);
+			OnTriggerStay?.Invoke(data);
+		}
+
+		public static void TriggerExit(BC_TriggerData data)
+		{
+			//DebugManager.LogToFile("[OnTriggerExit] " + data.collider.name + " exited collision with " + data.myCollider.name);
+			OnTriggerExit?.Invoke(data);
+		}
+
+		#endregion
+
+		#region Game
+
+		public static void GameStart()
+		{
+			//DebugManager.LogToFile("[OnGameStart] The game has started");
+			OnGameStart?.Invoke();
+		}
+
+		public static void FileLoad(bool isNew, IDataSaver saver = null)
+		{
+			string state = isNew ? "new file was created" : "file was loaded";
+			DebugManager.LogToFile("[OnFileLoad] A " + state);
+			OnFileLoad?.Invoke(isNew, saver);
+		}
+
+		public static void GamePause(bool isPaused)
+		{
+			//string state = isPaused ? "paused" : "unpaused";
+			//DebugManager.LogToFile("[OnGamePause] The game has " + state);
+			OnGamePause?.Invoke(isPaused);
+		}
+
+		public static void GameQuit()
+		{
+			//DebugManager.LogToFile("[OnGameQuit] The game has quit");
+			OnGameQuit?.Invoke();
+		}
+
+		#endregion
+
+		#region Other
+
+		public static void ItemGet(Entity ent, Item item)
+		{
+			//DebugManager.LogToFile("[OnItemGet] " + ent.name + " got " + item.name);
+			OnItemGet?.Invoke(ent, item);
+		}
+
+		public static void EntVarSave(Entity ent, string var, int value)
+		{
+			//DebugManager.LogToFile("[OnEntVarSave] " + ent.name + "/" + var + " set to " + value);
+			OnEntVarSave?.Invoke(ent, var, value);
+		}
+
+		#endregion
 	}
 }

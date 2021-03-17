@@ -19,7 +19,7 @@ public class EntityEventsOwner
 		if (this.DeathListener != null)
 		{
 			this.DeathListener(ent);
-			EventListener.OnEntityDeath(ent);
+			EventListener.EntityDeath(ent); // Invoke custom event
 		}
 	}
 
@@ -36,7 +36,7 @@ public class EntityEventsOwner
 		if (this.DeactivateListener != null)
 		{
 			this.DeactivateListener(ent);
-			EventListener.OnEntityDeactivate(ent);
+			EventListener.EntitySpawn(ent, false); // Invoke custom event
 		}
 	}
 
@@ -45,7 +45,7 @@ public class EntityEventsOwner
 		if (this.DamageListener != null)
 		{
 			this.DamageListener(ent, data);
-			EventListener.OnEntityDamage(ent, data);
+			EventListener.DamageDone(ent, data); // Invoke custom event
 		}
 	}
 
@@ -54,7 +54,6 @@ public class EntityEventsOwner
 		if (this.RoomChangeListener != null)
 		{
 			this.RoomChangeListener(ent, to, from, data);
-			EventListener.OnRoomChange(ent, to, from, data);
 		}
 	}
 
@@ -71,7 +70,7 @@ public class EntityEventsOwner
 		if (this.ItemGetListener != null)
 		{
 			this.ItemGetListener(ent, item);
-			EventListener.OnItemGet(ent, item);
+			EventListener.ItemGet(ent, item); // Invoke custom event
 		}
 	}
 
@@ -80,7 +79,7 @@ public class EntityEventsOwner
 		if (this.VarSetListener != null)
 		{
 			this.VarSetListener(ent, var, value);
-			EventListener.OnEntityVarChange(ent, var, value);
+			EventListener.EntVarSave(ent, var, value); // Invoke custom event
 		}
 	}
 

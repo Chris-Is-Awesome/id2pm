@@ -153,7 +153,7 @@ public class PlayerSpawner : MonoBehaviour
 		{
 			onSpawnedFunc(entity, gameObject, controller);
 		}
-
+		EventListener.PlayerSpawn(false); // Invoke custom event
 		Object.Destroy(base.gameObject);
 	}
 
