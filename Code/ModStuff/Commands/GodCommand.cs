@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ModStuff.Cheats
+namespace ModStuff.Commands
 {
 	public class GodCommand : DebugCommand
 	{

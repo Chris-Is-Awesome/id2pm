@@ -1,4 +1,4 @@
-﻿namespace ModStuff.Cheats
+﻿namespace ModStuff.Commands
 {
 	public class TestCommand : DebugCommand
 	{

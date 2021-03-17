@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ModStuff.Cheats
+namespace ModStuff.Commands
 {
 	public class HelpCommand : DebugCommand
 	{

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using ModStuff.Cheats;
+using ModStuff.Commands;
 
 namespace ModStuff
 {
