@@ -7,16 +7,6 @@ namespace ModStuff.Commands
 	{
 		public GameObject savedObj;
 
-		// find [objName] -save
-		// find -load
-		// find [objName]
-		// find [objName] -activate
-		// find [objName] -destroy
-		// find [objName] -pos [x] [y] [z]
-		// find [objName] -rot [x] [y] [z]
-		// find [objName] -scale [x] [y] [z]
-		// find [objName] [index]
-
 		public override string Activate(string[] args)
 		{
 			// If args given
@@ -157,60 +147,47 @@ namespace ModStuff.Commands
 			return GetHelp();
 		}
 
+
 		private string GetObjectInfo(GameObject obj)
 		{
 			Transform objParent = obj.transform.parent;
-			List<string> parents = new List<string>();
-			List<string> children = new List<string>();
-			string familyTree = string.Empty;
-			string isActiveText = obj.transform.parent != null ? "Is active (excl. parent): " + obj.activeSelf.ToString() + " | Is active (incl. parent): " + obj.activeInHierarchy.ToString() : "Is active: " + obj.activeSelf;
+			List<string> allParents = new List<string>();
+			List<string> allChildren = new List<string>();
+			List<Component> allComps = new List<Component>();
 
-			// Get parents
+			// Get all parents
 			while (objParent != null)
 			{
-				parents.Add(objParent.name);
+				allParents.Add(objParent.name);
 				objParent = objParent.parent;
 			}
 
-			// Get children
+			// Get all children
 			for (int i = 0; i < obj.transform.childCount; i++)
 			{
-				children.Add(obj.transform.GetChild(i).name);
+				allChildren.Add(obj.transform.GetChild(i).name);
 			}
 
-			// Make family tree
-			for (int i = parents.Count - 1; i >= 0; i--)
+			// Get all components
+			foreach (Component comp in obj.GetComponents<Component>())
 			{
-				familyTree += parents[i] + " -> ";
+				allComps.Add(comp);
 			}
 
-			familyTree += "<color=blue>" + obj.name + "</color>";
-
-			for (int i =  children.Count - 1; i >= 0; i--)
-			{
-				if (i == children.Count - 1)
-				{
-					familyTree += " -> " + children[i];
-					continue;
-				}
-
-				familyTree += ", " + children[i];
-			}
-
-			// Get info
-			string info = string.Concat
+			return string.Concat
 			(
-				"<color=green>" + obj.name + "</color>\n\n",
-				"----- TRANFORM -----\n",
-				"Position: " + obj.transform.position.ToString() + "\n",
-				"Rotation: " + obj.transform.localEulerAngles.ToString() + "\n",
-				"Scale: " + obj.transform.localScale.ToString() + "\n\n",
-				"----- HIERARCHY -----\n",
-				isActiveText + "\n",
-				"Family tree: " + familyTree
+				"<color=blue>" + obj.name + "</color>\n",
+				"\n----- TRANSFORM -----\n",
+				"Position: " + obj.transform.localPosition.ToString() + " (local) | " + obj.transform.position.ToString() + " (global)\n",
+				"Rotation: " + obj.transform.localEulerAngles.ToString() + " (local) | " + obj.transform.eulerAngles.ToString() + " (global)\n",
+				"Scale: " + obj.transform.localScale.ToString() + "\n",
+				"\n----- COMPONENTS -----\n",
+				"Components: " + StringHelper.GetStringFromList(allComps, ", ", StringHelper.StringConversionType.GetType) + "\n",
+				"\n----- HIERARCHY -----\n",
+				"Is active: " + obj.activeSelf.ToString() + " (self) | " + obj.activeInHierarchy.ToString() + " (parent-inclusive)\n",
+				"Parents: " + StringHelper.GetStringFromList(allParents, " -> ", StringHelper.StringConversionType.None) + "\n",
+				"Children: " + StringHelper.GetStringFromList(allChildren, ", ", StringHelper.StringConversionType.None)
 			);
-
-			return info;
 		}
 
 		private void SaveObject(GameObject obj)
