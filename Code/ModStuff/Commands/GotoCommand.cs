@@ -45,7 +45,7 @@ namespace ModStuff.Commands
 
 						// If invalid spawn, check if there's a 2nd scene
 						sceneData = GotoData.GetSceneData(sceneData.realSceneName + "2");
-						spawnData = GotoData.GetSpawnData(sceneData.realSceneName, wantedSpawn);
+						if (sceneData != null) spawnData = GotoData.GetSpawnData(sceneData.realSceneName, wantedSpawn);
 
 						// If valid spawn
 						if (spawnData != null)
@@ -56,7 +56,7 @@ namespace ModStuff.Commands
 						}
 
 						// If invalid spawn
-						return DebugManager.LogToConsole("<in>" + wantedSpawn + "</in> is not a valid spawn or room for <in>" + sceneData.realSceneName + "</in>. Use <out>help goto</out> for more info.", DebugManager.MessageType.Error);
+						return DebugManager.LogToConsole("<in>" + wantedSpawn + "</in> is not a valid spawn or room for <in>" + wantedScene + "</in>. Use <out>help goto</out> for more info.", DebugManager.MessageType.Error);
 					}
 					// If no spawn given
 					else
