@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace ModStuff
 {
@@ -29,10 +30,22 @@ namespace ModStuff
 			return isFloat;
 		}
 
-		public bool TryParseInt(string arg, int num)
+		public bool TryParseInt(string arg, out int num)
 		{
 			bool  isInt = int.TryParse(arg, out num);
 			return isInt;
+		}
+
+		public bool TryParseToVector3(string x, string y, string z, out Vector3 vector)
+		{
+			if (TryParseToFloat(x, out float _x) && TryParseToFloat(y, out float _y) && TryParseToFloat(z, out float _z))
+			{
+				vector = new Vector3(_x, _y, _z);
+				return true;
+			}
+
+			vector = Vector3.zero;
+			return false;
 		}
 	}
 }
