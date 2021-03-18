@@ -43,11 +43,14 @@
 
 		private void MakeIttleStrong(Entity ent, bool isLikeABoss)
 		{
-			Killable killable = ent.GetComponentInChildren<Killable>();
-			if (killable != null)
+			if (ent != null)
 			{
-				if (isLikeABoss) killable.CurrentHp = 0;
-				else killable.CurrentHp = killable.MaxHp;
+				Killable killable = ent.GetComponentInChildren<Killable>();
+				if (killable != null)
+				{
+					if (isLikeABoss) killable.CurrentHp = 0;
+					else killable.CurrentHp = killable.MaxHp;
+				}
 			}
 		}
 
