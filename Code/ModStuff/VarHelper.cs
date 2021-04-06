@@ -5,7 +5,22 @@ namespace ModStuff
 {
 	public static class VarHelper
 	{
+		private static string currentSaveFilePath;
 		private static GameObject playerObj;
+		private static List<Entity> activeEnts = new List<Entity>();
+
+		public static string CurrentSaveFilePath
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(currentSaveFilePath)) DebugManager.LogToFile("Attempted to retrieve path from null save file.", LogType.Error);
+				return currentSaveFilePath;
+			}
+			set
+			{
+				currentSaveFilePath = Application.persistentDataPath + "/steam/" + value;
+			}
+		}
 		public static GameObject PlayerObj
 		{
 			get
@@ -19,7 +34,6 @@ namespace ModStuff
 			}
 		}
 
-		private static List<Entity> activeEnts = new List<Entity>();
 		public static List<Entity> ActiveEnts
 		{
 			get

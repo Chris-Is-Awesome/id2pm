@@ -36,6 +36,8 @@ namespace ModStuff
 		public LikeABossCommand likeABossCommand = new LikeABossCommand();
 		public NoClipCommand noClipCommand = new NoClipCommand();
 		public FindCommand findCommand = new FindCommand();
+		public SaveStateCommand saveStateCommand = new SaveStateCommand();
+		public LoadStateCommand loadStateCommand = new LoadStateCommand();
 
 		public KeyCode keyToOpenDebugMenu = KeyCode.F1;
 
@@ -54,6 +56,8 @@ namespace ModStuff
 				{ new CommandInfo("LikeABoss", new ActivationMethod(likeABossCommand.Activate), new DeactivationMethod(likeABossCommand.Deactivate)) },
 				{ new CommandInfo("NoClip", new ActivationMethod(noClipCommand.Activate), new DeactivationMethod(noClipCommand.Deactivate)) },
 				{ new CommandInfo("Find", new ActivationMethod(findCommand.Activate)) },
+				{ new CommandInfo("SaveState", new ActivationMethod(saveStateCommand.Activate)) },
+				{ new CommandInfo("LoadState", new ActivationMethod(loadStateCommand.Activate)) },
 			};
 
 			DebugManager.LogToFile("DebugCommandHandler initialized");

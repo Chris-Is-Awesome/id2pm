@@ -145,7 +145,7 @@ namespace ModStuff
 			OnGameStart?.Invoke();
 		}
 
-		public static void FileLoad(bool isNew, IDataSaver saver = null)
+		public static void FileLoad(bool isNew, IDataSaver saver)
 		{
 			//string state = isNew ? "new file was created" : "file was loaded";
 			//DebugManager.LogToFile("[OnFileLoad] A " + state);
