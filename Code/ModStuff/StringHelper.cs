@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace ModStuff
 {
@@ -48,6 +49,27 @@ namespace ModStuff
 			}
 
 			return output;
+		}
+
+		public static bool ParseVector3(string vector, out Vector3 result)
+		{
+			// If vector given
+			if (!string.IsNullOrEmpty(vector))
+			{
+				string input = vector.Substring(1, vector.Length - 2);
+				string[] values = input.Split(","[0]);
+				if (values.Length == 3)
+				{
+					float x = float.Parse(values[0]);
+					float y = float.Parse(values[1]);
+					float z = float.Parse(values[2]);
+					result = new Vector3(x, y, z);
+					return true;
+				}
+			}
+
+			result = Vector3.zero;
+			return false;
 		}
 	}
 }
