@@ -1,4 +1,7 @@
-﻿namespace ModStuff.Commands
+﻿using System;
+using UnityEngine;
+
+namespace ModStuff.Commands
 {
 	public class TestCommand : DebugCommand
 	{

@@ -173,7 +173,6 @@ public class MainMenu : MonoBehaviour
 		else
 		{
 			SceneDoor.StartLoad(this._defaultStartScene, string.Empty, this._fadeData, null, null);
-			EventListener.FileLoad(true);
 		}
 		MusicSelector.Instance.StopLayer(this._songLayer, this._songFadeoutTime);
 	}
@@ -554,6 +553,7 @@ public class MainMenu : MonoBehaviour
 		void ClickedStart(object ctx)
 		{
 			base.Owner.StartGame();
+			VarHelper.CurrentSaveFilePath = currentSaveFile.path; // Save reference to save file path
 		}
 
 		void ClickedDuplicate(object ctx)
@@ -620,6 +620,8 @@ public class MainMenu : MonoBehaviour
 				Debug.Log("Created file " + uniqueLocalSavePath);
 				base.Owner._saver.LoadLocalFromFile(uniqueLocalSavePath);
 				base.Owner.StartGame();
+				VarHelper.CurrentSaveFilePath = uniqueLocalSavePath; // Save reference to save file path
+				EventListener.FileLoad(true, realDataSaver); // Invoke custom event
 			}
 			else
 			{

@@ -123,7 +123,7 @@ namespace ModStuff.Data
 					{
 						// User-friendly spawn name (output), real spawn name (logic), valid names for spawn (input), room name (logic)
 						{ new SpawnData("Pillow Fort entrance", "PillowFortOutside", new List<string> { "PillowFort", "PF", "D1" }, "A") },
-						{ new SpawnData("Checkpoint", "RestorePt1", new List<string> { "checkpoint", "restorepoint", "cp", "safezone" }, "A") },
+						{ new SpawnData("Fluffy Fields checkpoint", "RestorePt1", new List<string> { "checkpoint", "restorepoint", "cp", "safezone" }, "A") },
 						{ new SpawnData("Sunken Labyrinth entrance", "SunkenLabyrinthOutside", new List<string> { "SunkenLabyrinth", "SL", "S1" }, "B") },
 						{ new SpawnData("Warp Garden", "CaveP", new List<string> { "WarpGarden", "garden", "warps" }, "C") },
 						{ new SpawnData("Autumn Climb entrance", "CaveA", new List<string> { "AutumnClimb", "AC", "Deep1" }, "A") },
@@ -145,8 +145,8 @@ namespace ModStuff.Data
 					{
 						// User-friendly spawn name (output), real spawn name (logic), valid names for spawn (input), room name (logic)
 						{ new SpawnData("Sand Castle entrance", "SandCastleOutside", new List<string> { "SandCastle", "SC", "D2" }, "A") },
-						{ new SpawnData("Checkpoint", "RestorePt1", new List<string> { "checkpoint", "restorepoint", "cp" }, "A") },
-						{ new SpawnData("Changing Tent", "CaveQ", new List<string> { "ChangingTent", "OutfitTent", "tent", "beachtent" }, "C") },
+						{ new SpawnData("Sweetwater Coast checkpoint", "RestorePt1", new List<string> { "checkpoint", "restorepoint", "cp" }, "A") },
+						{ new SpawnData("Changing tent", "CaveQ", new List<string> { "ChangingTent", "OutfitTent", "tent", "beachtent" }, "C") },
 						{ new SpawnData("The Vault entrance", "CaveE", new List<string> { "TheVault", "TV", "vault", "Deep2" }, "A") },
 						{ new SpawnData("Painful Plain entrance", "CaveO", new List<string> { "PainfulPlain", "pain", "Deep3" }, "B") },
 						{ new SpawnData("Western Sweetwater Coast", "CaveG", new List<string> { "west", "western" }, "A") },
@@ -172,7 +172,7 @@ namespace ModStuff.Data
 						{ new SpawnData("Machine Fortress entrance", "MachineFortressOutside", new List<string> { "MachineFortress", "MF", "S2" }, "A") },
 						{ new SpawnData("Farthest Shore entrance", "CaveF", new List<string> { "FarthestShore", "FS", "Deep4" }, "A") },
 						{ new SpawnData("Scrap Yard entrance", "CaveR", new List<string> { "ScrapYard", "SY", "Deep5" }, "C") },
-						{ new SpawnData("Checkpoint", "RestorePt1", new List<string> { "checkpoint", "restorepoint", "cp" }, "A") },
+						{ new SpawnData("Fancy Ruins checkpoint", "RestorePt1", new List<string> { "checkpoint", "restorepoint", "cp" }, "A") },
 						{ new SpawnData("Southern Fancy Ruins", "CaveJ", new List<string> { "south", "southern" }, "B") },
 						{ new SpawnData("Northern Fancy Ruins", "CaveB", new List<string> { "north", "northern" }, "A") }
 					}
@@ -190,6 +190,83 @@ namespace ModStuff.Data
 					{
 						// User-friendly spawn name (output), real spawn name (logic), valid names for spawn (input), room name (logic)
 						{ new SpawnData("Art Exhibit entrance", "ArtExhibitOutside", new List<string> { "ArtExhibit", "art", "exhibit", "AE", "D3" }, "A") }
+					}
+				),
+				new SceneData("Star Woods", // User-friendly scene name (output)
+					"StarWoods", // Real scene name (logic)
+					SceneType.Overworld, // Type (output)
+					new List<string> { "StarWoods", "Star", "Woods", "SW", "SW2" }, // Valid names for scene (input)
+					new List<RoomData>
+					{
+						// Real room name, spawn position, facing direction, optional name for room (eg. "boss")
+						{ new RoomData("A", new Vector3(65.5f, 0f, -7.09f), new Vector3(0f, 270f, 0f)) },
+						{ new RoomData("B", new Vector3(69.5f, 0f, -18.45f), new Vector3(0f, 90f, 0f)) },
+						{ new RoomData("C", new Vector3(141f, 0f, -4f), new Vector3(0f, 180f, 0f)) },
+					},
+					new List<SpawnData>
+					{
+						// User-friendly spawn name (output), real spawn name (logic), valid names for spawn (input), room name (logic)
+						{ new SpawnData("Southeast Star Woods", "CaveK", new List<string> { "southeast", "southeastern" }, "B") },
+						{ new SpawnData("Northeast Star Woods", "CaveR1", new List<string> { "northeast", "northeastern" }, "B") },
+						{ new SpawnData("Star Woods checkpoint", "RestorePt1", new List<string> { "checkpoint", "restorepoint", "cp" }, "B") },
+						{ new SpawnData("Trash Cave entrance", "TrashCaveOutside", new List<string> { "TrashCave", "trash", "TC", "d4" }, "B") },
+						{ new SpawnData("Brutal Oasis entrance", "CaveN", new List<string> { "BrutalOasis", "brutal", "oasis", "BO", "deep6" }, "B") },
+						{ new SpawnData("Former Colossus entrance", "CaveP", new List<string> { "FormerColossus", "former", "colossus", "deep7" }, "C") },
+						{ new SpawnData("Southwest Star Woods", "CaveB", new List<string> { "southwest", "southwestern" }, "A") },
+						{ new SpawnData("Northwest Star Woods", "CaveC", new List<string> { "northwest", "northwestern" }, "A") },
+						{ new SpawnData("Dark Hypostyle entrance", "DarkHypostyleOutside", new List<string> { "DarkHypostyle", "hypostyle", "hypo", "DH", "S3" }, "C") }
+					}
+				),
+				new SceneData("Star Woods", // User-friendly scene name (output)
+					"StarWoods2", // Real scene name (logic)
+					SceneType.Overworld, // Type (output)
+					new List<string> { "StarWoods", "Star", "Woods", "SW", "SW2" }, // Valid names for scene (input)
+					new List<RoomData>
+					{
+						// Real room name, spawn position, facing direction, optional name for room (eg. "boss")
+						{ new RoomData("A", new Vector3(31.06f, 1f, -7.91f), new Vector3(0f, 180f, 0f)) },
+					},
+					new List<SpawnData>
+					{
+						// User-friendly spawn name (output), real spawn name (logic), valid names for spawn (input), room name (logic)
+						{ new SpawnData("Star Woods Octacle path", "CaveS", new List<string> { "tentacles", "octacles", "supersouth" }, "A") }
+					}
+				),
+				new SceneData("Slippery Slope", // User-friendly scene name (output)
+					"SlipperySlope", // Real scene name (logic)
+					SceneType.Overworld, // Type (output)
+					new List<string> { "SlipperySlope", "slippery", "slope", "SS" }, // Valid names for scene (input)
+					new List<RoomData>
+					{
+						// Real room name, spawn position, facing direction, optional name for room (eg. "boss")
+						{ new RoomData("A", new Vector3(48f, 0f, -31f), new Vector3(0f, 90f, 0f)) },
+						{ new RoomData("B", new Vector3(34.97f, 0f, -76.97f), new Vector3(0f, 0f, 0f)) },
+					},
+					new List<SpawnData>
+					{
+						// User-friendly spawn name (output), real spawn name (logic), valid names for spawn (input), room name (logic)
+						{ new SpawnData("Sand Crucible entrance", "CaveH", new List<string> { "SandCrucible", "crucible", "deep8" }, "A") },
+						{ new SpawnData("Ocean Castle entrance", "CaveC", new List<string> { "OceanCastle", "oc", "deep9" }, "A") },
+						{ new SpawnData("Flooded Basement entrance", "CaveO", new List<string> { "FloodedBasement", "flooded", "basement", "FB", "D5" }, "A") },
+						{ new SpawnData("Southwest Slippery Slope", "CaveL", new List<string> { "southwest", "southwestern" }, "B") },
+						{ new SpawnData("Northeast Slippery Slope", "CaveD", new List<string> { "northeast", "northeastern" }, "A") },
+						{ new SpawnData("Southeast Slippery Slope", "CaveK", new List<string> { "southeast", "southeastern" }, "B") },
+						{ new SpawnData("Slippery Slope checkpoint", "RestorePt1", new List<string> { "checkpoint", "restorepoint", "cp" }, "A") },
+					}
+				),
+				new SceneData("", // User-friendly scene name (output)
+					"", // Real scene name (logic)
+					SceneType.Overworld, // Type (output)
+					new List<string> { "" }, // Valid names for scene (input)
+					new List<RoomData>
+					{
+						// Real room name, spawn position, facing direction, optional name for room (eg. "boss")
+						{ new RoomData("A", new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f)) },
+					},
+					new List<SpawnData>
+					{
+						// User-friendly spawn name (output), real spawn name (logic), valid names for spawn (input), room name (logic)
+						{ new SpawnData("", "", new List<string> { "" }, "") }
 					}
 				),
 				new SceneData("", // User-friendly scene name (output)

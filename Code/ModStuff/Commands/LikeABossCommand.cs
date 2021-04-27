@@ -17,31 +17,41 @@
 			return "LikeABoss is now <color=red>deactivated</color> for Ittle.";
 		}
 
-		private void RunCommand(Entity ent, bool isActive)
+		private void RunCommand(Entity ent, bool isEntActive)
 		{
 			// If first time using command in session, use ents stored in VarHelper
 			if (ent == null)
 			{
 				for (int i = 0; i < VarHelper.ActiveEnts.Count; i++)
 				{
-					MakeIttleStrong(VarHelper.ActiveEnts[i]);
+					MakeIttleStrong(VarHelper.ActiveEnts[i], true);
 				}
 			}
-			// If active ent
-			else MakeIttleStrong(ent);
-
-			DebugManager.LogToFile("[Cheat] LikeABoss activated for Ittle");
+			// If activ ent
+			else if (ent != null && isEntActive) MakeIttleStrong(ent, true);
 		}
 
 		public void Deactivate()
 		{
 			EventListener.OnEntitySpawn -= RunCommand;
+
+			for (int i = 0; i < VarHelper.ActiveEnts.Count; i++)
+			{
+				MakeIttleStrong(VarHelper.ActiveEnts[i], false);
+			}
 		}
 
-		private void MakeIttleStrong(Entity ent)
+		private void MakeIttleStrong(Entity ent, bool isLikeABoss)
 		{
-			Killable killable = ent.GetComponentInChildren<Killable>();
-			if (killable != null) killable.CurrentHp = 0;
+			if (ent != null)
+			{
+				Killable killable = ent.GetComponentInChildren<Killable>();
+				if (killable != null)
+				{
+					if (isLikeABoss) killable.CurrentHp = 0;
+					else killable.CurrentHp = killable.MaxHp;
+				}
+			}
 		}
 
 		public static string GetHelp()
