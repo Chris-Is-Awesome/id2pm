@@ -144,13 +144,13 @@ public class PlayerSpawner : MonoBehaviour
 			playerRespawner = gameObject3.AddComponent<PlayerRespawner>();
 		}
 		playerRespawner.Init(entity, controller, componentInChildren3, componentInChildren2, componentInChildren4, this._gameSaver, attacher, attachTag, this._varOverrider, P, dir);
+		VarHelper.PlayerObj = entity.gameObject; // Store reference to player obj
 		PlayerSpawner.OnSpawnedFunc onSpawnedFunc = PlayerSpawner.onSpawned;
 		PlayerSpawner.onSpawned = null;
 		if (onSpawnedFunc != null)
 		{
 			onSpawnedFunc(entity, gameObject, controller);
 		}
-		VarHelper.PlayerObj = entity.gameObject;
 		EventListener.PlayerSpawn(false); // Invoke custom event
 		Object.Destroy(base.gameObject);
 	}
