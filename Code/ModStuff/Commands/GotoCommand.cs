@@ -28,7 +28,7 @@ namespace ModStuff.Commands
 							if (StringHelper.DoStringsMatch(room.roomName, wantedSpawn))
 							{
 								// Load room
-								SceneAndRoomHelper.LoadRoom(sceneData.realSceneName, room.roomName, room.spawnPosition, room.facingAngle);
+								SceneAndRoomHelper.LoadRoom(sceneData.realSceneName, room.roomName, true, room.spawnPosition, room.facingAngle);
 								return "Now loading <in>" + sceneData.sceneName + "</in> room <in>" + room.roomName + "</in>...";
 							}
 						}
