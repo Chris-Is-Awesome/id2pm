@@ -27,7 +27,6 @@ namespace ModStuff.Commands
 					// Load data
 					SaveManager.GetSaverOwner().LoadAll(true);
 					VarHelper.PlayerObj.GetComponent<Entity>().LoadState();
-					Debug.Log("Player has " + SaveManager.GetSaverOwner().LevelStorage.GetLocalSaver("player").GetLocalSaver("vars").LoadInt("localKeys") + " keys");
 					string scene = SaveManager.LoadFromSaveFile("mod/savestate/scene");
 					string room = SaveManager.LoadFromSaveFile("mod/savestate/room");
 					float posX = float.Parse(SaveManager.LoadFromSaveFile("mod/savestate/objects/PlayerEnt/position/x"));
