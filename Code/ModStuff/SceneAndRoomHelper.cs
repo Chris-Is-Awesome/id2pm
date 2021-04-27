@@ -26,42 +26,50 @@ namespace ModStuff
 			SceneDoor.StartLoad(scene, spawn, fadeData, SaveManager.GetSaverOwner());
 		}
 
-		public static void LoadRoom(string scene, string room, Vector3? positionForPlayer = null, Vector3? facingDirectionForPlayer = null)
+		public static void LoadRoom(string scene, string room, bool doFade = true, Vector3? positionForPlayer = null, Vector3? facingDirectionForPlayer = null, bool forceLoadScene = false)
 		{
 			LevelRoom realRoom;
 
 			// If not in scene with room
-			if (GetLoadedScene().name != scene)
+			if (GetLoadedScene().name != scene || forceLoadScene)
 			{
 				// Load scene
-				LoadScene(scene);
+				LoadScene(scene, room, true, doFade);
 
 				// Wait until player has spawned
 				PlayerSpawner.RegisterSpawnListener(delegate
 				{
-					// Load room
-					realRoom = GameObject.Find("LevelRoot").GetComponent<LevelRoot>().GetRoom(room);
-					LevelRoom.SetCurrentActiveRoom(realRoom, true); // Sets room as active & unloads prior room
-					GameObject.Find("Cameras").transform.parent.GetComponent<CameraContainer>().SetRoom(realRoom); // Set camera to look at room
+					// Load room if not already in correct room
+					if (GetLoadedRoom().RoomName != room)
+					{
+						realRoom = GameObject.Find("LevelRoot").GetComponent<LevelRoot>().GetRoom(room);
+						realRoom.deactivateOnStart = false; // Allow room to load
+						LevelRoom.SetCurrentActiveRoom(realRoom); // Sets room as active & unloads prior room
+						GameObject.Find("Cameras").transform.parent.GetComponent<CameraContainer>().SetRoom(realRoom); // Set camera to look at room
+					}
 
 					// Teleport player
 					if (positionForPlayer != null)
 					{
-						Transform playerEnt = GameObject.Find("PlayerEnt").transform;
+						Transform playerEnt = VarHelper.PlayerObj.transform;
 						playerEnt.position = (Vector3)positionForPlayer; // Teleport player
 
 						if (facingDirectionForPlayer != null) playerEnt.localEulerAngles = (Vector3)facingDirectionForPlayer; // Change player facing direction
 					}
 				});
 			}
+			// If in scene with room
 			else
 			{
 				MenuHelper.ClosePauseMenu(); // Unpause game (prevents issue with entity animations breaking if visible upon spawn while paused on first frame)
 
-				// Load room
-				realRoom = GameObject.Find("LevelRoot").GetComponent<LevelRoot>().GetRoom(room);
-				LevelRoom.SetCurrentActiveRoom(realRoom, true); // Sets room as active & unloads prior room
-				GameObject.Find("Cameras").transform.parent.GetComponent<CameraContainer>().SetRoom(realRoom); // Sets camera to look at room
+				// Load room if not already in correct room
+				if (GetLoadedRoom().RoomName != room)
+				{
+					realRoom = GameObject.Find("LevelRoot").GetComponent<LevelRoot>().GetRoom(room);
+					LevelRoom.SetCurrentActiveRoom(realRoom); // Sets room as active & unloads prior room
+					GameObject.Find("Cameras").transform.parent.GetComponent<CameraContainer>().SetRoom(realRoom); // Set camera to look at room
+				}
 
 				// Teleport player
 				if (positionForPlayer != null)
@@ -89,7 +97,7 @@ namespace ModStuff
 			{
 				LevelRoom room = levelRoot.GetChild(i).GetComponent<LevelRoom>();
 
-				if (room != null && room.IsActive) return room;
+				if (room != null && room.IsActive && room.RoomName != "DunLgR") return room;
 			}
 
 			return null;
