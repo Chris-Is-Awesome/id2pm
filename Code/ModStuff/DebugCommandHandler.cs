@@ -38,6 +38,7 @@ namespace ModStuff
 		public FindCommand findCommand = new FindCommand();
 		public SaveStateCommand saveStateCommand = new SaveStateCommand();
 		public LoadStateCommand loadStateCommand = new LoadStateCommand();
+		public SetItemsCommand setItemsCommand = new SetItemsCommand();
 
 		public KeyCode keyToOpenDebugMenu = KeyCode.F1;
 
@@ -58,6 +59,7 @@ namespace ModStuff
 				{ new CommandInfo("Find", new ActivationMethod(findCommand.Activate)) },
 				{ new CommandInfo("SaveState", new ActivationMethod(saveStateCommand.Activate)) },
 				{ new CommandInfo("LoadState", new ActivationMethod(loadStateCommand.Activate)) },
+				{ new CommandInfo("SetItems", new ActivationMethod(setItemsCommand.Activate)) },
 			};
 
 			DebugManager.LogToFile("DebugCommandHandler initialized");

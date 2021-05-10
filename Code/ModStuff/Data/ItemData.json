@@ -1,0 +1,115 @@
+﻿{
+	"items": [
+		{
+			"friendlyName": "Amulet",
+			"realName": "amulet",
+			"maxLevelOrCount": 3
+		},
+		{
+			"friendlyName": "Chain",
+			"realName": "chain",
+			"maxLevelOrCount": 3
+		},
+		{
+			"friendlyName": "Dynamite",
+			"realName": "dynamite",
+			"validNames": [ "dynamite", "dyna" ],
+			"maxLevelOrCount": 4,
+			"isFinalLevelDev": true
+		},
+		{
+			"friendlyName": "Forbidden Keys",
+			"realName": "evilKeys",
+			"validNames": [ "evilKeys", "forbiddenKeys", "fKeys" ],
+			"maxLevelOrCount": 4,
+			"hasInfiniteCount": true
+		},
+		{
+			"friendlyName": "Forcewand",
+			"realName": "forcewand",
+			"validNames": [ "forcewand", "force" ],
+			"maxLevelOrCount": 4,
+			"isFinalLevelDev": true
+		},
+		{
+			"friendlyName": "Headband",
+			"realName": "headband",
+			"validNames": [ "headband", "band" ],
+			"maxLevelOrCount": 3
+		},
+		{
+			"friendlyName": "Ice Ring",
+			"realName": "icering",
+			"validNames": [ "icering", "ice", "ring" ],
+			"maxLevelOrCount": 4,
+			"isFinalLevelDev":  true
+		},
+		{
+			"friendlyName": "Lockpicks",
+			"realName": "keys",
+			"validNames": [ "pick", "picks", "lockpick", "lockpicks" ],
+			"maxLevelOrCount": 12,
+			"hasInfiniteCount": true
+		},
+		{
+			"friendlyName": "Loot",
+			"realName": "loot",
+			"validNames": [ "loot" ],
+			"maxLevelOrCount": 1
+		},
+		{
+			"friendlyName": "Stick",
+			"realName": "melee",
+			"realValue": 0,
+			"validNames": [ "stick", "branch" ],
+			"maxLevelOrCount": 3
+		},
+		{
+			"friendlyName": "Fire Sword",
+			"realName": "melee",
+			"realValue": 1,
+			"validNames": [ "firesword", "sword" ],
+			"maxLevelOrCount": 3
+		},
+		{
+			"friendlyName": "Fire Mace",
+			"realName": "melee",
+			"realValue": 2,
+			"validNames": [ "firemace", "mace" ],
+			"maxLevelOrCount": 3
+		},
+		{
+			"friendlyName": "Exploding Fire Chainsaw Shotgun",
+			"realName": "melee",
+			"realValue": 3,
+			"validNames": [ "chainsaw", "shotgun", "efcs" ],
+			"maxLevelOrCount": 3
+		},
+		{
+			"friendlyName": "Raft Pieces",
+			"realName": "raft",
+			"validNames": [ "raft", "rafts" ],
+			"maxLevelOrCount": 8,
+			"hasInfiniteCount": true
+		},
+		{
+			"friendlyName": "Secret Shards",
+			"realName": "shards",
+			"validNames": [ "secretshard", "secretshards", "shard", "shards" ],
+			"maxLevelOrCount": 24,
+			"hasInfiniteCount": true
+		},
+		{
+			"friendlyName": "Tome",
+			"realName": "tome",
+			"validNames": [ "tome" ],
+			"maxLevelOrCount": 3
+		},
+		{
+			"friendlyName": "Tracker",
+			"realName": "tracker",
+			"validNames": [ "tracker" ],
+			"maxLevelOrCount": 3
+		}
+	]
+}
