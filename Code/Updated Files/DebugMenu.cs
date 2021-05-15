@@ -16,6 +16,12 @@ public class DebugMenu : MonoBehaviour
 	MappedInput _input;
 
 	[SerializeField]
+	FadeEffectData _fadeData;
+
+	[SerializeField]
+	SaverOwner _saver;
+
+	[SerializeField]
 	GameVersion _version;
 
 	GuiWindow menuRoot;
@@ -39,8 +45,6 @@ public class DebugMenu : MonoBehaviour
 	bool hasCaret;
 
 	int ignoreFirstFramesDestroyUnity;
-
-	DebugCommandHandler commandHandler = DebugCommandHandler.Instance;
 
 	void Setup()
 	{
@@ -73,7 +77,7 @@ public class DebugMenu : MonoBehaviour
 		if (words.Length > 0)
 		{
 			string command = words[0]; // Get command name
-			DebugCommandHandler.CommandInfo commandToRun = commandHandler.GetCommand(command); // Get command
+			DebugCommandHandler.CommandInfo commandToRun = DebugCommandHandler.Instance.GetCommand(command); // Get command
 			
 			// If command is valid
 			if (commandToRun != null)
