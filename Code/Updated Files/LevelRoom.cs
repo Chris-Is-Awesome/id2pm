@@ -41,6 +41,19 @@ public class LevelRoom : MonoBehaviour
 
 	bool deactivateOnStart;
 
+	// Added
+	public bool DeactivateOnStart
+	{
+		get
+		{
+			return deactivateOnStart;
+		}
+		set
+		{
+			deactivateOnStart = value;
+		}
+	}
+
 	Vector3 importantPoint;
 
 	public static LevelRoom GetRoomForPosition(Vector3 pos, List<LevelRoom> rooms = null)
