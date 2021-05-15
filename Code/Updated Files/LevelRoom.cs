@@ -39,7 +39,20 @@ public class LevelRoom : MonoBehaviour
 
 	bool hasStarted;
 
-	public bool deactivateOnStart;
+	bool deactivateOnStart;
+
+	// Added
+	public bool DeactivateOnStart
+	{
+		get
+		{
+			return deactivateOnStart;
+		}
+		set
+		{
+			deactivateOnStart = value;
+		}
+	}
 
 	Vector3 importantPoint;
 

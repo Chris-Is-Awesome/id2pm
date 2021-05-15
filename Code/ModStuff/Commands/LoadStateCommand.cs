@@ -24,33 +24,11 @@ namespace ModStuff.Commands
 					// Load state
 					FileManager.CopyFile(filePath, VarHelper.CurrentSaveFilePath, true);
 
-					// Load data
-					SaveManager.GetSaverOwner().LoadAll(true);
+					// Load data & update player transform
+					SaveManager.GetSaverOwner().LoadAll(false, delegate (bool success, string error) { LoadTempData(); });
 					VarHelper.PlayerObj.GetComponent<Entity>().LoadState();
-					string scene = SaveManager.LoadFromSaveFile("mod/savestate/scene");
-					string room = SaveManager.LoadFromSaveFile("mod/savestate/room");
-					float posX = float.Parse(SaveManager.LoadFromSaveFile("mod/savestate/objects/PlayerEnt/position/x"));
-					float posY = float.Parse(SaveManager.LoadFromSaveFile("mod/savestate/objects/PlayerEnt/position/y"));
-					float posZ = float.Parse(SaveManager.LoadFromSaveFile("mod/savestate/objects/PlayerEnt/position/z"));
-					float rotX = float.Parse(SaveManager.LoadFromSaveFile("mod/savestate/objects/PlayerEnt/rotation/x"));
-					float rotY = float.Parse(SaveManager.LoadFromSaveFile("mod/savestate/objects/PlayerEnt/rotation/y"));
-					float rotZ = float.Parse(SaveManager.LoadFromSaveFile("mod/savestate/objects/PlayerEnt/rotation/z"));
-
-					Vector3 playerPos = new Vector3(posX, posY, posZ); // Teleport player
-					Vector3 playerRot = new Vector3(rotX, rotY, rotZ); // Rotate player
-					SceneAndRoomHelper.LoadRoom(scene, room, false, playerPos, playerRot, true); // Load scene/room
 
 					// EventListener.OnEntitySpawn += OnEntitySpawn;
-
-					// Delete temp saved data
-					SaveManager.DeleteSaveData("mod/savestate/scene");
-					SaveManager.DeleteSaveData("mod/savestate/room");
-					SaveManager.DeleteSaveData("mod/savestate/objects/PlayerEnt/position/x");
-					SaveManager.DeleteSaveData("mod/savestate/objects/PlayerEnt/position/y");
-					SaveManager.DeleteSaveData("mod/savestate/objects/PlayerEnt/position/z");
-					SaveManager.DeleteSaveData("mod/savestate/objects/PlayerEnt/rotation/x");
-					SaveManager.DeleteSaveData("mod/savestate/objects/PlayerEnt/rotation/y");
-					SaveManager.DeleteSaveData("mod/savestate/objects/PlayerEnt/rotation/z");
 
 					return "<color=green>Loaded state from slot " + saveSlot + "</color>";
 				}
@@ -59,6 +37,40 @@ namespace ModStuff.Commands
 			// If no index given
 			return DebugManager.LogToConsole("No <out>(int)</out> index was given. Use <out>help savestate/loadstate</out> for more info.", DebugManager.MessageType.Error);
 		}
+
+		private void LoadTempData()
+		{
+			string scene = SaveManager.LoadFromSaveFile("mod/savestate/scene");
+			string room = SaveManager.LoadFromSaveFile("mod/savestate/room");
+			float posX = float.Parse(SaveManager.LoadFromSaveFile("mod/savestate/objects/PlayerEnt/position/x"));
+			float posY = float.Parse(SaveManager.LoadFromSaveFile("mod/savestate/objects/PlayerEnt/position/y"));
+			float posZ = float.Parse(SaveManager.LoadFromSaveFile("mod/savestate/objects/PlayerEnt/position/z"));
+			float rotX = float.Parse(SaveManager.LoadFromSaveFile("mod/savestate/objects/PlayerEnt/rotation/x"));
+			float rotY = float.Parse(SaveManager.LoadFromSaveFile("mod/savestate/objects/PlayerEnt/rotation/y"));
+			float rotZ = float.Parse(SaveManager.LoadFromSaveFile("mod/savestate/objects/PlayerEnt/rotation/z"));
+
+			// Update player transform
+			Vector3 playerPos = new Vector3(posX, posY, posZ); // Teleport player
+			Vector3 playerRot = new Vector3(rotX, rotY, rotZ); // Rotate player
+			SceneAndRoomHelper.LoadRoom(scene, room, false, false, playerPos, playerRot, true); // Load scene/room
+
+			DeleteTempData();
+		}
+
+		private void DeleteTempData()
+		{
+			// Delete temp saved data
+			SaveManager.DeleteSaveData("mod/savestate/scene", false);
+			SaveManager.DeleteSaveData("mod/savestate/room", false);
+			SaveManager.DeleteSaveData("mod/savestate/objects/PlayerEnt/position/x", false);
+			SaveManager.DeleteSaveData("mod/savestate/objects/PlayerEnt/position/y", false);
+			SaveManager.DeleteSaveData("mod/savestate/objects/PlayerEnt/position/z", false);
+			SaveManager.DeleteSaveData("mod/savestate/objects/PlayerEnt/rotation/x", false);
+			SaveManager.DeleteSaveData("mod/savestate/objects/PlayerEnt/rotation/y", false);
+			SaveManager.DeleteSaveData("mod/savestate/objects/PlayerEnt/rotation/z", false);
+			SaveManager.GetSaverOwner().SaveAll();
+		}
+
 
 		/*
 		private void OnEntitySpawn(Entity ent, bool isActive)

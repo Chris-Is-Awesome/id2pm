@@ -184,7 +184,6 @@ namespace ModStuff.Data
 					new List<RoomData>
 					{
 						// Real room name, spawn position, facing direction, optional name for room (eg. "boss")
-						{ new RoomData("A", new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f)) },
 					},
 					new List<SpawnData>
 					{
@@ -224,7 +223,6 @@ namespace ModStuff.Data
 					new List<RoomData>
 					{
 						// Real room name, spawn position, facing direction, optional name for room (eg. "boss")
-						{ new RoomData("A", new Vector3(31.06f, 1f, -7.91f), new Vector3(0f, 180f, 0f)) },
 					},
 					new List<SpawnData>
 					{

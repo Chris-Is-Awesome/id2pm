@@ -26,7 +26,7 @@ namespace ModStuff
 			SceneDoor.StartLoad(scene, spawn, fadeData, SaveManager.GetSaverOwner());
 		}
 
-		public static void LoadRoom(string scene, string room, bool doFade = true, Vector3? positionForPlayer = null, Vector3? facingDirectionForPlayer = null, bool forceLoadScene = false)
+		public static void LoadRoom(string scene, string room, bool doSave = true, bool doFade = true, Vector3? positionForPlayer = null, Vector3? facingDirectionForPlayer = null, bool forceLoadScene = false)
 		{
 			LevelRoom realRoom;
 
@@ -34,7 +34,7 @@ namespace ModStuff
 			if (GetLoadedScene().name != scene || forceLoadScene)
 			{
 				// Load scene
-				LoadScene(scene, room, true, doFade);
+				LoadScene(scene, room, doSave, doFade);
 
 				// Wait until player has spawned
 				PlayerSpawner.RegisterSpawnListener(delegate
@@ -43,7 +43,7 @@ namespace ModStuff
 					if (GetLoadedRoom().RoomName != room)
 					{
 						realRoom = GameObject.Find("LevelRoot").GetComponent<LevelRoot>().GetRoom(room);
-						realRoom.deactivateOnStart = false; // Allow room to load
+						realRoom.DeactivateOnStart = false;
 						LevelRoom.SetCurrentActiveRoom(realRoom); // Sets room as active & unloads prior room
 						GameObject.Find("Cameras").transform.parent.GetComponent<CameraContainer>().SetRoom(realRoom); // Set camera to look at room
 					}
