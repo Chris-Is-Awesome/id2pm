@@ -80,7 +80,14 @@ namespace ModStuff
 		// Returns true if file exists, false if not
 		public static bool DoesFileExist(string path)
 		{
-			return File.Exists(path);
+			bool fileExists = File.Exists(path);
+
+			if (!fileExists)
+			{
+				DebugManager.LogToFile("File at path '" + path + "' does not exist. Typo?", LogType.Warning);
+			}
+
+			return fileExists;
 		}
 
 		// Returns specific filename containing specified text out of a directory, empty string if no such file exists
@@ -103,6 +110,19 @@ namespace ModStuff
 		public static string GetModDirectoryPath()
 		{
 			return Application.dataPath + "/Mods/speedrunMod";
+		}
+
+		// Parses json from file to text and returns text
+		public static T GetDataFromJson<T>(string path)
+		{
+			// If file exists
+			if (DoesFileExist(path))
+			{
+				return JsonUtility.FromJson<T>(File.ReadAllText(path));
+			}
+
+			// If file does not exist
+			return default;
 		}
 	}
 }
