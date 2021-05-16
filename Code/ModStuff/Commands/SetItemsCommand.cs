@@ -177,7 +177,7 @@ namespace ModStuff.Commands
 			if (!string.IsNullOrEmpty(localFilePath))
 			{
 				string modDirectory = FileManager.GetModDirectoryPath();
-				return JsonUtility.FromJson<ItemList>(File.ReadAllText(modDirectory + localFilePath));
+				return JsonUtility.FromJson<ItemList>(File.ReadAllText(modDirectory + "/data/" + localFilePath));
 			}
 
 			// TODO: If reading from server, fetch file
