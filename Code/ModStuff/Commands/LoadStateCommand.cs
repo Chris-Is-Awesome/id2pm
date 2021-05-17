@@ -26,7 +26,6 @@ namespace ModStuff.Commands
 
 					// Load data & update player transform
 					SaveManager.GetSaverOwner().LoadAll(false, delegate (bool success, string error) { LoadTempData(); });
-					VarHelper.PlayerObj.GetComponent<Entity>().LoadState();
 
 					// EventListener.OnEntitySpawn += OnEntitySpawn;
 
@@ -52,6 +51,7 @@ namespace ModStuff.Commands
 			// Update player transform
 			Vector3 playerPos = new Vector3(posX, posY, posZ); // Teleport player
 			Vector3 playerRot = new Vector3(rotX, rotY, rotZ); // Rotate player
+			VarHelper.PlayerObj.GetComponent<Entity>().LoadState();
 			SceneAndRoomHelper.LoadRoom(scene, room, false, false, playerPos, playerRot, true); // Load scene/room
 
 			DeleteTempData();

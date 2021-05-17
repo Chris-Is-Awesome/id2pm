@@ -22,6 +22,7 @@ namespace ModStuff
 
 		// Entity
 		public static event BoolFunc OnPlayerSpawn;
+		public static event Func OnPlayerUpdate;
 		public static event EntBoolFunc OnEntitySpawn;
 		public static event DamageFunc OnDamageDone;
 		public static event EntFunc OnEntityDeath;
@@ -54,7 +55,14 @@ namespace ModStuff
 		{
 			//string state = isRespawn ? "respawned" : "spawned";
 			//DebugManager.LogToFile("[OnplayerSpawn] PlayerEnt has " + state);
+			HotkeyHelper hotkeyHelper = HotkeyHelper.Instance; // Initialize hotkeys
 			OnPlayerSpawn?.Invoke(isRespawn);
+		}
+
+		public static void PlayerUpdate()
+		{
+			//DebugManager.LogToFile("[OnPlayerUpdate] Player is updating!");
+			OnPlayerUpdate?.Invoke();
 		}
 
 		public static void EntitySpawn(Entity ent, bool isActive)

@@ -33,6 +33,7 @@
 
 		public void Deactivate()
 		{
+			isActive = !isActive;
 			EventListener.OnEntitySpawn -= RunCommand;
 
 			for (int i = 0; i < VarHelper.ActiveEnts.Count; i++)

@@ -23,7 +23,7 @@ namespace ModStuff
 			}
 		}
 
-		public delegate string ActivationMethod(string[] args);
+		public delegate string ActivationMethod(string[] args = null);
 		public delegate void DeactivationMethod();
 		public List<CommandInfo> allCommands;
 
@@ -62,6 +62,7 @@ namespace ModStuff
 				{ new CommandInfo("SetItems", new ActivationMethod(setItemsCommand.Activate)) },
 			};
 
+			keyToOpenDebugMenu = HotkeyHelper.Instance.GetHotkey("OpenDebugMenu").key;
 			DebugManager.LogToFile("DebugCommandHandler initialized");
 		}
 
