@@ -12,13 +12,15 @@ namespace ModStuff
 			public string nameOfCommand;
 			public ActivationMethod activationMethod;
 			public DeactivationMethod deactivationMethod;
+			public string[] alternateNamesForCommand;
 			public bool isDevOnly;
 
-			public CommandInfo (string nameOfCommand, ActivationMethod activationMethod, DeactivationMethod deactivationMethod = null, bool isDevOnly = false)
+			public CommandInfo (string nameOfCommand, ActivationMethod activationMethod, DeactivationMethod deactivationMethod = null, string[] alternateNamesForCommand = null, bool isDevOnly = false)
 			{
 				this.nameOfCommand = nameOfCommand;
 				this.activationMethod = activationMethod;
 				this.deactivationMethod = deactivationMethod;
+				this.alternateNamesForCommand = alternateNamesForCommand;
 				this.isDevOnly = isDevOnly;
 			}
 		}
@@ -39,6 +41,7 @@ namespace ModStuff
 		public SaveStateCommand saveStateCommand = new SaveStateCommand();
 		public LoadStateCommand loadStateCommand = new LoadStateCommand();
 		public SetItemsCommand setItemsCommand = new SetItemsCommand();
+		public SetHpCommand setHpCommand = new SetHpCommand();
 
 		public KeyCode keyToOpenDebugMenu = KeyCode.F1;
 
@@ -49,17 +52,18 @@ namespace ModStuff
 			{
 				// Do not put dev commands at bottom of list, as this will add extra comma in help command and
 				// is more performant to just not list dev command last rather than remove that trailing comma
-				{ new CommandInfo("Test", new ActivationMethod(testCommand.Activate), null, true) },
-				{ new CommandInfo("Goto", new ActivationMethod(gotoCommand.Activate)) },
-				{ new CommandInfo("Speed", new ActivationMethod(speedCommand.Activate), new DeactivationMethod(speedCommand.Deactivate)) },
+				{ new CommandInfo("Test", new ActivationMethod(testCommand.Activate), null, null, true) },
+				{ new CommandInfo("Goto", new ActivationMethod(gotoCommand.Activate), null, new string[] { "warpto" }) },
+				{ new CommandInfo("Speed", new ActivationMethod(speedCommand.Activate), new DeactivationMethod(speedCommand.Deactivate), new string[] { "setspeed" }) },
 				{ new CommandInfo("God", new ActivationMethod(godCommand.Activate), new DeactivationMethod(godCommand.Deactivate)) },
 				{ new CommandInfo("Help", new ActivationMethod(helpCommand.Activate)) },
 				{ new CommandInfo("LikeABoss", new ActivationMethod(likeABossCommand.Activate), new DeactivationMethod(likeABossCommand.Deactivate)) },
 				{ new CommandInfo("NoClip", new ActivationMethod(noClipCommand.Activate), new DeactivationMethod(noClipCommand.Deactivate)) },
 				{ new CommandInfo("Find", new ActivationMethod(findCommand.Activate)) },
-				{ new CommandInfo("SaveState", new ActivationMethod(saveStateCommand.Activate)) },
-				{ new CommandInfo("LoadState", new ActivationMethod(loadStateCommand.Activate)) },
-				{ new CommandInfo("SetItems", new ActivationMethod(setItemsCommand.Activate)) },
+				{ new CommandInfo("SaveState", new ActivationMethod(saveStateCommand.Activate), null, new string[] { "save", "ss" }) },
+				{ new CommandInfo("LoadState", new ActivationMethod(loadStateCommand.Activate), null, new string[] { "load", "ls" }) },
+				{ new CommandInfo("SetItems", new ActivationMethod(setItemsCommand.Activate), null, new string[] { "setitem", "items", "item" }) },
+				{ new CommandInfo("SetHp", new ActivationMethod(setHpCommand.Activate), null, new string[] { "hp" }) },
 			};
 
 			keyToOpenDebugMenu = HotkeyHelper.Instance.GetHotkey("OpenDebugMenu").key;
@@ -71,9 +75,23 @@ namespace ModStuff
 			for (int i  = 0; i < allCommands.Count; i++)
 			{
 				CommandInfo command = allCommands[i];
+
+				// If name matches internal name
 				if (StringHelper.DoStringsMatch(commandName, command.nameOfCommand))
 				{
 					if (!command.isDevOnly || (command.isDevOnly && VersionHelper.IsDevBuild)) return command;
+				}
+
+				// If name matches altnernate names
+				if (command.alternateNamesForCommand != null)
+				{
+					for (int j = 0; j < command.alternateNamesForCommand.Length; j++)
+					{
+						if (StringHelper.DoStringsMatch(commandName, command.alternateNamesForCommand[j]))
+						{
+							if (!command.isDevOnly || (command.isDevOnly && VersionHelper.IsDevBuild)) return command;
+						}
+					}
 				}
 			}
 

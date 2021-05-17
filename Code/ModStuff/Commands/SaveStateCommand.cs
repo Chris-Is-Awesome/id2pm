@@ -7,29 +7,33 @@ namespace ModStuff.Commands
 	{
 		public override string Activate(string[] args)
 		{
-			// If index given
-			if (TryParseInt(args[0], out int saveSlot))
+			// If args given
+			if (args.Length > 0)
 			{
-				// If positive number
-				if (saveSlot >= 0)
+				// If index given
+				if (TryParseInt(args[0], out int saveSlot))
 				{
-					// Create filename for save state file
-					DateTime timestamp = DateTime.Now;
-					string date = timestamp.ToString("MM-dd-yy");
-					string time = timestamp.ToString("HH-mm");
-					string fileName = "state-" + saveSlot + "_" + date + "_" + time + ".state";
+					// If positive number
+					if (saveSlot >= 0)
+					{
+						// Create filename for save state file
+						DateTime timestamp = DateTime.Now;
+						string date = timestamp.ToString("MM-dd-yy");
+						string time = timestamp.ToString("HH-mm");
+						string fileName = "state-" + saveSlot + "_" + date + "_" + time + ".state";
 
-					// Delete any existing save states for this slot
-					string filePath = FileManager.GetFileNameFromText(FileManager.GetModDirectoryPath() + "/savestates/", "state-" + saveSlot);
-					if (!string.IsNullOrEmpty(filePath)) FileManager.DeleteFile(filePath);
+						// Delete any existing save states for this slot
+						string filePath = FileManager.GetFileNameFromText(FileManager.GetModDirectoryPath() + "/savestates/", "state-" + saveSlot);
+						if (!string.IsNullOrEmpty(filePath)) FileManager.DeleteFile(filePath);
 
-					// Save data
-					SaveTempData();
-					
-					// Copy save file to mod directory/savestates directory
-					FileManager.CopyFile(VarHelper.CurrentSaveFilePath, FileManager.GetModDirectoryPath() + "/savestates/" + fileName, true);
+						// Save data
+						SaveTempData();
 
-					return "<color=green>Saved state to slot " + saveSlot + "</color>";
+						// Copy save file to mod directory/savestates directory
+						FileManager.CopyFile(VarHelper.CurrentSaveFilePath, FileManager.GetModDirectoryPath() + "/savestates/" + fileName, true);
+
+						return "<color=green>Saved state to slot " + saveSlot + "</color>";
+					}
 				}
 			}
 
