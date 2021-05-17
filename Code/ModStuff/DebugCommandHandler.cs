@@ -23,7 +23,7 @@ namespace ModStuff
 			}
 		}
 
-		public delegate string ActivationMethod(string[] args);
+		public delegate string ActivationMethod(string[] args = null);
 		public delegate void DeactivationMethod();
 		public List<CommandInfo> allCommands;
 

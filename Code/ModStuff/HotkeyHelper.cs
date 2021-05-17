@@ -58,18 +58,34 @@ namespace ModStuff
 
 		void Update()
 		{
+			// If any key is pressed
 			if (Input.anyKeyDown)
 			{
+				// If player exists
 				if (VarHelper.PlayerObj != null)
 				{
+					// Iterate through all hotkeys
 					for (int i = 0;  i < hotkeyHolder.hotkeys.Count; i++)
 					{
 						HotkeyData.Hotkey hotkey = hotkeyHolder.hotkeys[i];
 
+						// If hotkey is pressed
 						if (Input.GetKeyDown(hotkey.key))
 						{
-							commandHandler.ActivateCommand(hotkey.commandToRun, hotkey.commandArgs);
-							Debug.Log("Hotkey used for '" + hotkey.name + "'!");
+							DebugManager.LogToFile("Used hotkey '" + hotkey.name + "' from pressing '" + hotkey.key.ToString() + "'!");
+
+							// If command is active
+							if (commandHandler.IsCommandActive(hotkey.commandToRun))
+							{
+								// Deactivate command
+								commandHandler.DeactivateCommand(hotkey.commandToRun);
+							}
+							// If command inactive
+							else
+							{
+								// Activate command
+								commandHandler.ActivateCommand(hotkey.commandToRun, hotkey.commandArgs);
+							}
 						}
 					}
 				}
