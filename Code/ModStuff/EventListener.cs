@@ -54,6 +54,7 @@ namespace ModStuff
 		{
 			//string state = isRespawn ? "respawned" : "spawned";
 			//DebugManager.LogToFile("[OnplayerSpawn] PlayerEnt has " + state);
+			HotkeyHelper hotkeyHelper = HotkeyHelper.Instance; // Initialize hotkeys
 			OnPlayerSpawn?.Invoke(isRespawn);
 		}
 
