@@ -27,7 +27,9 @@
 
 		public void Deactivate()
 		{
+			isActive = !isActive;
 			VarHelper.PlayerObj.GetComponent<BC_ColliderAACylinderN>().enabled = true;
+			DebugManager.LogToFile("[Cheat] NoClip deactivated for Ittle");
 		}
 
 		public static string GetHelp()

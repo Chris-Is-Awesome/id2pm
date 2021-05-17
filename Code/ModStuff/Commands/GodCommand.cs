@@ -42,6 +42,7 @@ namespace ModStuff.Commands
 
 		public void Deactivate()
 		{
+			isActive = !isActive;
 			EventListener.OnPlayerSpawn -= RunCommand;
 			GameObject playerObj = VarHelper.PlayerObj;
 
