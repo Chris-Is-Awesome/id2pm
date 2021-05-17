@@ -135,17 +135,19 @@ namespace ModStuff.Commands
 				{
 					case "all":
 						// If dev item, don't upgrade to last level
-						if (item.isFinalLevelDev) SaveManager.SaveToEnt(item.realName, item.maxLevelOrCount - 1);
-						else SaveManager.SaveToEnt(item.realName, item.maxLevelOrCount);
+						if (item.isFinalLevelDev) SaveManager.SaveToEnt(item.realName, item.maxLevelOrCount - 1, false);
+						else SaveManager.SaveToEnt(item.realName, item.maxLevelOrCount, false);
 						break;
 					case "dev":
-						SaveManager.SaveToEnt(item.realName, item.maxLevelOrCount);
+						SaveManager.SaveToEnt(item.realName, item.maxLevelOrCount, false);
 						break;
 					case "none":
-						SaveManager.SaveToEnt(item.realName, 0);
+						SaveManager.SaveToEnt(item.realName, 0, false);
 						break;
 				}
 			}
+
+			SaveManager.GetSaverOwner().SaveAll();
 		}
 
 		private ItemList.ItemData GetItem(ItemList itemList, string itemName)
