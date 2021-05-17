@@ -6,30 +6,34 @@ namespace ModStuff.Commands
 	{
 		public override string Activate(string[] args)
 		{
-			// If index given
-			if (TryParseInt(args[0], out int saveSlot))
+			// If args given
+			if (args.Length > 0)
 			{
-				// If positive number
-				if (saveSlot >= 0)
+				// If index given
+				if (TryParseInt(args[0], out int saveSlot))
 				{
-					// Get save state file path
-					string filePath = FileManager.GetFileNameFromText(FileManager.GetModDirectoryPath() + "/savestates/", "state-" + saveSlot);
-
-					// If no save state found for save slot
-					if (string.IsNullOrEmpty(filePath))
+					// If positive number
+					if (saveSlot >= 0)
 					{
-						return DebugManager.LogToConsole("No save state found for slot " + saveSlot, DebugManager.MessageType.Error);
+						// Get save state file path
+						string filePath = FileManager.GetFileNameFromText(FileManager.GetModDirectoryPath() + "/savestates/", "state-" + saveSlot);
+
+						// If no save state found for save slot
+						if (string.IsNullOrEmpty(filePath))
+						{
+							return DebugManager.LogToConsole("No save state found for slot " + saveSlot, DebugManager.MessageType.Error);
+						}
+
+						// Load state
+						FileManager.CopyFile(filePath, VarHelper.CurrentSaveFilePath, true);
+
+						// Load data & update player transform
+						SaveManager.GetSaverOwner().LoadAll(false, delegate (bool success, string error) { LoadTempData(); });
+
+						// EventListener.OnEntitySpawn += OnEntitySpawn;
+
+						return "<color=green>Loaded state from slot " + saveSlot + "</color>";
 					}
-
-					// Load state
-					FileManager.CopyFile(filePath, VarHelper.CurrentSaveFilePath, true);
-
-					// Load data & update player transform
-					SaveManager.GetSaverOwner().LoadAll(false, delegate (bool success, string error) { LoadTempData(); });
-
-					// EventListener.OnEntitySpawn += OnEntitySpawn;
-
-					return "<color=green>Loaded state from slot " + saveSlot + "</color>";
 				}
 			}
 
