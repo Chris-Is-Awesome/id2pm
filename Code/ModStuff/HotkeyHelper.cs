@@ -36,7 +36,25 @@ namespace ModStuff
 				}
 			}
 
+			EventListener.OnPlayerUpdate += PlayerUpdate;
 			DebugManager.LogToFile("Hotkeys initialized!");
+		}
+
+		public HotkeyData.Hotkey GetHotkey(string name)
+		{
+			// Iterate through all hotkeys
+			for (int i = 0; i < hotkeyHolder.hotkeys.Count; i++)
+			{
+				HotkeyData.Hotkey hotkey = hotkeyHolder.hotkeys[i];
+
+				// If found wanted hotkey, return it
+				if (StringHelper.DoStringsMatch(name, hotkey.name))
+				{
+					return hotkey;
+				}
+			}
+
+			return null;
 		}
 
 		private DebugCommandHandler.CommandInfo GetCommandMethod(string commandInput)
@@ -56,38 +74,49 @@ namespace ModStuff
 			return null;
 		}
 
-		void Update()
+		private HotkeyData.Hotkey IsUsingHotkey()
 		{
 			// If any key is pressed
 			if (Input.anyKeyDown)
 			{
-				// If player exists
-				if (VarHelper.PlayerObj != null)
+				// Iterate through all hotkeys
+				for (int i = 0; i < hotkeyHolder.hotkeys.Count; i++)
 				{
-					// Iterate through all hotkeys
-					for (int i = 0;  i < hotkeyHolder.hotkeys.Count; i++)
+					HotkeyData.Hotkey hotkey = hotkeyHolder.hotkeys[i];
+
+					// If hotkey is pressed
+					if (Input.GetKeyDown(hotkey.key))
 					{
-						HotkeyData.Hotkey hotkey = hotkeyHolder.hotkeys[i];
-
-						// If hotkey is pressed
-						if (Input.GetKeyDown(hotkey.key))
-						{
-							DebugManager.LogToFile("Used hotkey '" + hotkey.name + "' from pressing '" + hotkey.key.ToString() + "'!");
-
-							// If command is active
-							if (commandHandler.IsCommandActive(hotkey.commandToRun))
-							{
-								// Deactivate command
-								commandHandler.DeactivateCommand(hotkey.commandToRun);
-							}
-							// If command inactive
-							else
-							{
-								// Activate command
-								commandHandler.ActivateCommand(hotkey.commandToRun, hotkey.commandArgs);
-							}
-						}
+						return hotkey;
 					}
+				}
+			}
+
+			return null;
+		}
+
+		private void PlayerUpdate()
+		{
+			HotkeyData.Hotkey hotkey = IsUsingHotkey();
+
+			if (hotkey != null)
+			{
+				// If hotkey is for OpenDebugMenu
+				if (hotkey.name == "OpenDebugMenu") return;
+
+				DebugManager.LogToFile("Hotkey '" + hotkey.name + "' triggered from pressing '" + hotkey.key.ToString() + "'!", LogType.Log, false, false);
+
+				// If command is active
+				if (commandHandler.IsCommandActive(hotkey.commandToRun))
+				{
+					// Deactivate command
+					commandHandler.DeactivateCommand(hotkey.commandToRun);
+				}
+				// If command inactive
+				else
+				{
+					// Activate command
+					commandHandler.ActivateCommand(hotkey.commandToRun, hotkey.commandArgs);
 				}
 			}
 		}

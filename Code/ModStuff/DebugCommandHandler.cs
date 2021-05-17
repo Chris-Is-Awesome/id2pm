@@ -62,6 +62,7 @@ namespace ModStuff
 				{ new CommandInfo("SetItems", new ActivationMethod(setItemsCommand.Activate)) },
 			};
 
+			keyToOpenDebugMenu = HotkeyHelper.Instance.GetHotkey("OpenDebugMenu").key;
 			DebugManager.LogToFile("DebugCommandHandler initialized");
 		}
 
