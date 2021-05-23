@@ -100,8 +100,8 @@ namespace ModStuff
 		public static void SceneUnload()
 		{
 			Scene scene = SceneManager.GetActiveScene();
-			DebugManager.LogToFile("[OnSceneLoad] " + scene.name + " has unloaded");
-			OnSceneLoad?.Invoke(scene);
+			//DebugManager.LogToFile("[OnSceneLoad] " + scene.name + " has unloaded");
+			OnSceneUnload?.Invoke(scene);
 		}
 
 		public static void RoomLoad(LevelRoom room, bool isActive)
