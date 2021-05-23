@@ -29,6 +29,7 @@ namespace ModStuff
 
 		// Scene/room loading
 		public static event SceneFunc OnSceneLoad;
+		public static event SceneFunc OnSceneUnload;
 		public static event RoomFunc OnRoomLoad;
 
 		// Collision
@@ -93,6 +94,13 @@ namespace ModStuff
 		{
 			Scene scene = SceneManager.GetActiveScene();
 			//DebugManager.LogToFile("[OnSceneLoad] " + scene.name + " has loaded");
+			OnSceneLoad?.Invoke(scene);
+		}
+
+		public static void SceneUnload()
+		{
+			Scene scene = SceneManager.GetActiveScene();
+			DebugManager.LogToFile("[OnSceneLoad] " + scene.name + " has unloaded");
 			OnSceneLoad?.Invoke(scene);
 		}
 

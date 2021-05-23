@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using ModStuff;
 
 [AddComponentMenu("Ittle 2/Level/Scene door")]
 public class SceneDoor : MonoBehaviour, IBC_TriggerEnterListener, IBC_TriggerExitListener, IBC_CollisionEventListener
@@ -394,6 +395,9 @@ public class SceneDoor : MonoBehaviour, IBC_TriggerEnterListener, IBC_TriggerExi
 		{
 			list[i]();
 		}
+
+		// Invoke custom event
+		EventListener.SceneUnload();
 	}
 
 	static Vector3 WorldToScreen(Vector3 pos)
