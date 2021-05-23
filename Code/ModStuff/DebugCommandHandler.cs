@@ -42,6 +42,7 @@ namespace ModStuff
 		public LoadStateCommand loadStateCommand = new LoadStateCommand();
 		public SetItemsCommand setItemsCommand = new SetItemsCommand();
 		public SetHpCommand setHpCommand = new SetHpCommand();
+		public StopwatchCommand stopwatchCommand = new StopwatchCommand();
 
 		public KeyCode keyToOpenDebugMenu = KeyCode.F1;
 
@@ -64,6 +65,7 @@ namespace ModStuff
 				{ new CommandInfo("LoadState", new ActivationMethod(loadStateCommand.Activate), null, new string[] { "load", "ls" }) },
 				{ new CommandInfo("SetItems", new ActivationMethod(setItemsCommand.Activate), null, new string[] { "setitem", "items", "item" }) },
 				{ new CommandInfo("SetHp", new ActivationMethod(setHpCommand.Activate), null, new string[] { "hp" }) },
+				{ new CommandInfo("Stopwatch", new ActivationMethod(stopwatchCommand.Activate), new DeactivationMethod(stopwatchCommand.Deactivate), new string[] { "sw" }) },
 			};
 
 			keyToOpenDebugMenu = HotkeyHelper.Instance.GetHotkey("OpenDebugMenu").key;
