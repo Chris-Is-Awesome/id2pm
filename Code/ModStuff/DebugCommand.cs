@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ModStuff
 {
-	public abstract class DebugCommand : MonoBehaviour
+	public abstract class DebugCommand
 	{
 		public abstract string Activate(string[] args);
 
