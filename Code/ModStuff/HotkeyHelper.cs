@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using ModStuff.Data;
+using ModStuff.UI;
 
 namespace ModStuff
 {
@@ -10,6 +13,10 @@ namespace ModStuff
 		HotkeyData hotkeyHolder = new HotkeyData();
 		List<HotkeyData.HotkeyJson.Data> hotkeyData;
 		DebugCommandHandler commandHandler = DebugCommandHandler.Instance;
+		Coroutine textAnimation;
+		GameObject textObj;
+		float moveInterval = 1;
+		Vector3 moveToPosition;
 
 		private void Awake()
 		{
@@ -105,6 +112,13 @@ namespace ModStuff
 				if (hotkey.name == "OpenDebugMenu") return;
 
 				DebugManager.LogToFile("Hotkey '" + hotkey.name + "' triggered from pressing '" + hotkey.key.ToString() + "'!", LogType.Log, false, false);
+				if (textAnimation != null)
+				{
+					StopCoroutine(textAnimation);
+					Destroy(textObj);
+				}
+				textAnimation = commandHandler.StartCoroutine(ShowText(hotkey.name, hotkey.key.ToString())); // Start animation of showing text
+				EventListener.OnSceneUnload += OnSceneUnload;
 
 				// If command is active
 				if (commandHandler.IsCommandActive(hotkey.commandToRun))
@@ -119,6 +133,49 @@ namespace ModStuff
 					commandHandler.ActivateCommand(hotkey.commandToRun, hotkey.commandArgs);
 				}
 			}
+		}
+
+		void OnSceneUnload(Scene scene)
+		{
+			commandHandler.StopCoroutine(textAnimation); // Stop animation of showing text
+			EventListener.OnSceneUnload -= OnSceneUnload;
+		}
+
+		void Update()
+		{
+			if (textObj != null)
+			{
+				textObj.transform.localPosition = Vector3.MoveTowards(textObj.transform.localPosition, moveToPosition, moveInterval * Time.deltaTime);
+			}
+		}
+
+		IEnumerator ShowText(string command, string key)
+		{
+			string message = command + " {" + key + "} fired!";
+			textObj = UIText.Instance.CreateText("HotkeyNotification", message);
+			textObj.transform.localPosition = new Vector3(-5f, -3, 0f);
+			moveToPosition = new Vector3(-5f, -2.6375f, 0f);
+			yield return new WaitForSeconds(0.5f);
+			moveToPosition = new Vector3(-5f, -2.7f, 0f);
+
+			yield return new WaitForSeconds(0.1f);
+			moveToPosition = new Vector3(-5f, -2.58375f, 0f);
+
+			yield return new WaitForSeconds(0.1f);
+			moveToPosition = new Vector3(-5f, -2.66f, 0f);
+
+			yield return new WaitForSeconds(0.1f);
+			moveToPosition = new Vector3(-5f, -2.61f, 0f);
+
+			yield return new WaitForSeconds(0.1f);
+			moveToPosition = new Vector3(-5f, -2.6375f, 0f);
+
+			yield return new WaitForSeconds(1.75f);
+			moveToPosition = new Vector3(-5f, -3f, 0f);
+
+			yield return new WaitForSeconds(0.5f);
+			Destroy(textObj);
+			StopCoroutine(textAnimation);
 		}
 	}
 }
