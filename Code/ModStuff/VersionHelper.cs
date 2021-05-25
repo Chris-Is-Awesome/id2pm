@@ -6,11 +6,22 @@
 		{
 			get
 			{
-				string version = "v0.0";
-				if (IsDevBuild) version += "_Dev";
-				else if (IsAlphaBuild) version += "_Alpha";
-				else if (IsBetaBuild) version += "_Beta";
+				string version = "v0.1";
+				if (!IsPublicRelease)
+				{
+					if (IsDevBuild) version += "_Dev";
+					else if (IsAlphaBuild) version += "_Alpha";
+					else if (IsBetaBuild) version += "_Beta";
+				}
 				return  version;
+			}
+		}
+
+		public static bool IsPublicRelease
+		{
+			get
+			{
+				return false;
 			}
 		}
 
@@ -18,17 +29,7 @@
 		{
 			get
 			{
-				// TODO: Return true depending on Steam user currently playing?
 				return true;
-			}
-		}
-
-		public static bool IsChrisBuild
-		{
-			get
-			{
-				// TODO: Return true if options file has secret key in it
-				return false;
 			}
 		}
 
