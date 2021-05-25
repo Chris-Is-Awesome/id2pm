@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace ModStuff.Commands
 {
@@ -50,8 +51,12 @@ namespace ModStuff.Commands
 		public void Deactivate()
 		{
 			EventListener.OnPlayerSpawn -= RunCommand;
-			RigidBodyController rigidbody = VarHelper.PlayerObj.GetComponent<RigidBodyController>();
-			rigidbody.SetCustomVelocity(1);
+			GameObject playerObj = VarHelper.PlayerObj;
+			if (playerObj != null)
+			{
+				RigidBodyController rigidbody = playerObj.GetComponent<RigidBodyController>();
+				rigidbody.SetCustomVelocity(1);
+			}
 			isActive = false;
 		}
 
