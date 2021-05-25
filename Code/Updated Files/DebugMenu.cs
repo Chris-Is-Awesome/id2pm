@@ -456,7 +456,7 @@ public class DebugMenu : MonoBehaviour
 		}
 		if (titleTextMesh != null)
 		{
-			titleTextMesh.text = "Debug Menu (id2gz)";
+			titleTextMesh.text = "Debug Menu (id2pm)";
 			titleTextMesh.color = Color.black;
 			titleTextMesh.alignment = TextAlignment.Center;
 			titleTextMesh.fontSize = 35;
