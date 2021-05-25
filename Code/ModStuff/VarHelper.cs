@@ -34,7 +34,6 @@ namespace ModStuff
 		{
 			get
 			{
-				if (playerObj == null) DebugManager.LogToFile("Attempted to retrieve null PlayerEnt.", LogType.Error, true);
 				return playerObj;
 			}
 			set
