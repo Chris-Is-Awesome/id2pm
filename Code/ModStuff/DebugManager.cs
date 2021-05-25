@@ -20,6 +20,9 @@ namespace ModStuff
 			Debug.logger.logEnabled = true;
 			Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
 			Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
+
+			// Run in background
+			Application.runInBackground = true;
 		}
 
 		public static void LogToFile(string message, LogType logType = LogType.Log, bool includeStackTrace = false, bool addWhiteSpace = true)
