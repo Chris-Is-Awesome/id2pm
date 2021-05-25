@@ -186,7 +186,7 @@ namespace ModStuff.Commands
 			// Only stop animation if currently animating
 			if (isAnimating)
 			{
-				DebugCommandHandler.Instance.StopCoroutine(animationCoroutine);
+				if (animationCoroutine != null) DebugCommandHandler.Instance.StopCoroutine(animationCoroutine);
 				isAnimating = false;
 				isActive = false; // Set command to inactive so it won't resume command after loads
 				EventListener.OnSceneUnload -= OnSceneUnload;
