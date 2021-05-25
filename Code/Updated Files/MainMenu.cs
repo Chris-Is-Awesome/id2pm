@@ -376,7 +376,7 @@ public class MainMenu : MonoBehaviour
 			guiContentData.SetValue("showLanguage", this.ShouldShowLanguage());
 			guiContentData.SetValue("hasSaveFiles", base.Owner._saver.GetAvailableLocalSavers().Count > 0);
 			guiContentData.SetValue("saveFileWarn", base.Owner.SaveFileWarning());
-			guiContentData.SetValue("version", base.Owner._gameVersion.GetSmallVersion());
+			guiContentData.SetValue("version", "Base: v" + base.Owner._gameVersion.GetSmallVersion() + "\nid2pm: " + VersionHelper.ModVersion); // Add mod version #
 			MainMenu.ApplyUIData(PlatformInfo.Current.GetDataForUI("main.main"), guiContentData);
 			base.Root.ApplyContent(guiContentData, true);
 		}
@@ -606,11 +606,19 @@ public class MainMenu : MonoBehaviour
 		public NewGameScreen(MainMenu owner, string root, GuiBindData data) : base(owner, root, data)
 		{
 			Transform menu = GameObject.Find("GuiLayout").transform.Find("Main").Find("FileCreate");
-			UICheckBox isSpeedrunBox = UIFactory.Instance.CreateCheckBox(0f, 0.25f, menu, "Is Speedrun?");
+
+			// Create isSpeedrun checkbox
+			UICheckBox isSpeedrunBox = UIFactory.Instance.CreateCheckBox(0f, 0.25f, menu, "Speedrun?");
+			isSpeedrunBox.Value = VersionHelper.IsPublicRelease || !VersionHelper.IsDevBuild; // Default to true if public release or not dev build
+			isSpeedrun = isSpeedrunBox.Value;
 			isSpeedrunBox.onInteraction += delegate (bool enable)
 			{
 				isSpeedrun = enable;
 			};
+
+			// Create version text
+			string versionInfo = "Base: v" + base.Owner._gameVersion.GetSmallVersion() + "\nid2pm " + VersionHelper.ModVersion;
+			UIText.Instance.CreateText("VersionInfo", versionInfo, new Vector3(5.165f, 4.375f, 0f), menu, TextAlignment.Center, Color.black, 100);
 		}
 
 		void EnterNameDone(bool success, string value)
