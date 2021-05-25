@@ -56,7 +56,13 @@ namespace ModStuff
 		{
 			//string state = isRespawn ? "respawned" : "spawned";
 			//DebugManager.LogToFile("[OnplayerSpawn] PlayerEnt has " + state);
-			HotkeyHelper hotkeyHelper = HotkeyHelper.Instance; // Initialize hotkeys
+
+			// Initialize hotkeys
+			if (!VarHelper.IsAnticheatActive)
+			{
+				HotkeyHelper hotkeyHelper = HotkeyHelper.Instance;
+			}
+
 			OnPlayerSpawn?.Invoke(isRespawn);
 		}
 

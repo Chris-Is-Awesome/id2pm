@@ -15,8 +15,6 @@ public class LevelTimerOverlay : OverlayWindow
 
 	float oldTime = -1E+10f;
 
-	DebugCommandHandler commandHandler = DebugCommandHandler.Instance; // Added
-
 	void Update()
 	{
 		LevelTime instance = LevelTime.Instance;
@@ -26,11 +24,16 @@ public class LevelTimerOverlay : OverlayWindow
 			if (time != this.oldTime)
 			{
 				this.oldTime = time;
-				// If stopwatch is active, prevent text from being updated by vanilla text
-				if (commandHandler.stopwatchCommand != null && !commandHandler.stopwatchCommand.isActive)
+
+				if (!VarHelper.IsAnticheatActive)
 				{
-					this._text.text = StringUtility.ConvertToTime(time, this._format);
+					DebugCommandHandler commandHandler = DebugCommandHandler.Instance;
+
+					// If stopwatch is active, prevent text from being updated by vanilla text
+					if (commandHandler.stopwatchCommand == null || commandHandler.stopwatchCommand.isActive) return;
 				}
+
+				this._text.text = StringUtility.ConvertToTime(time, this._format);
 			}
 		}
 	}

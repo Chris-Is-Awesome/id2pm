@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 using ModStuff;
+using ModStuff.UI;
 
 public class MainMenu : MonoBehaviour
 {
@@ -191,26 +192,26 @@ public class MainMenu : MonoBehaviour
 	{
 		switch (data.mode)
 		{
-		case PerPlatformData.UIDataValueMode.Int:
-		{
-			int num = 0;
-			int.TryParse(data.value, out num);
-			inData.SetValue(data.key, num);
-			return;
-		}
-		case PerPlatformData.UIDataValueMode.Float:
-		{
-			float num2 = 0f;
-			float.TryParse(data.value, NumberStyles.Any, CultureInfo.InvariantCulture, out num2);
-			inData.SetValue(data.key, num2);
-			return;
-		}
-		case PerPlatformData.UIDataValueMode.Bool:
-		{
-			bool flag = data.value == "1" || data.value.Equals("true", StringComparison.InvariantCultureIgnoreCase);
-			inData.SetValue(data.key, flag);
-			return;
-		}
+			case PerPlatformData.UIDataValueMode.Int:
+				{
+					int num = 0;
+					int.TryParse(data.value, out num);
+					inData.SetValue(data.key, num);
+					return;
+				}
+			case PerPlatformData.UIDataValueMode.Float:
+				{
+					float num2 = 0f;
+					float.TryParse(data.value, NumberStyles.Any, CultureInfo.InvariantCulture, out num2);
+					inData.SetValue(data.key, num2);
+					return;
+				}
+			case PerPlatformData.UIDataValueMode.Bool:
+				{
+					bool flag = data.value == "1" || data.value.Equals("true", StringComparison.InvariantCultureIgnoreCase);
+					inData.SetValue(data.key, flag);
+					return;
+				}
 		}
 		inData.SetValue(data.key, data.value);
 	}
@@ -600,8 +601,16 @@ public class MainMenu : MonoBehaviour
 
 	class NewGameScreen : MenuScreen<MainMenu>
 	{
+		bool isSpeedrun;
+
 		public NewGameScreen(MainMenu owner, string root, GuiBindData data) : base(owner, root, data)
 		{
+			Transform menu = GameObject.Find("GuiLayout").transform.Find("Main").Find("FileCreate");
+			UICheckBox isSpeedrunBox = UIFactory.Instance.CreateCheckBox(0f, 0.25f, menu, "Is Speedrun?");
+			isSpeedrunBox.onInteraction += delegate (bool enable)
+			{
+				isSpeedrun = enable;
+			};
 		}
 
 		void EnterNameDone(bool success, string value)
@@ -615,6 +624,8 @@ public class MainMenu : MonoBehaviour
 				{
 					DataSaverData.AddDebugData(realDataSaver, code);
 				}
+				// If is doing speedrun, enable anticheat
+				if (isSpeedrun) SaveManager.SaveNewGameData("mod/settings/isSpeedrun", "1", realDataSaver);
 				string uniqueLocalSavePath = base.Owner._saver.GetUniqueLocalSavePath();
 				currentIO.WriteFile(uniqueLocalSavePath, realDataSaver.GetSaveData());
 				Debug.Log("Created file " + uniqueLocalSavePath);

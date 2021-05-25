@@ -21,6 +21,15 @@ namespace ModStuff
 				currentSaveFilePath = Application.persistentDataPath + "/steam/" + value;
 			}
 		}
+
+		public static bool IsAnticheatActive
+		{
+			get
+			{
+				return SaveManager.LoadFromSaveFile("mod/settings/isSpeedrun") == "1";
+			}
+		}
+
 		public static GameObject PlayerObj
 		{
 			get

@@ -125,7 +125,7 @@ public class Invulnerable : EntityHitListener, IUpdatable, IBaseUpdateable
 
 	public override bool HandleHit(ref HitData data, ref HitResult inResult)
 	{
-		if (DebugCommandHandler.Instance.likeABossCommand.isActive) return true; // If LikeABoss active, allow invincible enemies to be hit with any attack
+		if (!VarHelper.IsAnticheatActive && DebugCommandHandler.Instance.likeABossCommand.isActive) return true; // If LikeABoss active, allow invincible enemies to be hit with any attack
 		bool flag = this.state.hitTimer > 0f;
 		if (!flag)
 		{

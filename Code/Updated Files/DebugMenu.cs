@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using ModStuff;
 
@@ -36,6 +36,8 @@ public class DebugMenu : MonoBehaviour
 
 	TextInput.Listener textListener;
 
+	Dictionary<string, DebugMenu.CommandFunc> allComs;
+
 	List<string> prevComs = new List<string>();
 
 	int currPrevPos;
@@ -56,9 +58,28 @@ public class DebugMenu : MonoBehaviour
 		GuiContentData guiContentData = new GuiContentData();
 		guiContentData.SetValue("version", this._version.GetVersion());
 		this.menuRoot.ApplyContent(guiContentData, true);
+		this.allComs = new Dictionary<string, DebugMenu.CommandFunc>
+		{
+			{
+				"setentvar",
+				new DebugMenu.CommandFunc(this.SetEntVar)
+			},
+			{
+				"setsavevar",
+				new DebugMenu.CommandFunc(this.SetSaveVar)
+			},
+			{
+				"warpto",
+				new DebugMenu.CommandFunc(this.WarpTo)
+			},
+			{
+				"clearsavevar",
+				new DebugMenu.CommandFunc(this.ClearSaveVar)
+			}
+		};
 
-		// Modify the HUD to make it better
-		ModifyUI();
+		// Modify the UI to make it much better
+		if (!VarHelper.IsAnticheatActive) ConfigureUI();
 	}
 
 	void Start()
@@ -69,16 +90,161 @@ public class DebugMenu : MonoBehaviour
 		}
 	}
 
-	void ParseResultString(string input)
+	static Entity FindEntity(string name)
+	{
+		Entity entity = EntityTag.GetEntityByName(name);
+		if (entity == null)
+		{
+			GameObject gameObject = GameObject.Find(name);
+			if (gameObject != null)
+			{
+				entity = gameObject.GetComponent<Entity>();
+			}
+		}
+		return entity;
+	}
+
+	void SetEntVar(string com, string[] args)
+	{
+		if (args.Length < 3)
+		{
+			this.OutputText("SetEntVar expected at least three arguments");
+		}
+		else
+		{
+			string text = args[0];
+			string text2 = args[1];
+			Entity entity = DebugMenu.FindEntity(text);
+			if (entity == null)
+			{
+				this.OutputText("Entity not found: " + text);
+				return;
+			}
+			int num;
+			if (!int.TryParse(args[2], out num))
+			{
+				this.OutputText("Invalid value: " + args[2]);
+				return;
+			}
+			entity.SetStateVariable(text2, num);
+			this.OutputText(string.Concat(new object[]
+			{
+				"Set ",
+				text,
+				".",
+				text2,
+				" -> ",
+				num
+			}));
+		}
+	}
+
+	void SetSaveVar(string com, string[] args)
+	{
+		if (args.Length < 2)
+		{
+			this.OutputText("SetSaveVar expected at least two arguments");
+		}
+		else
+		{
+			string key;
+			IDataSaver saverAndName = this._saver.GetSaverAndName(args[0], out key, false);
+			saverAndName.SaveData(key, args[1]);
+			this.OutputText("set " + args[0] + " -> " + args[1]);
+		}
+	}
+
+	void ClearSaveVar(string com, string[] args)
+	{
+		if (args.Length < 1)
+		{
+			this.OutputText("ClearSaveVar expected at least one argument");
+		}
+		else
+		{
+			string text;
+			IDataSaver saverAndName = this._saver.GetSaverAndName(args[0], out text, true);
+			if (saverAndName != null)
+			{
+				if (saverAndName.HasData(text))
+				{
+					saverAndName.ClearValue(text);
+					this.OutputText("cleared var " + text);
+				}
+				else if (saverAndName.HasLocalSaver(text))
+				{
+					saverAndName.ClearLocalSaver(text);
+					this.OutputText("cleared saver " + text);
+				}
+			}
+		}
+	}
+
+	void WarpTo(string com, string[] args)
+	{
+		if (args.Length < 1)
+		{
+			this.OutputText("WarpTo expected at least one argument");
+		}
+		else
+		{
+			string targetScene = args[0];
+			string targetDoor = (args.Length <= 1) ? string.Empty : args[1];
+			SceneDoor.StartLoad(targetScene, targetDoor, this._fadeData, null, null);
+		}
+	}
+
+	void ParseResultString(string str)
+	{
+		string[] array = str.Split(new char[]
+		{
+			' '
+		});
+		if (array.Length > 0)
+		{
+			string text = array[0];
+			DebugMenu.CommandFunc commandFunc;
+			if (this.allComs.TryGetValue(text, out commandFunc))
+			{
+				string[] array2 = new string[array.Length - 1];
+				for (int i = 0; i < array2.Length; i++)
+				{
+					array2[i] = array[i + 1];
+				}
+				try
+				{
+					commandFunc(text, array2);
+				}
+				catch (Exception ex)
+				{
+					this.OutputText(string.Concat(new string[]
+					{
+						"Error in ",
+						text,
+						": ",
+						ex.Message,
+						"\n",
+						ex.StackTrace
+					}));
+				}
+			}
+			else
+			{
+				this.OutputText("Unknown command " + text);
+			}
+		}
+	}
+
+	void ParseResultStringMod(string input)
 	{
 		string[] words = input.Split(new char[] { ' ' }); // Split input into separate words. Words[0] is the command, every word after is an argument
-		
+
 		// Check if command given
 		if (words.Length > 0)
 		{
 			string command = words[0]; // Get command name
 			DebugCommandHandler.CommandInfo commandToRun = DebugCommandHandler.Instance.GetCommand(command); // Get command
-			
+
 			// If command is valid
 			if (commandToRun != null)
 			{
@@ -126,7 +292,8 @@ public class DebugMenu : MonoBehaviour
 
 	void ClickedDone(object ctx)
 	{
-		this.ParseResultString(this.currentText);
+		if (!VarHelper.IsAnticheatActive) this.ParseResultStringMod(this.currentText);
+		else this.ParseResultString(this.currentText);
 		this.prevComs.Add(this.currentText);
 		this.currPrevPos = this.prevComs.Count;
 		this.currentText = string.Empty;
@@ -190,7 +357,7 @@ public class DebugMenu : MonoBehaviour
 		this.blinkTimer = this._blinkTime;
 	}
 
-	public void OutputText(string info)
+	void OutputText(string info)
 	{
 		GuiContentData guiContentData = new GuiContentData();
 		guiContentData.SetValue("currentInfo", info);
@@ -277,16 +444,19 @@ public class DebugMenu : MonoBehaviour
 		this.ClearListeners();
 	}
 
-	void ModifyUI()
+	void ConfigureUI()
 	{
 		// Change title
 		Transform titleTrans = transform.Find("Title").Find("Text");
 		TextMesh titleTextMesh = null;
 
-		if (titleTrans != null) titleTextMesh = titleTrans.GetComponent<TextMesh>();
+		if (titleTrans != null)
+		{
+			titleTextMesh = titleTrans.GetComponent<TextMesh>();
+		}
 		if (titleTextMesh != null)
 		{
-			titleTextMesh.text = "E2D Debug Menu";
+			titleTextMesh.text = "Debug Menu (id2gz)";
 			titleTextMesh.color = Color.black;
 			titleTextMesh.alignment = TextAlignment.Center;
 			titleTextMesh.fontSize = 35;
@@ -342,4 +512,6 @@ public class DebugMenu : MonoBehaviour
 	}
 
 	public delegate void OnDoneFunc();
+
+	delegate void CommandFunc(string com, string[] args);
 }

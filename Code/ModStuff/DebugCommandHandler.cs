@@ -68,7 +68,9 @@ namespace ModStuff
 				{ new CommandInfo("Stopwatch", new ActivationMethod(stopwatchCommand.Activate), new DeactivationMethod(stopwatchCommand.Deactivate), new string[] { "sw" }) },
 			};
 
-			keyToOpenDebugMenu = HotkeyHelper.Instance.GetHotkey("OpenDebugMenu").key;
+			if (!VarHelper.IsAnticheatActive) keyToOpenDebugMenu = HotkeyHelper.Instance.GetHotkey("OpenDebugMenu").key;
+			else keyToOpenDebugMenu = KeyCode.None;
+
 			DebugManager.LogToFile("DebugCommandHandler initialized");
 		}
 
