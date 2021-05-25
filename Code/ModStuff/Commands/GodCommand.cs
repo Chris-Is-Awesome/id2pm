@@ -46,13 +46,16 @@ namespace ModStuff.Commands
 			EventListener.OnPlayerSpawn -= RunCommand;
 			GameObject playerObj = VarHelper.PlayerObj;
 
-			// Enable hurtbox
-			playerObj.transform.Find("Hittable").GetComponent<EntityHittable>().Disable = false;
+			if (playerObj != null)
+			{
+				// Enable hurtbox
+				playerObj.transform.Find("Hittable").GetComponent<EntityHittable>().Disable = false;
 
-			// Enable void planes
-			Entity entity = playerObj.GetComponent<Entity>();
-			EntityEnvirodeathable entityEnvirodeathable = playerObj.transform.Find("Envirodeath").GetComponent<EntityEnvirodeathable>();
-			entityEnvirodeathable.Enable(entity);
+				// Enable void planes
+				Entity entity = playerObj.GetComponent<Entity>();
+				EntityEnvirodeathable entityEnvirodeathable = playerObj.transform.Find("Envirodeath").GetComponent<EntityEnvirodeathable>();
+				entityEnvirodeathable.Enable(entity);
+			}
 
 			isActive = false;
 		}
