@@ -1,4 +1,5 @@
-﻿using UnityEngine.SceneManagement;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ModStuff
 {
@@ -56,12 +57,6 @@ namespace ModStuff
 		{
 			//string state = isRespawn ? "respawned" : "spawned";
 			//DebugManager.LogToFile("[OnplayerSpawn] PlayerEnt has " + state);
-
-			// Initialize hotkeys
-			if (!VarHelper.IsAnticheatActive)
-			{
-				HotkeyHelper hotkeyHelper = HotkeyHelper.Instance;
-			}
 
 			OnPlayerSpawn?.Invoke(isRespawn);
 		}
@@ -171,6 +166,20 @@ namespace ModStuff
 		{
 			//string state = isNew ? "new file was created" : "file was loaded";
 			//DebugManager.LogToFile("[OnFileLoad] A " + state);
+
+			// Disable active commands & hotkeys if any are active while anticheat is active
+			if (VarHelper.IsAnticheatActive)
+			{
+				DebugCommandHandler.Instance.gameObject.SetActive(false);
+				HotkeyHelper.Instance.gameObject.SetActive(false);
+			}
+			// Enable commands & hotkeys
+			else
+			{
+				DebugCommandHandler.Instance.gameObject.SetActive(true);
+				HotkeyHelper.Instance.gameObject.SetActive(true);
+			}
+
 			OnFileLoad?.Invoke(isNew, saver);
 		}
 

@@ -61,8 +61,6 @@ public class PauseMenu : EntityOverlayWindow
 
 	MapWindow mapWindow;
 
-	DebugCommandHandler commandHandler = DebugCommandHandler.Instance;
-
 	OptionsMenu GetOptions()
 	{
 		if (this.realOpts == null)
@@ -179,56 +177,59 @@ public class PauseMenu : EntityOverlayWindow
 
 	void UpdateDebug()
 	{
-		// Open debug menu with custom key
-		if (Input.GetKey(commandHandler.keyToOpenDebugMenu))
+		if (!VarHelper.IsAnticheatActive)
 		{
-			menuImpl.SwitchToScreen("debugRoot", null);
-		}
-		else if (Input.GetKey(this._debugStartCode))
-		{
-			if (this.debugSequence == null)
+			// Open debug menu with custom key
+			if (Input.GetKey(DebugCommandHandler.Instance.keyToOpenDebugMenu))
 			{
-				this.debugSequence = new List<KeyCode>();
+				menuImpl.SwitchToScreen("debugRoot", null);
 			}
-			if (this.uniqueDebugCodeSet == null)
+			else if (Input.GetKey(this._debugStartCode))
 			{
-				this.uniqueDebugCodeSet = new List<KeyCode>();
-				for (int i = this._debugStartSequence.Length - 1; i >= 0; i--)
+				if (this.debugSequence == null)
 				{
-					if (!this.uniqueDebugCodeSet.Contains(this._debugStartSequence[i]))
+					this.debugSequence = new List<KeyCode>();
+				}
+				if (this.uniqueDebugCodeSet == null)
+				{
+					this.uniqueDebugCodeSet = new List<KeyCode>();
+					for (int i = this._debugStartSequence.Length - 1; i >= 0; i--)
 					{
-						this.uniqueDebugCodeSet.Add(this._debugStartSequence[i]);
+						if (!this.uniqueDebugCodeSet.Contains(this._debugStartSequence[i]))
+						{
+							this.uniqueDebugCodeSet.Add(this._debugStartSequence[i]);
+						}
 					}
 				}
-			}
-			for (int j = this.uniqueDebugCodeSet.Count - 1; j >= 0; j--)
-			{
-				if (Input.GetKeyDown(this.uniqueDebugCodeSet[j]))
+				for (int j = this.uniqueDebugCodeSet.Count - 1; j >= 0; j--)
 				{
-					this.debugSequence.Add(this.uniqueDebugCodeSet[j]);
+					if (Input.GetKeyDown(this.uniqueDebugCodeSet[j]))
+					{
+						this.debugSequence.Add(this.uniqueDebugCodeSet[j]);
+					}
 				}
-			}
-			while (this.debugSequence.Count > this._debugStartSequence.Length)
-			{
-				this.debugSequence.RemoveAt(0);
-			}
-			if (this.debugSequence.Count != this._debugStartSequence.Length)
-			{
-				return;
-			}
-			for (int k = 0; k < this.debugSequence.Count; k++)
-			{
-				if (this.debugSequence[k] != this._debugStartSequence[k])
+				while (this.debugSequence.Count > this._debugStartSequence.Length)
+				{
+					this.debugSequence.RemoveAt(0);
+				}
+				if (this.debugSequence.Count != this._debugStartSequence.Length)
 				{
 					return;
 				}
+				for (int k = 0; k < this.debugSequence.Count; k++)
+				{
+					if (this.debugSequence[k] != this._debugStartSequence[k])
+					{
+						return;
+					}
+				}
+				this.debugSequence = null;
+				this.menuImpl.SwitchToScreen("debugRoot", null);
 			}
-			this.debugSequence = null;
-			this.menuImpl.SwitchToScreen("debugRoot", null);
-		}
-		else
-		{
-			this.debugSequence = null;
+			else
+			{
+				this.debugSequence = null;
+			}
 		}
 	}
 

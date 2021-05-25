@@ -46,7 +46,7 @@ namespace ModStuff
 
 		public KeyCode keyToOpenDebugMenu = KeyCode.F1;
 
-		private void Awake()
+		void OnEnable()
 		{
 			// Create commands
 			allCommands = new List<CommandInfo>
@@ -68,10 +68,14 @@ namespace ModStuff
 				{ new CommandInfo("Stopwatch", new ActivationMethod(stopwatchCommand.Activate), new DeactivationMethod(stopwatchCommand.Deactivate), new string[] { "sw" }) },
 			};
 
-			if (!VarHelper.IsAnticheatActive) keyToOpenDebugMenu = HotkeyHelper.Instance.GetHotkey("OpenDebugMenu").key;
-			else keyToOpenDebugMenu = KeyCode.None;
+			keyToOpenDebugMenu = HotkeyHelper.Instance.GetHotkey("OpenDebugMenu").key; // Store hotkey
 
-			DebugManager.LogToFile("DebugCommandHandler initialized");
+			DebugManager.LogToFile("DebugCommandHandler initialized!");
+		}
+
+		private void OnDisable()
+		{
+			DeactivateAllCommands();
 		}
 
 		public CommandInfo GetCommand(string commandName)

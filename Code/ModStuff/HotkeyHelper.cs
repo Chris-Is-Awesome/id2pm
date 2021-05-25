@@ -10,15 +10,15 @@ namespace ModStuff
 {
 	public class HotkeyHelper : Singleton<HotkeyHelper>
 	{
+		public bool IsInitialized;
 		HotkeyData hotkeyHolder = new HotkeyData();
 		List<HotkeyData.HotkeyJson.Data> hotkeyData;
-		DebugCommandHandler commandHandler = DebugCommandHandler.Instance;
 		Coroutine textAnimation;
 		GameObject textObj;
 		float moveInterval = 1;
 		Vector3 moveToPosition;
 
-		private void Awake()
+		public void OnEnable()
 		{
 			// Load all hotkey data
 			hotkeyData = FileManager.GetDataFromJson<HotkeyData.HotkeyJson>(FileManager.GetModDirectoryPath() + "/Hotkeys.json").hotkeys;
@@ -44,11 +44,19 @@ namespace ModStuff
 			}
 
 			EventListener.OnPlayerUpdate += PlayerUpdate;
+			IsInitialized = true;
 			DebugManager.LogToFile("Hotkeys initialized!");
+		}
+
+		private void OnDisable()
+		{
+			EventListener.OnPlayerUpdate -= PlayerUpdate;
 		}
 
 		public HotkeyData.Hotkey GetHotkey(string name)
 		{
+			if (hotkeyData == null || hotkeyData.Count == 0) OnEnable();
+
 			// Iterate through all hotkeys
 			for (int i = 0; i < hotkeyHolder.hotkeys.Count; i++)
 			{
@@ -67,7 +75,7 @@ namespace ModStuff
 		private DebugCommandHandler.CommandInfo GetCommandMethod(string commandInput)
 		{
 			string commandName = commandInput.Split(' ')[0];
-			return commandHandler.GetCommand(commandName);
+			return DebugCommandHandler.Instance.GetCommand(commandName);
 		}
 
 		private string[] GetCommandArgs(string commandInput)
@@ -117,27 +125,27 @@ namespace ModStuff
 					StopCoroutine(textAnimation);
 					Destroy(textObj);
 				}
-				textAnimation = commandHandler.StartCoroutine(ShowText(hotkey.name, hotkey.key.ToString())); // Start animation of showing text
+				textAnimation = StartCoroutine(ShowText(hotkey.name, hotkey.key.ToString())); // Start animation of showing text
 				EventListener.OnSceneUnload += OnSceneUnload;
 
 				// If command is active
-				if (commandHandler.IsCommandActive(hotkey.commandToRun))
+				if (DebugCommandHandler.Instance.IsCommandActive(hotkey.commandToRun))
 				{
 					// Deactivate command
-					commandHandler.DeactivateCommand(hotkey.commandToRun);
+					DebugCommandHandler.Instance.DeactivateCommand(hotkey.commandToRun);
 				}
 				// If command inactive
 				else
 				{
 					// Activate command
-					commandHandler.ActivateCommand(hotkey.commandToRun, hotkey.commandArgs);
+					DebugCommandHandler.Instance.ActivateCommand(hotkey.commandToRun, hotkey.commandArgs);
 				}
 			}
 		}
 
 		void OnSceneUnload(Scene scene)
 		{
-			commandHandler.StopCoroutine(textAnimation); // Stop animation of showing text
+			StopCoroutine(textAnimation); // Stop animation of showing text
 			EventListener.OnSceneUnload -= OnSceneUnload;
 		}
 
@@ -155,6 +163,7 @@ namespace ModStuff
 			textObj = UIText.Instance.CreateText("HotkeyNotification", message);
 			textObj.transform.localPosition = new Vector3(-5f, -3, 0f);
 			moveToPosition = new Vector3(-5f, -2.6375f, 0f);
+
 			yield return new WaitForSeconds(0.5f);
 			moveToPosition = new Vector3(-5f, -2.7f, 0f);
 

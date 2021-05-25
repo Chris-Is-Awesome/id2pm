@@ -91,7 +91,7 @@ namespace ModStuff.Commands
 
 			hasStarted = false;
 
-			animationCoroutine = DebugCommandHandler.Instance.StartCoroutine(AnimateText()); // Animate to indicate timer end
+			if (animationCoroutine != null) animationCoroutine = DebugCommandHandler.Instance.StartCoroutine(AnimateText()); // Animate to indicate timer end
 
 			return "Stopwatch stopped at: <in>" + GetFormattedTime() + "</in> (<in>" + frameCount + "</in> frames)";
 		}
