@@ -1,4 +1,6 @@
-﻿namespace ModStuff.Commands
+﻿using UnityEngine;
+
+namespace ModStuff.Commands
 {
 	public class NoClipCommand : DebugCommand
 	{
@@ -28,7 +30,8 @@
 		public void Deactivate()
 		{
 			isActive = !isActive;
-			VarHelper.PlayerObj.GetComponent<BC_ColliderAACylinderN>().enabled = true;
+			GameObject playerObj = VarHelper.PlayerObj;
+			if (playerObj != null) playerObj.GetComponent<BC_ColliderAACylinderN>().enabled = true;
 			DebugManager.LogToFile("[Cheat] NoClip deactivated for Ittle");
 		}
 
