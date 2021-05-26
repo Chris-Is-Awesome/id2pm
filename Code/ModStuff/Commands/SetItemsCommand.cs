@@ -61,6 +61,15 @@ namespace ModStuff.Commands
 					// If 2+ args given
 					if (args.Length > 1)
 					{
+						List<string> scenesWithItemOverriders = new List<string>()
+						{
+							"DreamWorld", "DreamForce", "DreamDynamite", "DreamIce", "DreamFireChain", "DreamAll", "Deep25", "Deep26"
+						};
+						if (scenesWithItemOverriders.Contains(SceneAndRoomHelper.GetLoadedScene().name))
+						{
+							VarHelper.PlayerObj.GetComponent<Entity>()._tempVars = null;
+						}
+
 						// If valid number is given
 						if (TryParseInt(args[1], out int value) && value >= 0)
 						{
