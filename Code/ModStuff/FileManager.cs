@@ -109,7 +109,7 @@ namespace ModStuff
 		// Returns path to mod directory
 		public static string GetModDirectoryPath()
 		{
-			return Application.dataPath + "/Mods/speedrunMod";
+			return Application.dataPath + "/Mods/Practice Mod";
 		}
 
 		// Parses json from file to text and returns text
