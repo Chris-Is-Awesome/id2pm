@@ -13,14 +13,16 @@ namespace ModStuff
 			public ActivationMethod activationMethod;
 			public DeactivationMethod deactivationMethod;
 			public string[] alternateNamesForCommand;
+			public bool reactivateIfActive;
 			public bool isDevOnly;
 
-			public CommandInfo (string nameOfCommand, ActivationMethod activationMethod, DeactivationMethod deactivationMethod = null, string[] alternateNamesForCommand = null, bool isDevOnly = false)
+			public CommandInfo (string nameOfCommand, ActivationMethod activationMethod, DeactivationMethod deactivationMethod = null, string[] alternateNamesForCommand = null, bool reactivateIfActive = false, bool isDevOnly = false)
 			{
 				this.nameOfCommand = nameOfCommand;
 				this.activationMethod = activationMethod;
 				this.deactivationMethod = deactivationMethod;
 				this.alternateNamesForCommand = alternateNamesForCommand;
+				this.reactivateIfActive = reactivateIfActive;
 				this.isDevOnly = isDevOnly;
 			}
 		}
@@ -53,7 +55,7 @@ namespace ModStuff
 			{
 				// Do not put dev commands at bottom of list, as this will add extra comma in help command and
 				// is more performant to just not list dev command last rather than remove that trailing comma
-				{ new CommandInfo("Test", new ActivationMethod(testCommand.Activate), null, null, true) },
+				{ new CommandInfo("Test", new ActivationMethod(testCommand.Activate), null, null, false, true) },
 				{ new CommandInfo("Goto", new ActivationMethod(gotoCommand.Activate), null, new string[] { "warpto" }) },
 				{ new CommandInfo("Speed", new ActivationMethod(speedCommand.Activate), new DeactivationMethod(speedCommand.Deactivate), new string[] { "setspeed" }) },
 				{ new CommandInfo("God", new ActivationMethod(godCommand.Activate), new DeactivationMethod(godCommand.Deactivate)) },
@@ -65,7 +67,7 @@ namespace ModStuff
 				{ new CommandInfo("LoadState", new ActivationMethod(loadStateCommand.Activate), null, new string[] { "load", "ls" }) },
 				{ new CommandInfo("SetItems", new ActivationMethod(setItemsCommand.Activate), null, new string[] { "setitem", "items", "item" }) },
 				{ new CommandInfo("SetHp", new ActivationMethod(setHpCommand.Activate), null, new string[] { "hp" }) },
-				{ new CommandInfo("Stopwatch", new ActivationMethod(stopwatchCommand.Activate), new DeactivationMethod(stopwatchCommand.Deactivate), new string[] { "sw" }) },
+				{ new CommandInfo("Stopwatch", new ActivationMethod(stopwatchCommand.Activate), new DeactivationMethod(stopwatchCommand.Deactivate), new string[] { "sw" }, true) },
 			};
 
 			keyToOpenDebugMenu = HotkeyHelper.Instance.GetHotkey("OpenDebugMenu").key; // Store hotkey
@@ -115,7 +117,7 @@ namespace ModStuff
 		public void ActivateCommand(CommandInfo command, string[] args = null)
 		{
 			// Only activate if not already active, otherwise don't bother (saves on performance)
-			if (!IsCommandActive(command)) command.activationMethod.Invoke(args);
+			if (!IsCommandActive(command) || command.reactivateIfActive) command.activationMethod.Invoke(args);
 		}
 
 		public void DeactivateCommand(CommandInfo command)

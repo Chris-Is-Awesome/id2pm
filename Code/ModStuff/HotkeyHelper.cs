@@ -128,17 +128,17 @@ namespace ModStuff
 				textAnimation = StartCoroutine(ShowText(hotkey.name, hotkey.key.ToString())); // Start animation of showing text
 				EventListener.OnSceneUnload += OnSceneUnload;
 
-				// If command is active
-				if (DebugCommandHandler.Instance.IsCommandActive(hotkey.commandToRun))
-				{
-					// Deactivate command
-					DebugCommandHandler.Instance.DeactivateCommand(hotkey.commandToRun);
-				}
-				// If command inactive
-				else
+				// If command is inactive
+				if (!DebugCommandHandler.Instance.IsCommandActive(hotkey.commandToRun) || hotkey.commandToRun.reactivateIfActive)
 				{
 					// Activate command
 					DebugCommandHandler.Instance.ActivateCommand(hotkey.commandToRun, hotkey.commandArgs);
+				}
+				// If command is active
+				else
+				{
+					// Deactivate command
+					DebugCommandHandler.Instance.DeactivateCommand(hotkey.commandToRun);
 				}
 			}
 		}
