@@ -101,7 +101,7 @@ namespace ModStuff
 		public static void SceneUnload()
 		{
 			Scene scene = SceneManager.GetActiveScene();
-			//DebugManager.LogToFile("[OnSceneLoad] " + scene.name + " has unloaded");
+			//DebugManager.LogToFile("[OnSceneUnload] " + scene.name + " has unloaded");
 			OnSceneUnload?.Invoke(scene);
 		}
 
