@@ -30,7 +30,7 @@ public class LevelTimerOverlay : OverlayWindow
 					DebugCommandHandler commandHandler = DebugCommandHandler.Instance;
 
 					// If stopwatch is active, prevent text from being updated by vanilla text
-					if (commandHandler.stopwatchCommand == null || commandHandler.stopwatchCommand.isActive) return;
+					if (commandHandler.stopwatchCommand != null && commandHandler.stopwatchCommand.isActive) return;
 				}
 
 				this._text.text = StringUtility.ConvertToTime(time, this._format);

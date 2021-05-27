@@ -54,13 +54,21 @@ namespace ModStuff.Commands
 
 		string StartStopwatch()
 		{
-			isActive = true; // Set command to active to allow resuming command after loads
-
 			// Reset values to defaults
 			currentTime = 0;
 			frameCount = 0;
 
+			if (isAnimating)
+			{
+				DebugCommandHandler.Instance.StopCoroutine(animationCoroutine); // Stop animating
+				isAnimating = false;
+				isActive = false;
+				ConfigureOverlay();
+			}
+
+			isActive = true; // Set command to active to allow resuming command after loads
 			hasStarted = true; // Start stopwatch
+
 			EventListener.OnPlayerUpdate += UpdateStopwatch; // Only update timer as long as the player has control (slightly different from IGT to be more accurate to actual play)
 			EventListener.OnPlayerSpawn += UpdateOverlay; // Initialize timer on load
 			EventListener.OnSceneUnload += OnSceneUnload;
@@ -91,7 +99,7 @@ namespace ModStuff.Commands
 
 			hasStarted = false;
 
-			if (animationCoroutine != null) animationCoroutine = DebugCommandHandler.Instance.StartCoroutine(AnimateText()); // Animate to indicate timer end
+			if (!isAnimating) animationCoroutine = DebugCommandHandler.Instance.StartCoroutine(AnimateText()); // Animate to indicate timer end
 
 			return "Stopwatch stopped at: <in>" + GetFormattedTime() + "</in> (<in>" + frameCount + "</in> frames)";
 		}
@@ -150,6 +158,7 @@ namespace ModStuff.Commands
 				// Reset to defaults
 				else
 				{
+					timerOverlayTextMesh.color = Color.black;
 					float x = timerOverlayTextMesh.transform.localPosition.x;
 					float y = timerOverlayTextMesh.transform.localPosition.y - 0.05f;
 					float z = timerOverlayTextMesh.transform.localPosition.z;
