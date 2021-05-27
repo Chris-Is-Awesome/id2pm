@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using UnityEngine;
 using ModStuff;
 using ModStuff.UI;
@@ -86,6 +87,19 @@ public class MainMenu : MonoBehaviour
 	bool waitForSync;
 
 	static bool didInitStuff;
+
+	private void MakeChangesToMenus()
+	{
+		// Replace title logo
+		string logoPath = FileManager.GetModDirectoryPath() + "/Assets/logo.png";
+		if (FileManager.DoesFileExist(logoPath))
+		{
+			GameObject logoObj = GameObject.Find("GuiLayout").transform.GetChild(1).GetChild(3).GetChild(1).gameObject;
+			Texture2D logoImg = new Texture2D(588, 258);
+			logoImg.LoadImage(File.ReadAllBytes(logoPath));
+			logoObj.GetComponent<SharedRendererInterface>().BaseMat.mainTexture = logoImg;
+		}
+	}
 
 	public static List<string> GetSortedSaveKeys(SaverOwner saverOwner, string path)
 	{
@@ -287,6 +301,8 @@ public class MainMenu : MonoBehaviour
 		{
 			this.DoStartMenu();
 		}
+
+		MakeChangesToMenus(); // Modify menus
 	}
 
 	void Update()
@@ -606,6 +622,10 @@ public class MainMenu : MonoBehaviour
 		public NewGameScreen(MainMenu owner, string root, GuiBindData data) : base(owner, root, data)
 		{
 			Transform menu = GameObject.Find("GuiLayout").transform.Find("Main").Find("FileCreate");
+
+			// Destroy existing isSpeedrun checkbox
+			GameObject isSpeedrunBoxOld = GameObject.Find("IsSpeedrunBox");
+			if (isSpeedrunBoxOld != null) Destroy(isSpeedrunBoxOld);
 
 			// Create isSpeedrun checkbox
 			UICheckBox isSpeedrunBox = UIFactory.Instance.CreateCheckBox(0f, 0.25f, menu, "Speedrun?");
