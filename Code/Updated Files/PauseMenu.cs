@@ -290,6 +290,8 @@ public class PauseMenu : EntityOverlayWindow
 				saveDone = true;
 				onDone();
 			});
+
+			EventListener.SceneUnload(); // Invoke custom event
 		}
 
 		void ClickedWarp(object ctx)
