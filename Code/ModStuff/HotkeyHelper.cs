@@ -143,7 +143,7 @@ namespace ModStuff
 			}
 		}
 
-		void OnSceneUnload(Scene scene)
+		void OnSceneUnload(string fromScene, string toScene)
 		{
 			StopCoroutine(textAnimation); // Stop animation of showing text
 			EventListener.OnSceneUnload -= OnSceneUnload;

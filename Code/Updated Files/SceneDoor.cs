@@ -396,8 +396,7 @@ public class SceneDoor : MonoBehaviour, IBC_TriggerEnterListener, IBC_TriggerExi
 			list[i]();
 		}
 
-		// Invoke custom event
-		EventListener.SceneUnload();
+		EventListener.SceneUnload(_scene); // Invoke custom event
 	}
 
 	static Vector3 WorldToScreen(Vector3 pos)

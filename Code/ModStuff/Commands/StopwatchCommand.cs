@@ -58,7 +58,7 @@ namespace ModStuff.Commands
 			currentTime = 0;
 			frameCount = 0;
 
-			if (isAnimating)
+			if (animationCoroutine != null && isAnimating)
 			{
 				DebugCommandHandler.Instance.StopCoroutine(animationCoroutine); // Stop animating
 				isAnimating = false;
@@ -190,15 +190,23 @@ namespace ModStuff.Commands
 			return timespan.Milliseconds + "ms";
 		}
 
-		void OnSceneUnload(Scene scene)
+		void OnSceneUnload(string fromScene, string toScene)
 		{
 			// Only stop animation if currently animating
 			if (isAnimating)
 			{
 				if (animationCoroutine != null) DebugCommandHandler.Instance.StopCoroutine(animationCoroutine);
-				isAnimating = false;
-				isActive = false; // Set command to inactive so it won't resume command after loads
 				EventListener.OnSceneUnload -= OnSceneUnload;
+			}
+
+			if (toScene == "MainMenu" || isAnimating)
+			{
+				EventListener.OnPlayerUpdate -= UpdateStopwatch; // Stop updating
+				EventListener.OnPlayerSpawn -= UpdateOverlay; // Unsubscribe
+
+				isAnimating = false;
+				hasStarted = false;
+				isActive = false;
 			}
 		}
 

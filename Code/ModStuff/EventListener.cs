@@ -11,6 +11,7 @@ namespace ModStuff
 		public delegate void EntFunc(Entity ent);
 		public delegate void EntBoolFunc(Entity ent, bool isActive);
 		public delegate void SceneFunc(Scene scene);
+		public delegate void StringStringFunc(string fromScene, string toScene);
 		public delegate void RoomFunc(LevelRoom room, bool isActive);
 		public delegate void DamageFunc(Entity ent, HitData data);
 		public delegate void ColCollisionFunc(BC_CollisionData data);
@@ -30,7 +31,7 @@ namespace ModStuff
 
 		// Scene/room loading
 		public static event SceneFunc OnSceneLoad;
-		public static event SceneFunc OnSceneUnload;
+		public static event StringStringFunc OnSceneUnload;
 		public static event RoomFunc OnRoomLoad;
 
 		// Collision
@@ -98,11 +99,11 @@ namespace ModStuff
 			OnSceneLoad?.Invoke(scene);
 		}
 
-		public static void SceneUnload()
+		public static void SceneUnload(string toScene)
 		{
-			Scene scene = SceneManager.GetActiveScene();
-			//DebugManager.LogToFile("[OnSceneUnload] " + scene.name + " has unloaded");
-			OnSceneUnload?.Invoke(scene);
+			string fromScene = SceneManager.GetActiveScene().name;
+			//DebugManager.LogToFile("[OnSceneUnload] " + fromScene + " has unloaded. Now loading " + toScene);
+			OnSceneUnload?.Invoke(fromScene, toScene);
 		}
 
 		public static void RoomLoad(LevelRoom room, bool isActive)

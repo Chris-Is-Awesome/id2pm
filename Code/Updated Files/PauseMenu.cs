@@ -260,6 +260,7 @@ public class PauseMenu : EntityOverlayWindow
 		{
 			base.Owner.Hide();
 			Utility.LoadLevel(base.Owner._quitScene);
+			EventListener.SceneUnload(Owner._quitScene); // Invoke custom event
 		}
 
 		void ClickedQuit(object ctx)
@@ -287,8 +288,6 @@ public class PauseMenu : EntityOverlayWindow
 				saveDone = true;
 				onDone();
 			});
-
-			EventListener.SceneUnload(); // Invoke custom event
 		}
 
 		void ClickedWarp(object ctx)
