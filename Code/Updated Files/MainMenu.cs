@@ -629,7 +629,6 @@ public class MainMenu : MonoBehaviour
 
 			// Create isSpeedrun checkbox
 			UICheckBox isSpeedrunBox = UIFactory.Instance.CreateCheckBox(0f, 0.25f, menu, "Speedrun?");
-			if (isSpeedrunBox == null) Application.Quit();
 			isSpeedrunBox.Value = VersionHelper.IsPublicRelease || !VersionHelper.IsDevBuild; // Default to true if public release or not dev build
 			isSpeedrun = isSpeedrunBox.Value;
 			isSpeedrunBox.onInteraction += delegate (bool enable)
