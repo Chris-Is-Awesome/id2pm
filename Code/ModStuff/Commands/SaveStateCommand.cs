@@ -99,7 +99,12 @@ namespace ModStuff.Commands
 
 		public static string GetHelp()
 		{
-			return "Coming soon...";
+			string description = "Makes a save state. Use <out>loadstate</out> to load this state. Currently only supports save data & player data, no enemy data is saved.\n\n";
+			string aliases = "Aliases: save, ss\n";
+			string usage = "Usage: <out>savestate slot {int}</out>\n";
+			string examples = "Examples: <out>savestate 1</out>";
+
+			return description + aliases + usage + examples;
 		}
 	}
 }

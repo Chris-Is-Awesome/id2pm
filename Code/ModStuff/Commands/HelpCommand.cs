@@ -48,7 +48,7 @@ namespace ModStuff.Commands
 
 		public static string GetHelp()
 		{
-			return "You really need help <i>here</i>?! At this point, you really should consult Tippsie...";
+			return "What, seriously? You need help with HELP!? Just feed this an actual command and you'll learn to make things do things.";
 		}
 	}
 }

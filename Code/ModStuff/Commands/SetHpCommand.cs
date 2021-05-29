@@ -52,12 +52,17 @@
 				return DebugManager.LogToConsole("<in>" + args[0] + "</in> is an invalid argument. Use <out>help sethp</out> for more info", DebugManager.MessageType.Error);
 			}
 
-			return DebugManager.LogToConsole("Must specify an argument. Use <out>help sethp</out> for more info", DebugManager.MessageType.Error);
+			return DebugManager.LogToConsole(GetHelp());
 		}
 
 		public static string GetHelp()
 		{
-			return "Coming soon...";
+			string description = "Sets Ittle's HP. Can set current or max. 1 HP is 1 quarter heart.\n\n";
+			string aliases = "Aliases: hp\n";
+			string usage = "Usage: <out>sethp hp {int}</out> OR <out>sethp max hp {float}</out> OR <out>sethp full</out>\n";
+			string examples = "Examples: <out>sethp 1</out>, <out>sethp max 40</out>, <out>sethp full</out>";
+
+			return description + aliases + usage + examples;
 		}
 	}
 }

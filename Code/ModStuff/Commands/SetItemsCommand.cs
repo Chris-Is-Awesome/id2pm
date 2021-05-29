@@ -131,7 +131,7 @@ namespace ModStuff.Commands
 				return DebugManager.LogToConsole("Item <in>" + args[0] + "</in> was not found. Is there a typo? Use <out>help setitems</out> for more info.", DebugManager.MessageType.Error);
 			}
 
-			return DebugManager.LogToConsole("Argument is required. Use <out>help setitems</out> for more info.", DebugManager.MessageType.Error);
+			return DebugManager.LogToConsole(GetHelp());
 		}
 
 		private void BulkAssignItems(ItemList itemList, string bulkType)
@@ -197,7 +197,12 @@ namespace ModStuff.Commands
 
 		public static string GetHelp()
 		{
-			return "Coming soon...";
+			string description = "Assign items. Can set specific items or do bulk assignments.\n\n";
+			string aliases = "Aliases: items\n";
+			string usage = "Usage: <out>setitems itemName itemLevelOrCount {int}</out> OR <out>setitems itemName</out> OR <out>setitems all/dev/none</out>\n";
+			string examples = "Examples: <out>setitems dynamite 4</out>, <out>setitems stick</out>, <out>setitems all</out>";
+
+			return description + aliases + usage + examples;
 		}
 	}
 }

@@ -212,7 +212,11 @@ namespace ModStuff.Commands
 
 		public static string GetHelp()
 		{
-			return "Coming soon...";
+			string description = "Runs a stopwatch. Time various things like route differences or strats.\n\n";
+			string aliases = "Aliases: sw\n";
+			string arguments = "Arguments: <out>start</out>, <out>stop</out>, <out>pause</out>, <out>restart</out>\n";
+			string examples = "Examples: <out>stopwatch start</out>";
+			return description + aliases + arguments + examples;
 		}
 
 		IEnumerator AnimateText()

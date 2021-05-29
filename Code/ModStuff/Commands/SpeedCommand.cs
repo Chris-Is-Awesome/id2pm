@@ -62,11 +62,12 @@ namespace ModStuff.Commands
 
 		public static string GetHelp()
 		{
-			string description = "<in>speed</in> lets you change the speed of Ittle. You can move faster or slower. Also affects roll & knockback speeds. A negative speed value will let you move in reverse.\n\n";
-			string usage = "<out>speed [float]{speed}</out> OR <out>speed [string]{reset/default}</out>";
-			string examples = "<out>speed 15</out>, <out>speed -5</out>, <out>speed reset</out>";
+			string description = "Change the speed of Ittle. You can move faster or slower. Also affects roll & knockback speeds. A negative speed value will let you move in reverse.\n\n";
+			string aliases = "Aliases: speed\n";
+			string usage = "Usage: <out>speed {float}</out> OR <out>speed reset/default</out>\n";
+			string examples = "Examples: <out>speed 15.5</out>, <out>speed -5</out>, <out>speed reset</out>";
 
-			return description + usage + examples;
+			return description + aliases + usage + examples;
 		}
 	}
 }

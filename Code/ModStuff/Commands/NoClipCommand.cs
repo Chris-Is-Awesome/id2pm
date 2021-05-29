@@ -37,7 +37,7 @@ namespace ModStuff.Commands
 
 		public static string GetHelp()
 		{
-			return "Toggles no clip mode for Ittle. Allows her to walk through everything, even some of the level.";
+			return "Toggles no clip mode for Ittle. Allows her to walk through everything, even some parts of the level.";
 		}
 	}
 }
