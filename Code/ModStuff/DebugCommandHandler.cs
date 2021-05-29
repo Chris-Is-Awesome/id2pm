@@ -33,7 +33,7 @@ namespace ModStuff
 
 		// References to commands
 		public TestCommand testCommand = new TestCommand();
-		public GotoCommand gotoCommand = new GotoCommand();
+		//public GotoCommand gotoCommand = new GotoCommand();
 		public SpeedCommand speedCommand = new SpeedCommand();
 		public GodCommand godCommand = new GodCommand();
 		public HelpCommand helpCommand = new HelpCommand();
@@ -53,16 +53,17 @@ namespace ModStuff
 			// Create commands
 			allCommands = new List<CommandInfo>
 			{
-				// Do not put dev commands at bottom of list, as this will add extra comma in help command and
-				// is more performant to just not list dev command last rather than remove that trailing comma
+				// Dev commands
 				{ new CommandInfo("Test", new ActivationMethod(testCommand.Activate), null, null, false, true) },
-				{ new CommandInfo("Goto", new ActivationMethod(gotoCommand.Activate), null, new string[] { "warpto" }) },
-				{ new CommandInfo("Speed", new ActivationMethod(speedCommand.Activate), new DeactivationMethod(speedCommand.Deactivate), new string[] { "setspeed" }) },
+				{ new CommandInfo("Find", new ActivationMethod(findCommand.Activate), null, null, false, true) },
+
+				// Global commands
+				//{ new CommandInfo("Goto", new ActivationMethod(gotoCommand.Activate), null, new string[] { "warpto" }) },
+				{ new CommandInfo("SetSpeed", new ActivationMethod(speedCommand.Activate), new DeactivationMethod(speedCommand.Deactivate), new string[] { "speed" }) },
 				{ new CommandInfo("God", new ActivationMethod(godCommand.Activate), new DeactivationMethod(godCommand.Deactivate)) },
 				{ new CommandInfo("Help", new ActivationMethod(helpCommand.Activate)) },
 				{ new CommandInfo("LikeABoss", new ActivationMethod(likeABossCommand.Activate), new DeactivationMethod(likeABossCommand.Deactivate)) },
 				{ new CommandInfo("NoClip", new ActivationMethod(noClipCommand.Activate), new DeactivationMethod(noClipCommand.Deactivate)) },
-				{ new CommandInfo("Find", new ActivationMethod(findCommand.Activate)) },
 				{ new CommandInfo("SaveState", new ActivationMethod(saveStateCommand.Activate), null, new string[] { "save", "ss" }) },
 				{ new CommandInfo("LoadState", new ActivationMethod(loadStateCommand.Activate), null, new string[] { "load", "ls" }) },
 				{ new CommandInfo("SetItems", new ActivationMethod(setItemsCommand.Activate), null, new string[] { "setitem", "items", "item" }) },
