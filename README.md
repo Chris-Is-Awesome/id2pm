@@ -11,7 +11,7 @@ If you would like to join the discssion on this mod and suggest features or subm
 ## Installation
 
 ### Install
-Download `.zip` the latest version from [here](https://github.com/Chris-Is-Awesome/id2pm/releases). Extract its contents to the directory of your Ittle Dew 2 install: `[Steam games directory]\Ittle Dew 2` and that's it! Can configure hotkeys by reading below.
+Download the `id2pm.zip` file in the latest version from [here](https://github.com/Chris-Is-Awesome/id2pm/releases). Extract its contents to the directory of your Ittle Dew 2 install: `[Steam games directory]\Ittle Dew 2` and that's it! Can configure hotkeys by reading below.
 
 ### Uninstall
 Right click the game in Steam -> Properties -> Local Files -> Verify integrity of game files...
@@ -45,3 +45,7 @@ Note that hotkeys will only run if the player has control (meaning they won't ru
 ## Commands
 
 There are a variety of commands to be used in debug menu. To open the debug menu, pause the game and press your `OpenDebugMenu` key (defualt `F1`). You can use the `help` command to get list of all commands and type `help [command name]` to get info on each command.
+
+## Debugging
+
+If posting a bug report, I may ask for the output log. The output log is a file in the root `ID2_Data` directory named `output_log.txt`. Contains a lot of useful debugging info to help me diagnose issues.
