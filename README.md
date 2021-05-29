@@ -1,4 +1,4 @@
-﻿![ID2 Practice Mod](/Images/logo.jpg)
+﻿![ID2 Practice Mod](/Images/logo.png)
 
 ### [Download! Install instructions below!](https://github.com/Chris-Is-Awesome/id2pm/releases)
 
