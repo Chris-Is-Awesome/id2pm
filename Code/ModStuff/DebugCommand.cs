@@ -47,5 +47,18 @@ namespace ModStuff
 			vector = Vector3.zero;
 			return false;
 		}
+
+		public string CombineArgsToString(string[] args, bool useDivider = false, char divider = '_')
+		{
+			string output = string.Empty;
+
+			for (int i = 0; i < args.Length; i++)
+			{
+				output += args[i];
+				if (useDivider && i < args.Length - 1) output += divider;
+			}
+
+			return output;
+		}
 	}
 }
