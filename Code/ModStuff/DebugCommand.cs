@@ -55,7 +55,7 @@ namespace ModStuff
 			for (int i = 0; i < args.Length; i++)
 			{
 				output += args[i];
-				if (useDivider && i < args.Length - 1) output += divider;
+				if (useDivider && i < args.Length - 1 && !args[i].Contains(divider.ToString())) output += divider;
 			}
 
 			return output;
