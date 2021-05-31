@@ -16,29 +16,53 @@ namespace ModStuff.Commands
 					// If positive number
 					if (saveSlot >= 0)
 					{
-						// Create filename for save state file
-						DateTime timestamp = DateTime.Now;
-						string date = timestamp.ToString("MM-dd-yy");
-						string time = timestamp.ToString("HH-mm");
-						string fileName = "state-" + saveSlot + "_" + date + "_" + time + ".state";
-
-						// Delete any existing save states for this slot
-						string filePath = FileManager.GetFileNameFromText(FileManager.GetModDirectoryPath() + "/savestates/", "state-" + saveSlot);
-						if (!string.IsNullOrEmpty(filePath)) FileManager.DeleteFile(filePath);
-
-						// Save data
-						SaveTempData();
-
-						// Copy save file to mod directory/savestates directory
-						FileManager.CopyFile(VarHelper.CurrentSaveFilePath, FileManager.GetModDirectoryPath() + "/savestates/" + fileName, true);
-
-						return "<color=green>Saved state to slot " + saveSlot + "</color>";
+						CreateStateFile(saveSlot.ToString());
+						return DebugManager.LogToConsole("Saved state <in>" + saveSlot + "</in>!", DebugManager.MessageType.Success);
 					}
+				}
+				// If saving with name
+				else
+				{
+					string stateName = CombineArgsToString(args, true);
+
+					// Keep file name within a reasonable length (avoids issue with filename being too long, being unable to create file)
+					if (stateName.Length < 200)
+					{
+						// Cycle through each character in savestateName to ensure each one is letter or digit (avoids issue with invalid chars in file name)
+						foreach (char c in stateName)
+						{
+							if (!char.IsLetterOrDigit(c) && c != '_')
+							{
+								return DebugManager.LogToConsole("While naming a savestate, you must use only letters or numbers", DebugManager.MessageType.Error);
+							}
+						}
+
+						CreateStateFile(stateName);
+						return DebugManager.LogToConsole("Saved state <in>" + stateName + " </in>!", DebugManager.MessageType.Success);
+					}
+
+					// If filename is too long
+					return DebugManager.LogToConsole("State name is too long. Keep it under 200 characters!", DebugManager.MessageType.Error);
 				}
 			}
 
 			// If no index given
-			return DebugManager.LogToConsole("No <out>(int)</out> index was given. Use <out>help savestate/loadstate</out> for more info.", DebugManager.MessageType.Error);
+			return DebugManager.LogToConsole("No savestate slot or name was given. Use <out>help savestate/loadstate</out> for more info.", DebugManager.MessageType.Error);
+		}
+
+		private void CreateStateFile(string slotName)
+		{
+			string fileName = "state-" + slotName + ".state";
+			string filePath = FileManager.GetFileNameFromText(FileManager.GetModDirectoryPath() + "/savestates/", fileName);
+
+			// Delete any existing savestates with this name/slot
+			if (!string.IsNullOrEmpty(filePath)) FileManager.DeleteFile(filePath);
+
+			// Save data
+			SaveTempData();
+
+			// Copy save file to mod directory/savestates directory
+			FileManager.CopyFile(VarHelper.CurrentSaveFilePath, FileManager.GetModDirectoryPath() + "/savestates/" + fileName, true);
 		}
 
 		private void SaveTempData()
@@ -99,10 +123,10 @@ namespace ModStuff.Commands
 
 		public static string GetHelp()
 		{
-			string description = "Makes a save state. Use <out>loadstate</out> to load this state. Currently only supports save data & player data, no enemy data is saved.\n\n";
+			string description = "Makes a save state. Use <out>loadstate</out> to load this state. Currently only supports save data & player data, no enemy data is saved. If you are naming the savestate, you cannot use any special characters.\n\n";
 			string aliases = "Aliases: save, ss\n";
-			string usage = "Usage: <out>savestate slot {int}</out>\n";
-			string examples = "Examples: <out>savestate 1</out>";
+			string usage = "Usage: <out>savestate slot {int}</out> OR <out>savestate name {string}</out>\n";
+			string examples = "Examples: <out>savestate 1</out>, <out>savestate Hundo Pillow Fort</out>";
 
 			return description + aliases + usage + examples;
 		}

@@ -15,30 +15,44 @@ namespace ModStuff.Commands
 					// If positive number
 					if (saveSlot >= 0)
 					{
-						// Get save state file path
-						string filePath = FileManager.GetFileNameFromText(FileManager.GetModDirectoryPath() + "/savestates/", "state-" + saveSlot);
-
-						// If no save state found for save slot
-						if (string.IsNullOrEmpty(filePath))
-						{
-							return DebugManager.LogToConsole("No save state found for slot " + saveSlot, DebugManager.MessageType.Error);
-						}
-
-						// Load state
-						FileManager.CopyFile(filePath, VarHelper.CurrentSaveFilePath, true);
-
-						// Load data & update player transform
-						SaveManager.GetSaverOwner().LoadAll(false, delegate (bool success, string error) { LoadTempData(); });
-
-						// EventListener.OnEntitySpawn += OnEntitySpawn;
-
-						return "<color=green>Loaded state from slot " + saveSlot + "</color>";
+						if (LoadStateFile(saveSlot.ToString())) return DebugManager.LogToConsole("Loaded state <in>" + saveSlot + "</in>!", DebugManager.MessageType.Success);
+						return DebugManager.LogToConsole("No state was found for slot <in>" + saveSlot + "</in>", DebugManager.MessageType.Error);
 					}
+				}
+				// If loading with name
+				else
+				{
+					string stateName = CombineArgsToString(args, true);
+					if (LoadStateFile(stateName)) return DebugManager.LogToConsole("Loaded state <in>" + stateName + "</in>!", DebugManager.MessageType.Success);
+					return DebugManager.LogToConsole("No state was found for slot <in>" + stateName + "</in>", DebugManager.MessageType.Error);
 				}
 			}
 
 			// If no index given
 			return DebugManager.LogToConsole("No <out>(int)</out> index was given. Use <out>help savestate/loadstate</out> for more info.", DebugManager.MessageType.Error);
+		}
+
+		private bool LoadStateFile(string slotName)
+		{
+			string fileName = "state-" + slotName + ".state";
+			string filePath = FileManager.GetFileNameFromText(FileManager.GetModDirectoryPath() + "/savestates/", fileName);
+
+			// If file exists
+			if (!string.IsNullOrEmpty(filePath))
+			{
+				// Load the state
+				FileManager.CopyFile(filePath, VarHelper.CurrentSaveFilePath, true);
+
+				// Load data & update player transform
+				SaveManager.GetSaverOwner().LoadAll(false, delegate (bool success, string error) { LoadTempData(); });
+
+				// EventListener.OnEntitySpawn += OnEntitySpawn;
+
+				return true;
+			}
+
+			// If file does not exist
+			return false;
 		}
 
 		private void LoadTempData()
@@ -93,8 +107,8 @@ namespace ModStuff.Commands
 		{
 			string description = "Loads a savestate. Currently only supports save data & player data, no enemy data is loaded.\n\n";
 			string aliases = "Aliases: load, ls\n";
-			string usage = "Usage: <out>loadstate slot {int}</out>\n";
-			string examples = "Examples: <out>loadstate 1</out>";
+			string usage = "Usage: <out>loadstate slot {int}</out> OR <out>loadstate name {string}</out>\n";
+			string examples = "Examples: <out>loadstate 1</out>, <out>loadstate Hundo Pillow Fort</out>";
 
 			return description + aliases + usage + examples;
 		}
