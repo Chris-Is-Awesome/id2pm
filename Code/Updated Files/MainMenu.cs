@@ -98,6 +98,7 @@ public class MainMenu : MonoBehaviour
 			Texture2D logoImg = new Texture2D(588, 258);
 			logoImg.LoadImage(File.ReadAllBytes(logoPath));
 			logoObj.GetComponent<SharedRendererInterface>().BaseMat.mainTexture = logoImg;
+			UIFactory.Instance.SaveScrollBar(); // Save reference to scroll bar to allow creating scrollable menus
 		}
 	}
 
