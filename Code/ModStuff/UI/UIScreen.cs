@@ -33,7 +33,6 @@ namespace ModStuff.UI
         //Uses Debug window for pause menu, Filestart window for main menu
         static GameObject mainMenuWindowOriginal;
         static GameObject pauseMenuWindowOriginal;
-        static GameObject optionsWindowOriginal;
         static Transform mainMenuParent;
         static Transform pauseMenuParent;
         static Transform optionsMenuParent;
@@ -53,19 +52,10 @@ namespace ModStuff.UI
                 }
                 if (pauseMenuWindowOriginal == null)
                 {
-                    pauseMenuWindowOriginal = SearchGO("Debug", "Pause");
+                    pauseMenuWindowOriginal = SearchGO("ItemScreen", "Pause");
                 }
                 return pauseMenuWindowOriginal;
             }
-        }
-
-        static GameObject BaseScreenOptions
-        {
-            get
-	        {
-                optionsWindowOriginal = SearchGO("Options(Clone)", "PauseOverlay");
-                return optionsWindowOriginal;
-	        }
         }
 
         static Transform BaseParent
