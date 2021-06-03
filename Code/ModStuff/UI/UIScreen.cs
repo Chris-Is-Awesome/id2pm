@@ -33,8 +33,10 @@ namespace ModStuff.UI
         //Uses Debug window for pause menu, Filestart window for main menu
         static GameObject mainMenuWindowOriginal;
         static GameObject pauseMenuWindowOriginal;
+        static GameObject optionsWindowOriginal;
         static Transform mainMenuParent;
         static Transform pauseMenuParent;
+        static Transform optionsMenuParent;
 
         //These automatically return the correct menu and transform for instantiating the menus
         static GameObject BaseScreen
@@ -56,6 +58,16 @@ namespace ModStuff.UI
                 return pauseMenuWindowOriginal;
             }
         }
+
+        static GameObject BaseScreenOptions
+        {
+            get
+	        {
+                optionsWindowOriginal = SearchGO("Options(Clone)", "PauseOverlay");
+                return optionsWindowOriginal;
+	        }
+        }
+
         static Transform BaseParent
         {
             get
@@ -76,11 +88,20 @@ namespace ModStuff.UI
             }
         }
 
+        static Transform BaseParentOptions
+		{
+            get
+			{
+                optionsMenuParent = SearchGO("Options(Clone)", "PauseOverlay").transform;
+                return optionsMenuParent;
+			}
+		}
+
         //Create base screen
-        public static UIScreen CreateBaseScreen(string title = "Mod Screen")
+        public static UIScreen CreateBaseScreen(string title = "Mod Screen", bool useOptionsBase = false)
         {
             //Instantiate, name and position the menu
-            GameObject elementCreated = GameObject.Instantiate(BaseScreen, BaseParent);
+            GameObject elementCreated = useOptionsBase ? Instantiate(BaseScreen, BaseParentOptions) : Instantiate(BaseScreen, BaseParent);
             elementCreated.transform.localPosition = SceneManager.GetActiveScene().name != "MainMenu" ? Vector3.zero : new Vector3(0f, 0.5f, 0f);
             elementCreated.transform.localScale = Vector3.one;
             elementCreated.name = "ModUIScreen";
