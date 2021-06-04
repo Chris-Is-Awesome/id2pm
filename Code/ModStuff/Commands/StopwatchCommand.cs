@@ -62,11 +62,11 @@ namespace ModStuff.Commands
 			{
 				DebugCommandHandler.Instance.StopCoroutine(animationCoroutine); // Stop animating
 				isAnimating = false;
-				isActive = false;
+				MakeInactive(GetType());
 				ConfigureOverlay();
 			}
 
-			isActive = true; // Set command to active to allow resuming command after loads
+			MakeActive(GetType()); // Set command to active to allow resuming command after loads
 			hasStarted = true; // Start stopwatch
 
 			EventListener.OnPlayerUpdate += UpdateStopwatch; // Only update timer as long as the player has control (slightly different from IGT to be more accurate to actual play)
@@ -206,7 +206,7 @@ namespace ModStuff.Commands
 
 				isAnimating = false;
 				hasStarted = false;
-				isActive = false;
+				MakeInactive(GetType());
 			}
 		}
 
@@ -262,7 +262,7 @@ namespace ModStuff.Commands
 
 			yield return new WaitForSeconds(0.5f);
 			timerOverlayTextMesh.color = normalColor;
-			isActive = false; // Set command to inactive so it won't resume command after loads
+			MakeInactive(GetType()); // Set command to inactive so it won't resume command after loads
 			ConfigureOverlay(); // Reset overlay
 			isAnimating = false;
 		}

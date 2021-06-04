@@ -30,6 +30,7 @@ namespace ModStuff
 		public delegate string ActivationMethod(string[] args = null);
 		public delegate void DeactivationMethod();
 		public List<CommandInfo> allCommands;
+		public List<CommandInfo> activeCommands = new List<CommandInfo>();
 
 		// References to commands
 		public TestCommand testCommand = new TestCommand();
@@ -45,6 +46,7 @@ namespace ModStuff
 		public SetItemsCommand setItemsCommand = new SetItemsCommand();
 		public SetHpCommand setHpCommand = new SetHpCommand();
 		public StopwatchCommand stopwatchCommand = new StopwatchCommand();
+		public DebugOverlayCommand debugOverlayCommand = new DebugOverlayCommand();
 
 		public KeyCode keyToOpenDebugMenu = KeyCode.F1;
 
@@ -69,6 +71,7 @@ namespace ModStuff
 				{ new CommandInfo("SetItems", new ActivationMethod(setItemsCommand.Activate), null, new string[] { "setitem", "items", "item" }) },
 				{ new CommandInfo("SetHp", new ActivationMethod(setHpCommand.Activate), null, new string[] { "hp" }) },
 				{ new CommandInfo("Stopwatch", new ActivationMethod(stopwatchCommand.Activate), new DeactivationMethod(stopwatchCommand.Deactivate), new string[] { "sw" }, true) },
+				{ new CommandInfo("DebugOverlay", new ActivationMethod(debugOverlayCommand.Activate), debugOverlayCommand.Deactivate, new string[] { "debug" }, true) },
 			};
 
 			keyToOpenDebugMenu = HotkeyHelper.Instance.GetHotkey("OpenDebugMenu").key; // Store hotkey
@@ -104,6 +107,19 @@ namespace ModStuff
 						}
 					}
 				}
+			}
+
+			return null;
+		}
+
+		public CommandInfo GetCommand(Type type)
+		{
+			for (int i = 0; i < allCommands.Count; i++)
+			{
+				CommandInfo command = allCommands[i];
+
+				// If type matches command type
+				if (type == command.activationMethod.Method.DeclaringType) return command;
 			}
 
 			return null;

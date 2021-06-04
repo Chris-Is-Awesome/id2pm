@@ -12,6 +12,7 @@ namespace ModStuff.Commands
 			{
 				RunCommand(false);
 				EventListener.OnPlayerSpawn += RunCommand;
+				MakeActive(GetType());
 				return "Godmode is now <color=green>active</color> for Ittle.";
 			}
 
@@ -42,7 +43,6 @@ namespace ModStuff.Commands
 
 		public void Deactivate()
 		{
-			isActive = !isActive;
 			EventListener.OnPlayerSpawn -= RunCommand;
 			GameObject playerObj = VarHelper.PlayerObj;
 
@@ -57,7 +57,7 @@ namespace ModStuff.Commands
 				entityEnvirodeathable.Enable(entity);
 			}
 
-			isActive = false;
+			MakeInactive(GetType());
 		}
 
 		public static string GetHelp()

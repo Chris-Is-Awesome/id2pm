@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ModStuff
@@ -8,6 +9,24 @@ namespace ModStuff
 		public abstract string Activate(string[] args);
 
 		public bool isActive;
+
+		public void MakeActive(Type command)
+		{
+			isActive = true;
+			DebugCommandHandler commandHandler = DebugCommandHandler.Instance;
+			DebugCommandHandler.CommandInfo commandInfo = commandHandler.GetCommand(command);
+			commandHandler.activeCommands.Add(commandInfo);
+			EventListener.DebugCommand(commandInfo, true);
+		}
+
+		public void MakeInactive(Type command)
+		{
+			isActive = false;
+			DebugCommandHandler commandHandler = DebugCommandHandler.Instance;
+			DebugCommandHandler.CommandInfo commandInfo = commandHandler.GetCommand(command);
+			commandHandler.activeCommands.Remove(commandInfo);
+			EventListener.DebugCommand(commandInfo, false);
+		}
 
 		public bool IsValidArg(string arg, string validArg)
 		{

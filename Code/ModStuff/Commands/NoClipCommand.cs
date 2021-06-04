@@ -11,6 +11,7 @@ namespace ModStuff.Commands
 			if (isActive)
 			{
 				RunCommand(false);
+				MakeActive(GetType());
 				return "NoClip is now <color=green>activated</color> for Ittle.";
 			}
 
@@ -29,9 +30,9 @@ namespace ModStuff.Commands
 
 		public void Deactivate()
 		{
-			isActive = !isActive;
 			GameObject playerObj = VarHelper.PlayerObj;
 			if (playerObj != null) playerObj.GetComponent<BC_ColliderAACylinderN>().enabled = true;
+			MakeInactive(GetType());
 			DebugManager.LogToFile("[Cheat] NoClip deactivated for Ittle");
 		}
 

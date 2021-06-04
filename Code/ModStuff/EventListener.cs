@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine.SceneManagement;
 
 namespace ModStuff
 {
@@ -19,6 +18,7 @@ namespace ModStuff
 		public delegate void ItemFunc(Entity ent, Item item);
 		public delegate void VarSaveFunc(Entity ent, string var, int value);
 		public delegate void FileFunc(bool isNew, IDataSaver saver = null);
+		public delegate void CommandFunc(DebugCommandHandler.CommandInfo command, bool isActive);
 
 		// Events
 
@@ -46,6 +46,7 @@ namespace ModStuff
 		public static event Func OnGameStart;
 		public static event FileFunc OnFileLoad;
 		public static event BoolFunc OnGamePause;
+		public static event CommandFunc OnDebugCommand;
 		public static event Func OnGameQuit;
 
 		// Other
@@ -189,6 +190,13 @@ namespace ModStuff
 			//string state = isPaused ? "paused" : "unpaused";
 			//DebugManager.LogToFile("[OnGamePause] The game has " + state);
 			OnGamePause?.Invoke(isPaused);
+		}
+
+		public static void DebugCommand(DebugCommandHandler.CommandInfo command, bool isActive)
+		{
+			//string state = isActive ? "activated" : "deactivated";
+			//DebugManager.LogToFile("[OnDebugCommand] Debug command " + command.nameOfCommand + " has " + state);
+			OnDebugCommand?.Invoke(command, isActive);
 		}
 
 		public static void GameQuit()

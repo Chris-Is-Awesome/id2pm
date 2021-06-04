@@ -10,6 +10,7 @@
 			{
 				RunCommand(null, false);
 				EventListener.OnEntitySpawn += RunCommand;
+				MakeActive(GetType());
 				return "LikeABoss is now <color=green>active</color> for Ittle.";
 			}
 
@@ -33,13 +34,14 @@
 
 		public void Deactivate()
 		{
-			isActive = !isActive;
 			EventListener.OnEntitySpawn -= RunCommand;
 
 			for (int i = 0; i < VarHelper.ActiveEnts.Count; i++)
 			{
 				MakeIttleStrong(VarHelper.ActiveEnts[i], false);
 			}
+
+			MakeInactive(GetType());
 		}
 
 		private void MakeIttleStrong(Entity ent, bool isLikeABoss)

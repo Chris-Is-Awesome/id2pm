@@ -23,7 +23,7 @@ namespace ModStuff.Commands
 				// If not resetting & number is given
 				else if (TryParseToFloat(arg0, out multiplier))
 				{
-					isActive = true;
+					MakeActive(GetType());
 					RunCommand(false);
 					EventListener.OnPlayerSpawn += RunCommand;
 					return "Set Ittle's speed to <in>" + multiplier + "</in>";
@@ -57,7 +57,7 @@ namespace ModStuff.Commands
 				RigidBodyController rigidbody = playerObj.GetComponent<RigidBodyController>();
 				rigidbody.SetCustomVelocity(1);
 			}
-			isActive = false;
+			MakeInactive(GetType());
 		}
 
 		public static string GetHelp()
