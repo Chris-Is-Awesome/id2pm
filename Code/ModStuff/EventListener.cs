@@ -19,6 +19,8 @@ namespace ModStuff
 		public delegate void VarSaveFunc(Entity ent, string var, int value);
 		public delegate void FileFunc(bool isNew, IDataSaver saver = null);
 		public delegate void CommandFunc(DebugCommandHandler.CommandInfo command, bool isActive);
+		public delegate void SaveVarFunc(string key, object value);
+		public delegate void DroptableFunc(int entTier, bool isSuper, int totalCount, int currentCount, int noHitCount, int currentTierCount, ItemBase currentItem);
 
 		// Events
 
@@ -28,6 +30,7 @@ namespace ModStuff
 		public static event EntBoolFunc OnEntitySpawn;
 		public static event DamageFunc OnDamageDone;
 		public static event EntFunc OnEntityDeath;
+		public static event DroptableFunc OnEntDrop;
 
 		// Scene/room loading
 		public static event SceneFunc OnSceneLoad;
@@ -47,6 +50,7 @@ namespace ModStuff
 		public static event FileFunc OnFileLoad;
 		public static event BoolFunc OnGamePause;
 		public static event CommandFunc OnDebugCommand;
+		public static event SaveVarFunc OnFlagSaved;
 		public static event Func OnGameQuit;
 
 		// Other
@@ -59,6 +63,12 @@ namespace ModStuff
 		{
 			//string state = isRespawn ? "respawned" : "spawned";
 			//DebugManager.LogToFile("[OnplayerSpawn] PlayerEnt has " + state);
+
+			DebugCommandHandler commandHandler = DebugCommandHandler.Instance;
+			if (ModOptions.LoadOption("debugOverlay") && !commandHandler.IsCommandActive("debug"))
+			{
+				commandHandler.ActivateCommand("debug");
+			}
 
 			OnPlayerSpawn?.Invoke(isRespawn);
 		}
@@ -79,7 +89,7 @@ namespace ModStuff
 
 		public static void DamageDone(Entity ent, HitData data)
 		{
-			//DebugManager.LogToFile("[OnDamageDone] " + data.Attacker.name + " did " + data.GetDamageData().Length + " damage to " + ent.name);
+			//DebugManager.LogToFile("[OnDamageDone] " + data.Attacker.name + " did " + data.GetDamageData()[0].damage + " damage to " + ent.name);
 			OnDamageDone?.Invoke(ent, data);
 		}
 
@@ -87,6 +97,38 @@ namespace ModStuff
 		{
 			//DebugManager.LogToFile("[OnEntityDeath] " + ent.name + " has died");
 			OnEntityDeath?.Invoke(ent);
+		}
+
+		public static void EntityDrop(int totalCount, int currentCount, int noHitCount, DropTable table, DropTableContext context, ItemBase currentItem)
+		{
+			bool isSuper = table.name.Contains("Super");
+			int entTier = int.Parse(table.name.Substring(7,1));
+			string itemDropped = currentItem == null ? "nothing" : currentItem.name;
+			string tableName = !isSuper ? "Tier " + entTier : "Tier " + entTier + " (Super)";
+			int currentTierCount = 0;
+
+			if (context.tables.TryGetValue(table, out DropTableContext.TableState state))
+			{
+				currentTierCount = state.Position;
+			}
+
+			ItemBase nextItem = currentTierCount < 15 ? table._items[currentTierCount] : table._items[0];
+			string itemName = nextItem != null ? nextItem.name : "nothing";
+
+			string output = string.Concat(
+				"[OnEntDrop] Tier " + entTier,
+				" Entity dropped " + itemDropped,
+				"\nTotal: " + totalCount,
+				"\nCurrent: " + currentCount,
+				"\nNo hit count: " + noHitCount,
+				"\n" + tableName + " count: " + currentTierCount,
+				"\nNext item for Tier " + entTier + ": " + itemName
+			);
+
+			SaveManager.SaveToPrefs("droptables/noHitCount", noHitCount);
+
+			DebugManager.LogToFile(output);
+			OnEntDrop?.Invoke(entTier, isSuper, totalCount, currentCount, noHitCount, currentTierCount, currentItem);
 		}
 
 		#endregion
@@ -189,6 +231,7 @@ namespace ModStuff
 		{
 			//string state = isPaused ? "paused" : "unpaused";
 			//DebugManager.LogToFile("[OnGamePause] The game has " + state);
+
 			OnGamePause?.Invoke(isPaused);
 		}
 
@@ -197,6 +240,12 @@ namespace ModStuff
 			//string state = isActive ? "activated" : "deactivated";
 			//DebugManager.LogToFile("[OnDebugCommand] Debug command " + command.nameOfCommand + " has " + state);
 			OnDebugCommand?.Invoke(command, isActive);
+		}
+
+		public static void FlagSaved(string key, object value)
+		{
+			//DebugManager.LogToFile("[OnFlagSaved] Flag '" + key + "' set to '" + value.ToString() + "'!");
+			OnFlagSaved?.Invoke(key, value);
 		}
 
 		public static void GameQuit()
