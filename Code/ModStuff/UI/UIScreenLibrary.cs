@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using ModStuff;
 
 namespace ModStuff.UI
 {
@@ -12,10 +12,17 @@ namespace ModStuff.UI
 		//UIScreens list
 		public static Dictionary<string, UIScreenHandler> GetLibrary()
 		{
-			Dictionary<string, UIScreenHandler> output = new Dictionary<string, UIScreenHandler>();
+			// Create all UI menus
+			Dictionary<string, UIScreenHandler> allScreens = new Dictionary<string, UIScreenHandler>()
+			{
+				// Pause menu screens
+				{ "modoptions", new UIScreenHandler(ModOptionsMenu) }
+			};
+			return allScreens;
+
+			/*
 			if (SceneManager.GetActiveScene().name == "MainMenu")
 			{
-				/*
 				//Main menu dictionary
 				output.Add("newgamemodes", new UIScreenHandler(NewGameModes));
 				//output.Add("newgamemodeselect", new UIScreenHandler(NewGameModeSelect));
@@ -34,9 +41,10 @@ namespace ModStuff.UI
 				output.Add("scriptsmenu", new UIScreenHandler(ScriptsMenu));
 				output.Add("creativemenu", new UIScreenHandler(CreativeMenu));
 				output.Add("optionsmenu", new UIScreenHandler(OptionsMenu));
-				*/
 			}
+
 			return output;
+			*/
 		}
 
 		static float ColDistance { get { return 3.75f; } }
@@ -45,6 +53,64 @@ namespace ModStuff.UI
 		public static float FirstCol { get { return -AspectRatio * ColDistance; } }
 		public static float MidCol { get { return 0f; } }
 		public static float LastCol { get { return AspectRatio * ColDistance; } }
+
+		static UIScreen ModOptionsMenu()
+		{
+			// Create screen
+			UIScreen screen = UIScreen.CreateBaseScreen("Mod Options", true);
+
+			// Create scroll menu
+			UIScrollMenu menu = UIFactory.Instance.CreateScrollMenu(LastCol, 2f, screen.transform, "Mod Options");
+			menu.Title.gameObject.SetActive(false);
+			menu.ScrollBar.transform.localPosition += new Vector3(-1.6f, 0f);
+			menu.ScrollBar.ResizeLength(6);
+
+			// Positional offsets for buttons
+			float leftColOffset = -3.6f;
+			float rightColOffset = -3.1f;
+			float row1Pos = -1f;
+			float row2Pos = -2.25f;
+			float row3Pos = -3.5f;
+			float row4Pos = -5.25f;
+
+			string popupText;
+			Vector3 popupPos = new Vector2(MidCol, -2.5f);
+			Vector2 popupScale = new Vector2(3.5f, 1f);
+
+			// Create buttons
+
+			// Run in background
+			UICheckBox runInBackground = UIFactory.Instance.CreateCheckBox(FirstCol + leftColOffset, row1Pos, screen.transform, "Run in background");
+			runInBackground.ScaleBackground(1.75f, Vector3.one);
+			runInBackground.onInteraction += delegate (bool enable)
+			{
+				Application.runInBackground = enable;
+				ModOptions.SaveOption("runInBackground", enable);
+				Debug.Log("ModOption: 'runInBackground' set to " + enable.ToString());
+			};
+			menu.Assign(runInBackground);
+			screen.SaveElement("runInBackground", runInBackground);
+			popupText = "Allows the game to run without having active focus. Good for multitasking.";
+			UITextFrame popupRunInBackground = UIFactory.Instance.CreatePopupFrame(popupPos.x, popupPos.y, runInBackground, screen.transform, popupText);
+			popupRunInBackground.ScaleBackground(popupScale);
+
+			// Debug overlay
+			UICheckBox debugOverlay = UIFactory.Instance.CreateCheckBox(MidCol + rightColOffset, row1Pos, screen.transform, "Debug overlay");
+			debugOverlay.ScaleBackground(1.75f, Vector3.one);
+			debugOverlay.onInteraction += delegate (bool enable)
+			{
+				DebugCommandHandler.Instance.ActivateCommand("debug");
+				ModOptions.SaveOption("debugOverlay", enable);
+				Debug.Log("ModOption: 'debugOverlay' set to " + enable.ToString());
+			};
+			menu.Assign(debugOverlay);
+			screen.SaveElement("debugOverlay", debugOverlay);
+			popupText = "Toggles the display of the debug overlay, showing info like player position, scene data, and more.";
+			UITextFrame popupDebugOverlay = UIFactory.Instance.CreatePopupFrame(popupPos.x, popupPos.y, debugOverlay, screen.transform, popupText);
+			popupDebugOverlay.ScaleBackground(popupScale);
+
+			return screen;
+		}
 
 		/*
 
