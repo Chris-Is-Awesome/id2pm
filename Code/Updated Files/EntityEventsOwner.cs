@@ -42,10 +42,10 @@ public class EntityEventsOwner
 
 	public void SendDamaged(Entity ent, HitData data)
 	{
+		EventListener.DamageDone(ent, data); // Invoke custom event
 		if (this.DamageListener != null)
 		{
 			this.DamageListener(ent, data);
-			EventListener.DamageDone(ent, data); // Invoke custom event
 		}
 	}
 
