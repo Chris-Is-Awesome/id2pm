@@ -22,7 +22,7 @@ namespace ModStuff
 			Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
 
 			// Run in background
-			Application.runInBackground = true;
+			Application.runInBackground = ModOptions.LoadOption("runInBackground");
 		}
 
 		public static void LogToFile(string message, LogType logType = LogType.Log, bool includeStackTrace = false, bool addWhiteSpace = true)
