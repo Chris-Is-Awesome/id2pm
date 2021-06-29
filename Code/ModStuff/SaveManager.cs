@@ -128,7 +128,11 @@ namespace ModStuff
 			if (saver != null)
 			{
 				string key = GetSaveKey(path);
-				return saver.LoadData(key);
+				string value = saver.LoadData(key);
+
+				// If is empty string, return "0"
+				if (string.IsNullOrEmpty(value)) return "0";
+				return value;
 			}
 
 			DebugManager.LogToFile("[Save Data] Path " + path + " could not be loaded. Returning empty string.", LogType.Warning);
