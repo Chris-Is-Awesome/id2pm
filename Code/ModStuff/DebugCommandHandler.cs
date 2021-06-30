@@ -71,7 +71,7 @@ namespace ModStuff
 				{ new CommandInfo("SetItems", new ActivationMethod(setItemsCommand.Activate), null, new string[] { "setitem", "items", "item" }) },
 				{ new CommandInfo("SetHp", new ActivationMethod(setHpCommand.Activate), null, new string[] { "hp" }) },
 				{ new CommandInfo("Stopwatch", new ActivationMethod(stopwatchCommand.Activate), new DeactivationMethod(stopwatchCommand.Deactivate), new string[] { "sw" }, true) },
-				{ new CommandInfo("DebugOverlay", new ActivationMethod(debugOverlayCommand.Activate), debugOverlayCommand.Deactivate, new string[] { "debug" }, true) },
+				{ new CommandInfo("DebugOverlay", new ActivationMethod(debugOverlayCommand.Activate), debugOverlayCommand.Deactivate, new string[] { "debug" }) },
 			};
 
 			keyToOpenDebugMenu = HotkeyHelper.Instance.GetHotkey("OpenDebugMenu").key; // Store hotkey
@@ -131,9 +131,23 @@ namespace ModStuff
 			return (bool)commandClass.GetField("isActive").GetValue(command.activationMethod.Target);
 		}
 
+		public bool IsCommandActive(string commandName)
+		{
+			CommandInfo command = GetCommand(commandName);
+			Type commandClass = command.activationMethod.Method.DeclaringType;
+			return (bool)commandClass.GetField("isActive").GetValue(command.activationMethod.Target);
+		}
+
 		public void ActivateCommand(CommandInfo command, string[] args = null)
 		{
 			// Only activate if not already active, otherwise don't bother (saves on performance)
+			if (!IsCommandActive(command) || command.reactivateIfActive) command.activationMethod.Invoke(args);
+		}
+
+		public void ActivateCommand(string commandName, string[] args = null)
+		{
+			// Only activate if not already active, otherwise don't bother (saves on performance)
+			CommandInfo command = GetCommand(commandName);
 			if (!IsCommandActive(command) || command.reactivateIfActive) command.activationMethod.Invoke(args);
 		}
 
