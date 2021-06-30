@@ -21,6 +21,8 @@ namespace ModStuff
 		public delegate void CommandFunc(DebugCommandHandler.CommandInfo command, bool isActive);
 		public delegate void SaveVarFunc(string key, object value);
 		public delegate void DroptableFunc(int entTier, bool isSuper, int totalCount, int currentCount, int noHitCount, int currentTierCount, ItemBase currentItem);
+		public delegate void LevelEventFunc(LevelEvent effect, float duration);
+		public delegate void FloatFunc(float value);
 
 		// Events
 
@@ -52,6 +54,8 @@ namespace ModStuff
 		public static event CommandFunc OnDebugCommand;
 		public static event SaveVarFunc OnFlagSaved;
 		public static event Func OnGameQuit;
+		public static event LevelEventFunc OnLevelEventUpdate;
+		public static event FloatFunc OnTimerUpdate;
 
 		// Other
 		public static event ItemFunc OnItemGet;
@@ -252,6 +256,18 @@ namespace ModStuff
 		{
 			//DebugManager.LogToFile("[OnGameQuit] The game has quit");
 			OnGameQuit?.Invoke();
+		}
+
+		public static void LevelEventUpdate(LevelEvent effect, float duration)
+		{
+			//DebugManager.LogToFile("[OnLevelEventUpdate] World event " + effect.gameObject.name + " will continue for " + duration);
+			OnLevelEventUpdate?.Invoke(effect, duration);
+		}
+
+		public static void TimerUpdate(float time)
+		{
+			//DebugManager.LogToFile("[OnTimerUpdate] Timer will continue for " + time);
+			OnTimerUpdate?.Invoke(time);
 		}
 
 		#endregion
